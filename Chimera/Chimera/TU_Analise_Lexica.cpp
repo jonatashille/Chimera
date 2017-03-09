@@ -13,12 +13,13 @@ TU_Analise_Lexica::~TU_Analise_Lexica()
 
 void TU_Analise_Lexica::Realizar_Testes(string _expressao, string _testeNum)
 {
-	Compilador compilador(_expressao);
+	C_Analise_Lexica lexica(_expressao);
+	
 	bool testeOk = true;
 
-	compilador.Iniciar_Lexica();
+	lexica.Iniciar();
 
-	tabelaResultado = compilador.GetTabelaTokenLexema();
+	tabelaResultado = lexica.Get_Tabela_Token_Lexema();
 
 	auto it_real = tabelaResultado.begin();
 	auto it_esperado = this->tabelaTeste.begin();
@@ -36,6 +37,72 @@ void TU_Analise_Lexica::Realizar_Testes(string _expressao, string _testeNum)
 		cout << _testeNum << " - OK" << endl;
 }
 
+void TU_Analise_Lexica::Executar()
+{
+	cout << SEPARADOR_HASHTAG << endl;
+	cout << "Iniciando testes Lexicos" << endl;
+	cout << SEPARADOR_HASHTAG << endl;
+	Teste_001();
+	Teste_002();
+	Teste_003();
+	Teste_004();
+	Teste_005();
+	Teste_006();
+	Teste_007();
+	Teste_008();
+	Teste_009();
+	Teste_010();
+	Teste_011();
+	Teste_012();
+	Teste_013();
+	Teste_014();
+	Teste_015();
+	Teste_016();
+	Teste_017();
+	Teste_018();
+	Teste_019();
+	Teste_020();
+	Teste_021();
+	Teste_022();
+	Teste_023();
+	Teste_024();
+	Teste_025();
+	Teste_026();
+	Teste_027();
+	Teste_028();
+	Teste_029();
+	Teste_030();
+	Teste_031();
+	Teste_032();
+	Teste_033();
+	Teste_034();
+	Teste_035();
+	Teste_036();
+	Teste_037();
+	Teste_038();
+	Teste_039();
+	Teste_040();
+	Teste_041();
+	Teste_042();
+	Teste_043();
+	Teste_044();
+	Teste_045();
+	Teste_046();
+	Teste_047();
+	Teste_048();
+	Teste_049();
+	Teste_050();
+	Teste_051();
+	Teste_052();
+	Teste_053();
+	Teste_054();
+	Teste_055();
+	Teste_056();
+	Teste_057();
+	Teste_058();
+	Teste_059();
+}
+
 
 //Teste Digitos e sinal de adição
 void TU_Analise_Lexica::Teste_001()
@@ -43,9 +110,9 @@ void TU_Analise_Lexica::Teste_001()
 	string expressao = "587+999";
 
 	this->tabelaTeste.clear();
-	this->tabelaTeste.push_back(make_pair("587", NUM));
+	this->tabelaTeste.push_back(make_pair("587", NUM_INT));
 	this->tabelaTeste.push_back(make_pair("+", OP_ADICAO));
-	this->tabelaTeste.push_back(make_pair("999", NUM));
+	this->tabelaTeste.push_back(make_pair("999", NUM_INT));
 	//this->tabelaTeste.push_back(make_pair("FIM", FIM));
 
 	Realizar_Testes(expressao, "TESTE_01");
@@ -57,9 +124,9 @@ void TU_Analise_Lexica::Teste_002()
 	string expressao = "	587 +		999 ";
 
 	this->tabelaTeste.clear();
-	this->tabelaTeste.push_back(make_pair("587", NUM));
+	this->tabelaTeste.push_back(make_pair("587", NUM_INT));
 	this->tabelaTeste.push_back(make_pair("+", OP_ADICAO));
-	this->tabelaTeste.push_back(make_pair("999", NUM));
+	this->tabelaTeste.push_back(make_pair("999", NUM_INT));
 	//this->tabelaTeste.push_back(make_pair("FIM", FIM));
 
 	Realizar_Testes(expressao, "TESTE_02");
@@ -71,17 +138,17 @@ void TU_Analise_Lexica::Teste_003()
 	string expressao = "	587 -		4487874 / 557 * 123 + 9 % 11 -=";
 
 	this->tabelaTeste.clear();
-	this->tabelaTeste.push_back(make_pair("587", NUM));
+	this->tabelaTeste.push_back(make_pair("587", NUM_INT));
 	this->tabelaTeste.push_back(make_pair("-", OP_SUBTRACAO));
-	this->tabelaTeste.push_back(make_pair("4487874", NUM));
+	this->tabelaTeste.push_back(make_pair("4487874", NUM_INT));
 	this->tabelaTeste.push_back(make_pair("/", OP_DIVISAO));
-	this->tabelaTeste.push_back(make_pair("557", NUM));
+	this->tabelaTeste.push_back(make_pair("557", NUM_INT));
 	this->tabelaTeste.push_back(make_pair("*", OP_MULTIPLICACAO));
-	this->tabelaTeste.push_back(make_pair("123", NUM));
+	this->tabelaTeste.push_back(make_pair("123", NUM_INT));
 	this->tabelaTeste.push_back(make_pair("+", OP_ADICAO));
-	this->tabelaTeste.push_back(make_pair("9", NUM));
+	this->tabelaTeste.push_back(make_pair("9", NUM_INT));
 	this->tabelaTeste.push_back(make_pair("%", OP_RESTO));
-	this->tabelaTeste.push_back(make_pair("11", NUM));
+	this->tabelaTeste.push_back(make_pair("11", NUM_INT));
 	this->tabelaTeste.push_back(make_pair("-=", OP_ATRIBUICAO_SUBTRACAO));
 	//this->tabelaTeste.push_back(make_pair("FIM", FIM));
 
@@ -383,10 +450,12 @@ void TU_Analise_Lexica::Teste_027()
 //Teste operador de selecao de elemento por identificador 
 void TU_Analise_Lexica::Teste_028()
 {
-	string expressao = ".";
+	string expressao = "objeto.propriedade";
 
 	this->tabelaTeste.clear();
+	this->tabelaTeste.push_back(make_pair("objeto", IDENTIFICADOR));
 	this->tabelaTeste.push_back(make_pair(".", OP_SELECAO_IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("propriedade", IDENTIFICADOR));
 	//this->tabelaTeste.push_back(make_pair("FIM", FIM));
 
 	Realizar_Testes(expressao, "TESTE_28");
@@ -426,7 +495,7 @@ void TU_Analise_Lexica::Teste_031()
 	this->tabelaTeste.push_back(make_pair("+", OP_ADICAO));
 	this->tabelaTeste.push_back(make_pair("\'C\'", CARACTERE));
 	this->tabelaTeste.push_back(make_pair("->", OP_SELECAO_PONTEIRO));
-	this->tabelaTeste.push_back(make_pair("555", NUM));
+	this->tabelaTeste.push_back(make_pair("555", NUM_INT));
 	this->tabelaTeste.push_back(make_pair("&", ENDERECO_ELEMENTO));
 	this->tabelaTeste.push_back(make_pair(".", OP_SELECAO_IDENTIFICADOR));
 	this->tabelaTeste.push_back(make_pair("99.99", NUM_REAL));
@@ -715,9 +784,9 @@ void TU_Analise_Lexica::Teste_053()
 
 	this->tabelaTeste.clear();
 	this->tabelaTeste.push_back(make_pair("{", ABRE_CHAVES));
-	this->tabelaTeste.push_back(make_pair("5", NUM));
+	this->tabelaTeste.push_back(make_pair("5", NUM_INT));
 	this->tabelaTeste.push_back(make_pair("+", OP_ADICAO));
-	this->tabelaTeste.push_back(make_pair("5", NUM));
+	this->tabelaTeste.push_back(make_pair("5", NUM_INT));
 	this->tabelaTeste.push_back(make_pair("}", FECHA_CHAVES));
 
 	Realizar_Testes(expressao, "TESTE_53");
@@ -752,7 +821,7 @@ void TU_Analise_Lexica::Teste_055()
 	this->tabelaTeste.push_back(make_pair("int", TIPO_INT));
 	this->tabelaTeste.push_back(make_pair("numero", IDENTIFICADOR));
 	this->tabelaTeste.push_back(make_pair("=", OP_ATRIBUICAO));
-	this->tabelaTeste.push_back(make_pair("14", NUM));
+	this->tabelaTeste.push_back(make_pair("14", NUM_INT));
 	this->tabelaTeste.push_back(make_pair(";", PONTO_VIRGULA));
 	this->tabelaTeste.push_back(make_pair("void", TIPO_VOID));
 	this->tabelaTeste.push_back(make_pair("main", IDENTIFICADOR));

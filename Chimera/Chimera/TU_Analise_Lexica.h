@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.cpp"
+#include "C_Analise_Lexica.h"
 
 using namespace std;
 
@@ -7,12 +8,13 @@ class TU_Analise_Lexica
 {
 private:
 	vector<pair <string, string>>  tabelaTeste;
-	vector<TokenLexema> tabelaResultado;
+	vector<S_Token_Lexema> tabelaResultado;
 public:
 	TU_Analise_Lexica();
 	~TU_Analise_Lexica();
 
 	void Realizar_Testes(string, string);
+	void Executar();
 
 	void Teste_001();
 	void Teste_002();

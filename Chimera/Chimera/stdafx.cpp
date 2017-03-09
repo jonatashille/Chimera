@@ -3,6 +3,7 @@
 #include <vector>
 #include <regex>
 #include <string>
+#include <sstream>
 
 
 //TOKENS
@@ -113,3 +114,5 @@
 #define  FECHA_CHAVES "FECHA_CHAVES"
 #define PONTO_INTERROGACAO "PONTO_INTERROGACAO"
 #define DOIS_PONTOS "DOIS_PONTOS"
+
+#define SEPARADOR_HASHTAG "########################"
