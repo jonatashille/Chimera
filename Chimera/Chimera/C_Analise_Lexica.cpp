@@ -1,7 +1,6 @@
 #include "C_Analise_Lexica.h"
 
 
-
 C_Analise_Lexica::C_Analise_Lexica(string _conteudo)
 {
 	conteudo = _conteudo;
@@ -701,4 +700,25 @@ void C_Analise_Lexica::Incrementar_Linha()
 vector<S_Token_Lexema> C_Analise_Lexica::Get_Tabela_Token_Lexema()
 {
 	return tabela_token_lexema;
+}
+
+void C_Analise_Lexica::Gravar_Tabela_Token(string _nome_arquivo)
+{
+	fstream arquivo;
+	stringstream ss;
+
+	ss << "LEXEMA;TOKEN;LINHA" << endl;
+	for (auto it = tabela_token_lexema.begin(); it != tabela_token_lexema.end(); it++)
+	{
+		if (it->lexema == ";")
+			ss << "\"" << it->lexema << "\"" << ";" << it->token << ";" << it->linha << endl;
+		else
+			ss << it->lexema << ";" << it->token << ";" << it->linha << endl;
+	}
+
+	arquivo.open(_nome_arquivo, ios::out | ios::trunc);
+	arquivo << ss.str();
+	arquivo.close();
+
+	cout << "Arquivo \"" << _nome_arquivo << "\" gerado" << endl;
 }

@@ -1,0 +1,161 @@
+const MAX = 7;
+const MAX_ARRAY = 100;
+
+function int fibonacci(var int n by value)
+	var bool teste;
+	if(n==0) then
+		return 0;
+	else
+	if(n==1) then
+		return 1;
+	else
+		return (fibonacci(n-1) + fibonacci(n-2));
+	end_if
+	end_if
+end_function
+
+sub p_fibonacci()
+	
+	//Programa serie de Fibonacci	
+	var int n, i, c;
+	i = 0;
+	scan(n);
+
+	print("Serie de Fibonacci:\n");
+
+	for c = 1 to (c <= n) do
+	  print(fibonacci(i));
+	  i = i+1; 
+	  c = c+1;
+	next
+	//Fim programa serie de Fibonacci
+end_sub 
+
+sub p_par_impar()
+	var int n;
+ 
+   print("Digite um numero inteiro\n");
+   scan(n);
+ 
+   if (n mod 2 == 0) then
+      print("Par\n");
+   else
+      print("Impar\n");
+    end_if
+end_sub
+
+function int fatorial(var int n by value)
+  if (n == 0) then
+    return 1;
+  else
+    return(n * fatorial(n-1));
+  end_if
+end_function
+
+sub p_fatorial()
+	var int n;
+ 	var int f;
+ 
+  print("Digite um inteiro para encontrar o fatorial\n");
+  scan(n); 
+ 
+  if (n < 0 or n>MAX) then
+    print("Numero nao permitido.Negativo ou maior que 7.\n");
+  else
+
+    f = fatorial(n);
+    print(n,"=",f);
+  end_if
+end_sub
+
+sub p_operacoes()
+   var int num1, num2, soma, diminui, multiplica;
+   var float divide;
+ 
+   print("Digite 2 inteiros.\n");
+   scan(num1, num2);
+ 
+   soma = num1 + num2;
+   diminui = num1 - num2;
+   multiplica = num1 * num2;
+   divide = num1 / num2;   //casting
+ 
+   print("Soma = ",soma,"\n");
+   print("Diferenca = ",diminui,"\n");
+   print("Multiplicacao = ",multiplica,"\n");
+   print("Divisao = ",divide,"\n");
+end_sub
+
+sub p_maior_num_array()
+	var int array[MAX_ARRAY], maximo, tamanho, c, local;
+	local = 1;
+	print("Digite o numero de elementos no array\n");
+	scan(tamanho);
+
+	print("Digite ",tamanho, "inteiros\n");
+ 
+	for c = 0 to (c < tamanho) do
+		scan(array[c]);
+		c = c+1;
+ 	next
+ 	maximo = array[0];
+ 
+	for c = 1 to (c < tamanho) do 
+		if (array[c] > maximo) then
+		   maximo  = array[c];
+		   local = c+1;
+		end_if
+		c = c+1;
+	next
+ 
+	print("O maior elemento esta no local", local, " e o valor dele e: ", maximo , "\n");
+end_sub
+
+sub bubble_sort(var int lista by ref, var int n by value)
+	var int c, d, t;
+
+	for c = 0 to (c < ( n - 1 )) do
+		for d = 0 to (d < n - c - 1) do
+			if (lista > lista) then
+				/// Swapping 
+				t         = lista;
+				lista  = lista;
+				lista = t;
+			end_if
+			d = d+1;
+		next
+		c = c+1;
+	next
+end_sub
+
+sub p_bubble_sort()
+	var int array[MAX_ARRAY], tamanho, c, d, swap;
+
+	print("Digite o numero de elementos\n");
+	scan(tamanho);
+
+	print("Digite ",tamanho, "inteiros\n");
+
+	for c = 0 to (c < tamanho) do
+		scan(array[c]);
+		c = c+1;
+ 	next
+
+	bubble_sort(array, tamanho);
+
+	print("Lista ordenada esta em ordem crescente:\n");
+
+	for c = 0 to (c < tamanho) do
+		print(array[c], "\n");
+		c = c+1;
+ 	next	
+end_sub
+
+sub main()
+	p_fibonacci();
+	p_par_impar();
+	p_fatorial();
+	p_operacoes();
+	p_maior_num_array();
+	p_bubble_sort();
+end_sub 

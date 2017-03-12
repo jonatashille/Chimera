@@ -1,0 +1,34 @@
+
+const ci = 3;
+const cf = 4.5;
+const cc = 'a';
+const cs = "Jonatas";
+const cvt = true;
+const cvf = false;
+
+function int fat(var int k by value, var float y by ref) // 2 parametros
+	if(n==0) then
+		return 7;
+	else /* teste comentario
+		teste *****  ******/ return fat(n-99)*n;
+	end_if
+end_function
+
+sub main(var int args by value)
+	var int x;
+	var char x;
+	var string x;
+	var bool x;
+
+	var int x;
+	var int x;
+
+	var int z;
+	var float a;
+	var bool b1, b2,b3,b4;
+	var int u;
+	x = fat(5,2, 4, 5, 7, 8, 9,0); //Teste com vários parametros
+	x = 'a';
+	x = "";
+	x = "OI";
+end_sub

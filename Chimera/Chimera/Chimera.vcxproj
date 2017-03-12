@@ -112,13 +112,20 @@
   <ItemGroup>
     <ClCompile Include="Chimera.cpp" />
     <ClCompile Include="C_Analise_Lexica.cpp" />
+    <ClCompile Include="C_Analise_Sintatica.cpp" />
+    <ClCompile Include="C_Arquivo.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="TU_Analise_Lexica.cpp" />
+    <ClCompile Include="TU_Analise_Sintatica.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Compilador.h" />
     <ClInclude Include="C_Analise_Lexica.h" />
+    <ClInclude Include="C_Analise_Sintatica.h" />
+    <ClInclude Include="C_Arquivo.h" />
     <ClInclude Include="S_Token_Lexema.h" />
     <ClInclude Include="TU_Analise_Lexica.h" />
+    <ClInclude Include="TU_Analise_Sintatica.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

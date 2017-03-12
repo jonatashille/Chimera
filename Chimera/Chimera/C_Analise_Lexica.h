@@ -65,5 +65,6 @@ public:
 	void Incrementar_Linha();
 
 	vector<S_Token_Lexema> Get_Tabela_Token_Lexema();
+	void Gravar_Tabela_Token(string);
 };
 

@@ -4,6 +4,12 @@
 #include <regex>
 #include <string>
 #include <sstream>
+#include <fstream>
+
+
+//#include <utility>
+#include <iomanip>
+//#include <map>
 
 
 //TOKENS
@@ -124,3 +130,88 @@
 #define DOIS_PONTOS "DOIS_PONTOS"
 
 #define SEPARADOR_HASHTAG "########################"
+
+
+//ERROS
+#define ERR_ABRE_PARENTESES "Esperado ("
+#define ERR_FECHA_PARENTESES "Esperado )"
+
+#define ERR_IDENTIFICADOR "Esperado identificador"
+
+#define ERR_END_FUNCTION "Esperado end_function"
+#define ERR_END_SUB "Esperado end_sub"
+#define ERR_ENDIF "Esperado end_if"
+#define ERR_END_STRUCT "Esperado end_struct"
+#define ERR_END_CLASS "Esperado end_class"
+
+#define ERR_OP_MENOR "Esperado <"
+#define ERR_OP_MENOR_IGUAL "Esperado <="
+#define ERR_OP_DIFERENTE "Esperado <>"
+#define ERR_OP_IGUALDADE "Esperado =="
+#define ERR_OP_MAIOR "Esperado >"
+#define ERR_OP_MAIOR_IGUAL "Esperado >="
+
+#define ERR_OP_SUBTRACAO "Esperado -"
+#define ERR_OP_ADICAO "Esperado +"
+#define ERR_OP_LOGICO_OU "Esperado (or / ||)"
+
+#define ERR_OP_MULTIPLICACAO "Esperado *"
+#define ERR_OP_DIVISAO "Esperado /"
+#define ERR_OP_LOGICO_E "Esperado (and / &&)"
+#define ERR_OP_MOD "Esperado mod"
+
+#define ERR_ABRE_COLCHETES "Esperado ["
+#define ERR_FECHA_COLCHETES "Esperado ]"
+
+#define ERR_CARACTERE "Esperado caractere"
+#define ERR_FALSO "Esperado fase"
+#define ERR_NUM "Esperado numero inteiro"
+#define ERR_NUM_REAL "Esperado numero real"
+#define ERR_STRING "Esperado string"
+#define ERR_VERDADEIRO "Esperado true"
+
+#define ERR_VIRGULA "Esperado ,"
+
+#define ERR_OP_NEGACAO "Esperado \'not\' ou \'!\'"
+
+#define ERR_CONTANTE "Esperado declaracao const"
+#define ERR_OP_ATRIBUICAO "Esperado ="
+#define ERR_PONTO_VIRGULA "Esperado ;"
+#define ERR_VAR "Esperado var"
+#define ERR_TIPO_BOOLEANO "Esperado declaracao bool"
+#define ERR_TIPO_CHAR "Esperado declaracao char"
+#define ERR_TIPO_FLOAT "Esperado declaracao float"
+#define ERR_TIPO_INT "Esperado declaracao int"
+#define ERR_TIPO_STRING "Esperado declaracao string"
+
+#define ERR_SUB "Esperado declaracao sub"
+#define ERR_FUNCTION "Esperado function"
+#define ERR_STRUCT "Esperado struct"
+#define ERR_CLASS "Esperado class"
+
+#define ERR_DOIS_PONTOS "Esperado :"
+#define ERR_ACESS_PRIVATE "Esperado private"
+#define ERR_ACESS_PUBLIC "Esperado public"
+
+
+#define ERR_BY "Esperado by"
+#define ERR_VALUE "Esperado value"
+#define ERR_REF "Esperado ref"
+
+#define ERR_CONDICAO_IF "Esperado if"
+#define ERR_CONDICAO_THEN "Esperado then"
+#define ERR_CONDICAO_ELSE "Esperado else"
+
+#define ERR_LACO_DO "Esperado do"
+#define ERR_LACO_WHILE "Esperado while"
+#define ERR_LACO_FOR "Esperado for"
+#define ERR_LACO_TO "Esperado to"
+#define ERR_LACO_NEXT "Esperado next"
+#define ERR_LACO_REPEAT "Esperado repeat"
+#define ERR_LACO_UNTIL "Esperado until"
+#define ERR_LACO_LOOP "Esperado loop"
+
+#define ERR_SCAN "Esperado scan"
+#define ERR_SCANLN "Esperado scanln"
+#define ERR_PRINT "Esperado print"
+#define ERR_PRINTLN "Esperado println"

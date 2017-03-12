@@ -27,6 +27,15 @@
     <ClCompile Include="TU_Analise_Lexica.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C_Analise_Sintatica.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TU_Analise_Sintatica.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C_Arquivo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="S_Token_Lexema.h">
@@ -36,6 +45,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TU_Analise_Lexica.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Analise_Sintatica.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TU_Analise_Sintatica.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Arquivo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compilador.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
