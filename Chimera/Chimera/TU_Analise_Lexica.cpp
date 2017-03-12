@@ -26,13 +26,20 @@ void TU_Analise_Lexica::Realizar_Testes(string _expressao, string _testeNum)
 
 	for (; it_real != tabelaResultado.end() && it_esperado != this->tabelaTeste.end(); it_real++, it_esperado++)
 	{
-		if (it_real->lexema != it_esperado->first && it_real->token != it_esperado->second)
+		if (it_real->lexema != it_esperado->first || it_real->token != it_esperado->second)
 		{
 			cout << _testeNum << " - Erro no token: " << it_real->lexema << " - " << it_real->token
 				<< " - ESPERADO: " << it_esperado->first << " - " << it_esperado->second << endl;
 			testeOk = false;
 		}
 	}
+
+	if (tabelaResultado.size() -1 != tabelaTeste.size())
+	{
+		cout << _testeNum << " - Totalidade da expressao do teste nao foi validada, deve-se criar os cenarios" << endl;
+		testeOk = false;
+	}
+		
 	if (testeOk)
 		cout << _testeNum << " - OK" << endl;
 }
@@ -101,6 +108,9 @@ void TU_Analise_Lexica::Executar()
 	Teste_057();
 	Teste_058();
 	Teste_059();
+	Teste_060();
+	Teste_061();
+	Teste_062();
 }
 
 
@@ -464,10 +474,12 @@ void TU_Analise_Lexica::Teste_028()
 //Teste operador de selecao de elemento por ponteiro 
 void TU_Analise_Lexica::Teste_029()
 {
-	string expressao = " ->		";
+	string expressao = " objeto->propriedade		";
 
 	this->tabelaTeste.clear();
+	this->tabelaTeste.push_back(make_pair("objeto", IDENTIFICADOR));
 	this->tabelaTeste.push_back(make_pair("->", OP_SELECAO_PONTEIRO));
+	this->tabelaTeste.push_back(make_pair("propriedade", IDENTIFICADOR));
 	//this->tabelaTeste.push_back(make_pair("FIM", FIM));
 
 	Realizar_Testes(expressao, "TESTE_29");
@@ -905,5 +917,128 @@ void TU_Analise_Lexica::Teste_059()
 	this->tabelaTeste.push_back(make_pair("mod", OP_MOD));
 	this->tabelaTeste.push_back(make_pair("and", OP_LOGICO_E));
 	Realizar_Testes(expressao, "TESTE_59");
+}
+
+//Teste operador de selecao de elemento por ponteiro, por identificador e por ponteiro novamente
+void TU_Analise_Lexica::Teste_060()
+{
+	string expressao = " objeto->objeto.objeto->propriedade		";
+
+	this->tabelaTeste.clear();
+	this->tabelaTeste.push_back(make_pair("objeto", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("->", OP_SELECAO_PONTEIRO));
+	this->tabelaTeste.push_back(make_pair("objeto", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair(".", OP_SELECAO_IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("objeto", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("->", OP_SELECAO_PONTEIRO));
+	this->tabelaTeste.push_back(make_pair("propriedade", IDENTIFICADOR));
+	//this->tabelaTeste.push_back(make_pair("FIM", FIM));
+
+	Realizar_Testes(expressao, "TESTE_60");
+}
+
+//Teste de uma struct 
+void TU_Analise_Lexica::Teste_061()
+{
+	string expressao = " struct cliente var int id; var string nome; var bool platinium; end_struct	";
+
+	this->tabelaTeste.clear();
+	this->tabelaTeste.push_back(make_pair("struct", TIPO_STRUCT));
+	this->tabelaTeste.push_back(make_pair("cliente", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("var", VAR));
+	this->tabelaTeste.push_back(make_pair("int", TIPO_INT));
+	this->tabelaTeste.push_back(make_pair("id", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair(";", PONTO_VIRGULA));
+	this->tabelaTeste.push_back(make_pair("var", VAR));
+	this->tabelaTeste.push_back(make_pair("string", TIPO_STRING));
+	this->tabelaTeste.push_back(make_pair("nome", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair(";", PONTO_VIRGULA));
+	this->tabelaTeste.push_back(make_pair("var", VAR));
+	this->tabelaTeste.push_back(make_pair("bool", TIPO_BOOLEANO));
+	this->tabelaTeste.push_back(make_pair("platinium", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair(";", PONTO_VIRGULA));
+	this->tabelaTeste.push_back(make_pair("end_struct", END_STRUCT));
+
+	Realizar_Testes(expressao, "TESTE_61");
+}
+
+//Teste de uma class
+void TU_Analise_Lexica::Teste_062()
+{
+	string expressao = " class cliente private: var int id; var string nome; var bool platinium; "; 
+	expressao += "function int calcular_id() return algum_hashing_maluco; end_function ";
+	expressao += "public: sub set_cliente(var string _nome by value, var bool _platinium by value) id = calcular_id(); nome = _nome; platinium = _platinium; end_sub ";
+	expressao += " function string get_nome() return nome; end_function end_class";
+
+	this->tabelaTeste.clear();
+	this->tabelaTeste.push_back(make_pair("class", TIPO_CLASS));
+	this->tabelaTeste.push_back(make_pair("cliente", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("private", ACESS_PRIVATE));
+	this->tabelaTeste.push_back(make_pair(":", DOIS_PONTOS));
+	this->tabelaTeste.push_back(make_pair("var", VAR));
+	this->tabelaTeste.push_back(make_pair("int", TIPO_INT));
+	this->tabelaTeste.push_back(make_pair("id", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair(";", PONTO_VIRGULA));
+	this->tabelaTeste.push_back(make_pair("var", VAR));
+	this->tabelaTeste.push_back(make_pair("string", TIPO_STRING));
+	this->tabelaTeste.push_back(make_pair("nome", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair(";", PONTO_VIRGULA));
+	this->tabelaTeste.push_back(make_pair("var", VAR));
+	this->tabelaTeste.push_back(make_pair("bool", TIPO_BOOLEANO));
+	this->tabelaTeste.push_back(make_pair("platinium", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair(";", PONTO_VIRGULA));
+	this->tabelaTeste.push_back(make_pair("function", FUNCTION));
+	this->tabelaTeste.push_back(make_pair("int", TIPO_INT));
+	this->tabelaTeste.push_back(make_pair("calcular_id", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("(", ABRE_PARENTESES));
+	this->tabelaTeste.push_back(make_pair(")", FECHA_PARENTESES));
+	this->tabelaTeste.push_back(make_pair("return", RETORNO));
+	this->tabelaTeste.push_back(make_pair("algum_hashing_maluco", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair(";", PONTO_VIRGULA));
+	this->tabelaTeste.push_back(make_pair("end_function", END_FUNCTION));
+	this->tabelaTeste.push_back(make_pair("public", ACESS_PUBLIC));
+	this->tabelaTeste.push_back(make_pair(":", DOIS_PONTOS));
+	this->tabelaTeste.push_back(make_pair("sub", SUB));
+	this->tabelaTeste.push_back(make_pair("set_cliente", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("(", ABRE_PARENTESES));
+	this->tabelaTeste.push_back(make_pair("var", VAR));
+	this->tabelaTeste.push_back(make_pair("string", TIPO_STRING));
+	this->tabelaTeste.push_back(make_pair("_nome", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("by", BY));
+	this->tabelaTeste.push_back(make_pair("value", VALUE));
+	this->tabelaTeste.push_back(make_pair(",", VIRGULA));
+	this->tabelaTeste.push_back(make_pair("var", VAR));
+	this->tabelaTeste.push_back(make_pair("bool", TIPO_BOOLEANO));
+	this->tabelaTeste.push_back(make_pair("_platinium", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("by", BY));
+	this->tabelaTeste.push_back(make_pair("value", VALUE));
+	this->tabelaTeste.push_back(make_pair(")", FECHA_PARENTESES));
+	this->tabelaTeste.push_back(make_pair("id", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("=", OP_ATRIBUICAO));
+	this->tabelaTeste.push_back(make_pair("calcular_id", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("(", ABRE_PARENTESES));
+	this->tabelaTeste.push_back(make_pair(")", FECHA_PARENTESES));
+	this->tabelaTeste.push_back(make_pair(";", PONTO_VIRGULA));
+	this->tabelaTeste.push_back(make_pair("nome", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("=", OP_ATRIBUICAO));
+	this->tabelaTeste.push_back(make_pair("_nome", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair(";", PONTO_VIRGULA));
+	this->tabelaTeste.push_back(make_pair("platinium", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("=", OP_ATRIBUICAO));
+	this->tabelaTeste.push_back(make_pair("_platinium", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair(";", PONTO_VIRGULA));
+	this->tabelaTeste.push_back(make_pair("end_sub", END_SUB));
+	this->tabelaTeste.push_back(make_pair("function", FUNCTION));
+	this->tabelaTeste.push_back(make_pair("string", TIPO_STRING));
+	this->tabelaTeste.push_back(make_pair("get_nome", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("(", ABRE_PARENTESES));
+	this->tabelaTeste.push_back(make_pair(")", FECHA_PARENTESES));
+	this->tabelaTeste.push_back(make_pair("return", RETORNO));
+	this->tabelaTeste.push_back(make_pair("nome", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair(";", PONTO_VIRGULA));
+	this->tabelaTeste.push_back(make_pair("end_function", END_FUNCTION));
+	this->tabelaTeste.push_back(make_pair("end_class", END_CLASS));
+
+	Realizar_Testes(expressao, "TESTE_62");
 }
 

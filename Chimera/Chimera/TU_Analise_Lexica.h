@@ -75,5 +75,8 @@ public:
 	void Teste_057();
 	void Teste_058();
 	void Teste_059();
+	void Teste_060();
+	void Teste_061();
+	void Teste_062();
 };
 
