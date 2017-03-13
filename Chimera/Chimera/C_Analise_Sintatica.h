@@ -40,13 +40,10 @@ public:
 	void Mode();
 	void Decl_struct();
 	void Lista_decl_struct();
-	void Lista_decl_struct_1();
 	void Decl_class();
 	void Bloco_class();
-	void Bloco_class_1();
 	void Espec_acesso();
 	void Lista_membro_class();
-	void Lista_membro_class_1();
 	void Membro_class();
 
 	//Comandos
@@ -60,6 +57,11 @@ public:
 	void Com_desvio();
 	void Com_leitura();
 	void Com_escrita();
+	void Aces_objeto();
+	void Objeto();
+	void Membro();
+	void Membro_1();
+	void Membro_2();
 
 	//Expressões
 	void Lista_exp();

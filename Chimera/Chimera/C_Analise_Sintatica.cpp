@@ -294,17 +294,10 @@ void C_Analise_Sintatica::Decl_struct()
 //LDS
 void C_Analise_Sintatica::Lista_decl_struct()
 {
-	Decl_var();
-	Lista_decl_struct_1();
-}
-
-//LDS'
-void C_Analise_Sintatica::Lista_decl_struct_1()
-{
 	if (token == VAR)
 	{
 		Decl_var();
-		Lista_decl_struct_1();
+		Lista_decl_struct();
 	}
 	else if (token != END_STRUCT)
 		Erro(ERR_END_STRUCT);
@@ -325,36 +318,24 @@ void C_Analise_Sintatica::Decl_class()
 //BC
 void C_Analise_Sintatica::Bloco_class()
 {
-	Espec_acesso();
-
-	Aceitar_Token(DOIS_PONTOS, ERR_DOIS_PONTOS);
-
-	Lista_membro_class();
-
-	Bloco_class_1();
-}
-
-//BC'
-void C_Analise_Sintatica::Bloco_class_1()
-{
 	if (token == ACESS_PRIVATE ||
 		token == ACESS_PUBLIC)
 	{
 		Espec_acesso();
 		Aceitar_Token(DOIS_PONTOS, ERR_DOIS_PONTOS);
 	}
-	
+
 	if (token == CONSTANTE ||
 		token == FUNCTION ||
 		token == SUB ||
 		token == VAR)
 	{
 		Lista_membro_class();
-		Bloco_class_1();
+		Bloco_class();
 	}
 }
 
-//EA
+//EAC
 void C_Analise_Sintatica::Espec_acesso()
 {
 	if (token == ACESS_PRIVATE)
@@ -369,13 +350,8 @@ void C_Analise_Sintatica::Espec_acesso()
 		Erro("Esperado especificacao de acesso private ou public");
 }
 
+//LMC
 void C_Analise_Sintatica::Lista_membro_class()
-{
-	Membro_class();
-	Lista_membro_class_1();
-}
-
-void C_Analise_Sintatica::Lista_membro_class_1()
 {
 	if (token == CONSTANTE ||
 		token == FUNCTION ||
@@ -383,10 +359,11 @@ void C_Analise_Sintatica::Lista_membro_class_1()
 		token == VAR)
 	{
 		Membro_class();
-		Lista_membro_class_1();
+		Lista_membro_class();
 	}
 }
 
+//MC
 void C_Analise_Sintatica::Membro_class()
 {
 	if (token == CONSTANTE)
@@ -430,7 +407,9 @@ void C_Analise_Sintatica::Bloco()
 		token == SCAN ||
 		token == SCANLN ||
 		token == VAR ||
-		token == LACO_WHILE)
+		token == LACO_WHILE ||
+		token == OBJ_SEL_IDENTIFICADOR ||
+		token == OBJ_SEL_PONTEIRO)
 	{
 		Lista_com();
 	}
@@ -453,7 +432,9 @@ void C_Analise_Sintatica::Lista_com()
 		token == SCAN ||
 		token == SCANLN ||
 		token == VAR ||
-		token == LACO_WHILE)
+		token == LACO_WHILE ||
+		token == OBJ_SEL_IDENTIFICADOR ||
+		token == OBJ_SEL_PONTEIRO)
 	{
 		//Só entra aqui se for a pelo bloco, lá já é feita a condição
 		Comando();
@@ -503,6 +484,16 @@ void C_Analise_Sintatica::Comando()
 	else if (token == VAR)
 	{
 		Decl_var();
+	}
+	else if (token == OBJ_SEL_IDENTIFICADOR)
+	{
+		Aceitar_Token(OBJ_SEL_IDENTIFICADOR, ERR_OBJ_SEL_IDENTIFICADOR);
+		Aces_objeto();
+	}
+	else if (token == OBJ_SEL_PONTEIRO)
+	{
+		Aceitar_Token(OBJ_SEL_PONTEIRO, ERR_OBJ_SEL_PONTEIRO);
+		Aces_objeto();
 	}
 	else
 		Erro("Esperado comando");
@@ -667,6 +658,82 @@ void C_Analise_Sintatica::Com_escrita()
 	}
 	else
 		Erro("Esperado comando de escrita (print / println)");
+}
+
+//AO
+void C_Analise_Sintatica::Aces_objeto()
+{
+	if (token == OBJ_SEL_IDENTIFICADOR)
+	{
+		Objeto();
+		Aces_objeto();
+	}
+	else if (token == OBJ_SEL_PONTEIRO)
+	{
+		Objeto();
+		Aces_objeto();
+	}
+}
+
+//O
+void C_Analise_Sintatica::Objeto()
+{
+	if (token == OBJ_SEL_IDENTIFICADOR)
+	{
+		Aceitar_Token(OBJ_SEL_IDENTIFICADOR, ERR_OBJ_SEL_IDENTIFICADOR);
+		Membro();
+	}
+	else if (token == OBJ_SEL_PONTEIRO)
+	{
+		Aceitar_Token(OBJ_SEL_PONTEIRO, ERR_OBJ_SEL_PONTEIRO);
+		Membro();
+	}
+	else
+		Erro("Esperado objeto");
+}
+
+//M
+void C_Analise_Sintatica::Membro()
+{
+	if (token == IDENTIFICADOR)
+	{
+		Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+		Membro_1();
+	}
+}
+
+void C_Analise_Sintatica::Membro_1()
+{
+	if (token == ABRE_PARENTESES)
+	{
+		Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
+		Args();
+		Aceitar_Token(FECHA_PARENTESES, ERR_FECHA_PARENTESES);
+		Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
+	}
+	if (token == ABRE_COLCHETES)
+	{
+		Aceitar_Token(ABRE_COLCHETES, ERR_ABRE_COLCHETES);
+		Exp_soma();
+		Aceitar_Token(FECHA_COLCHETES, ERR_FECHA_COLCHETES);
+		Membro_2();
+	}
+	else if (token == OP_ATRIBUICAO)
+	{
+		Aceitar_Token(OP_ATRIBUICAO, ERR_OP_ATRIBUICAO);
+		Exp();
+		Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
+	}
+}
+
+void C_Analise_Sintatica::Membro_2()
+{
+	if (token == OP_ATRIBUICAO)
+	{
+		Aceitar_Token(OP_ATRIBUICAO, ERR_OP_ATRIBUICAO);
+		Exp();
+		Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
+	}
 }
 
 

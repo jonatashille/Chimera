@@ -463,8 +463,7 @@ void TU_Analise_Lexica::Teste_028()
 	string expressao = "objeto.propriedade";
 
 	this->tabelaTeste.clear();
-	this->tabelaTeste.push_back(make_pair("objeto", IDENTIFICADOR));
-	this->tabelaTeste.push_back(make_pair(".", OP_SELECAO_IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("objeto.", OBJ_SEL_IDENTIFICADOR));
 	this->tabelaTeste.push_back(make_pair("propriedade", IDENTIFICADOR));
 	//this->tabelaTeste.push_back(make_pair("FIM", FIM));
 
@@ -477,8 +476,7 @@ void TU_Analise_Lexica::Teste_029()
 	string expressao = " objeto->propriedade		";
 
 	this->tabelaTeste.clear();
-	this->tabelaTeste.push_back(make_pair("objeto", IDENTIFICADOR));
-	this->tabelaTeste.push_back(make_pair("->", OP_SELECAO_PONTEIRO));
+	this->tabelaTeste.push_back(make_pair("objeto->", OBJ_SEL_PONTEIRO));
 	this->tabelaTeste.push_back(make_pair("propriedade", IDENTIFICADOR));
 	//this->tabelaTeste.push_back(make_pair("FIM", FIM));
 
@@ -925,12 +923,9 @@ void TU_Analise_Lexica::Teste_060()
 	string expressao = " objeto->objeto.objeto->propriedade		";
 
 	this->tabelaTeste.clear();
-	this->tabelaTeste.push_back(make_pair("objeto", IDENTIFICADOR));
-	this->tabelaTeste.push_back(make_pair("->", OP_SELECAO_PONTEIRO));
-	this->tabelaTeste.push_back(make_pair("objeto", IDENTIFICADOR));
-	this->tabelaTeste.push_back(make_pair(".", OP_SELECAO_IDENTIFICADOR));
-	this->tabelaTeste.push_back(make_pair("objeto", IDENTIFICADOR));
-	this->tabelaTeste.push_back(make_pair("->", OP_SELECAO_PONTEIRO));
+	this->tabelaTeste.push_back(make_pair("objeto->", OBJ_SEL_PONTEIRO));
+	this->tabelaTeste.push_back(make_pair("objeto.", OBJ_SEL_IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("objeto->", OBJ_SEL_PONTEIRO));
 	this->tabelaTeste.push_back(make_pair("propriedade", IDENTIFICADOR));
 	//this->tabelaTeste.push_back(make_pair("FIM", FIM));
 

@@ -556,7 +556,26 @@ void C_Analise_Lexica::Estado_17()
 		ch = ProximoChar();
 	}
 
-	if (Validar_Identificador())
+	//verificar se é objeto. ou objeto->
+	if (ch == '.')
+	{
+		lexema += ch;
+		Set_Resultado(lexema, OBJ_SEL_IDENTIFICADOR);
+		continua = false;
+	}
+	else if (ch == '-')
+	{
+		lexema += ch;
+		ch = ProximoChar();
+		if (ch != '>')
+		{
+			ERRO(">", "caractere invalido: " + string(1, ch));
+		}
+		lexema += ch;
+		Set_Resultado(lexema, OBJ_SEL_PONTEIRO);
+		continua = false;
+	}
+	else if (Validar_Identificador())
 	{
 		token_palavra_reservada = Buscar_Palavra_Reservada();
 		if (token_palavra_reservada == "")

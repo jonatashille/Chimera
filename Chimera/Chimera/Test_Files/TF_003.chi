@@ -17,8 +17,26 @@ class cliente
             id = calcular_id();
             nome = _nome;
             platinium = _platinium;
+            cliente.cliente.nome = "Sage";
+            cliente.nome = "Sage";
+            cliente->cliente->nome = "Sage";
+            cliente->cliente.nome = "Sage";
+            cliente.cliente->nome = "Sage";
+            b = metodo();
+            a.a1.a2 = b1.b2->metodo();
+            a.a1.a2 = b1.b2->metodo(param1, param2);
+            d1 = c1->c2.c3.c4->c5.metodo();
+            //d1 = c1->c2.c3.c4->c5.propriedade;
+            //d1 = c1->c2.c3.c4->c5.propriedade[1];
         end_sub 
         function string get_nome()
             return nome;
-        end_function       
+        end_function    
+    private:
+        var int id;
+        var string nome;
+        var bool platinium;
+        function int calcular_id()
+            return algum_hashing_maluco;
+        end_function           
 end_class

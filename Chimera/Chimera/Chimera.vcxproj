@@ -124,6 +124,7 @@
     <ClInclude Include="C_Analise_Sintatica.h" />
     <ClInclude Include="C_Arquivo.h" />
     <ClInclude Include="S_Token_Lexema.h" />
+    <ClInclude Include="Testes.h" />
     <ClInclude Include="TU_Analise_Lexica.h" />
     <ClInclude Include="TU_Analise_Sintatica.h" />
   </ItemGroup>
