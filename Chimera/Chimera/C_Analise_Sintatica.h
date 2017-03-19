@@ -19,6 +19,8 @@ public:
 	void Iniciar();
 
 	void Proximo_Token_Lexema();
+	void Encontrar_Membro();
+	string Proximo_Token();
 
 	void Erro(string);
 	string Aceitar_Token(string, string);
@@ -57,11 +59,7 @@ public:
 	void Com_desvio();
 	void Com_leitura();
 	void Com_escrita();
-	void Aces_objeto();
-	void Objeto();
-	void Membro();
-	void Membro_1();
-	void Membro_2();
+	void Id_Composto();
 
 	//Expressões
 	void Lista_exp();
@@ -83,6 +81,9 @@ public:
 	void Lista_var();
 	void Lista_var_1();
 	void Lista_var_2();
+	void Lista_decl_var();
+	void Lista_decl_var_1();
+	void Lista_decl_var_2();
 	void Op_unario();
 };
 

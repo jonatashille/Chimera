@@ -34,6 +34,15 @@ void C_Analise_Sintatica::Proximo_Token_Lexema()
 		iter_token_lexema++;
 }
 
+//Método que apenas retorna o proximo token, sem avançar até ele
+string C_Analise_Sintatica::Proximo_Token()
+{
+	vector<S_Token_Lexema>::iterator tmp_iter_token_lexema;
+	tmp_iter_token_lexema = iter_token_lexema + 1;
+
+	return tmp_iter_token_lexema->token;
+}
+
 void C_Analise_Sintatica::Erro(string _msg)
 {
 	cout << "ERRO-Linha: " << iter_token_lexema->linha << " - " << iter_token_lexema->lexema << " -> " << _msg << endl;
@@ -150,7 +159,7 @@ void C_Analise_Sintatica::Decl_var()
 	Aceitar_Token(VAR, ERR_VAR);
 
 	Espec_tipo();
-	Lista_var();
+	Lista_decl_var();
 
 	Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
 }
@@ -257,7 +266,7 @@ void C_Analise_Sintatica::Param()
 
 	Espec_tipo();
 
-	Lista_var();
+	Lista_decl_var();
 
 	Aceitar_Token(BY, ERR_BY);
 
@@ -407,9 +416,7 @@ void C_Analise_Sintatica::Bloco()
 		token == SCAN ||
 		token == SCANLN ||
 		token == VAR ||
-		token == LACO_WHILE ||
-		token == OBJ_SEL_IDENTIFICADOR ||
-		token == OBJ_SEL_PONTEIRO)
+		token == LACO_WHILE)
 	{
 		Lista_com();
 	}
@@ -432,9 +439,7 @@ void C_Analise_Sintatica::Lista_com()
 		token == SCAN ||
 		token == SCANLN ||
 		token == VAR ||
-		token == LACO_WHILE ||
-		token == OBJ_SEL_IDENTIFICADOR ||
-		token == OBJ_SEL_PONTEIRO)
+		token == LACO_WHILE)
 	{
 		//Só entra aqui se for a pelo bloco, lá já é feita a condição
 		Comando();
@@ -464,7 +469,7 @@ void C_Analise_Sintatica::Comando()
 	}
 	else if (token == IDENTIFICADOR)
 	{
-		Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+		Id_Composto();
 		Comando_1();
 	}
 	else if (token == CONDICAO_IF)
@@ -485,16 +490,6 @@ void C_Analise_Sintatica::Comando()
 	{
 		Decl_var();
 	}
-	else if (token == OBJ_SEL_IDENTIFICADOR)
-	{
-		Aceitar_Token(OBJ_SEL_IDENTIFICADOR, ERR_OBJ_SEL_IDENTIFICADOR);
-		Aces_objeto();
-	}
-	else if (token == OBJ_SEL_PONTEIRO)
-	{
-		Aceitar_Token(OBJ_SEL_PONTEIRO, ERR_OBJ_SEL_PONTEIRO);
-		Aces_objeto();
-	}
 	else
 		Erro("Esperado comando");
 }
@@ -509,7 +504,7 @@ void C_Analise_Sintatica::Comando_1()
 		Aceitar_Token(FECHA_PARENTESES, ERR_FECHA_PARENTESES);
 		Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
 	}
-	if (token == ABRE_COLCHETES)
+	else if (token == ABRE_COLCHETES)
 	{
 		Aceitar_Token(ABRE_COLCHETES, ERR_ABRE_COLCHETES);
 		Exp_soma();
@@ -660,80 +655,26 @@ void C_Analise_Sintatica::Com_escrita()
 		Erro("Esperado comando de escrita (print / println)");
 }
 
-//AO
-void C_Analise_Sintatica::Aces_objeto()
+//IC - Navegar até o membo de uma struct/classe
+void C_Analise_Sintatica::Id_Composto()
 {
-	if (token == OBJ_SEL_IDENTIFICADOR)
-	{
-		Objeto();
-		Aces_objeto();
-	}
-	else if (token == OBJ_SEL_PONTEIRO)
-	{
-		Objeto();
-		Aces_objeto();
-	}
-}
-
-//O
-void C_Analise_Sintatica::Objeto()
-{
-	if (token == OBJ_SEL_IDENTIFICADOR)
-	{
-		Aceitar_Token(OBJ_SEL_IDENTIFICADOR, ERR_OBJ_SEL_IDENTIFICADOR);
-		Membro();
-	}
-	else if (token == OBJ_SEL_PONTEIRO)
-	{
-		Aceitar_Token(OBJ_SEL_PONTEIRO, ERR_OBJ_SEL_PONTEIRO);
-		Membro();
-	}
-	else
-		Erro("Esperado objeto");
-}
-
-//M
-void C_Analise_Sintatica::Membro()
-{
-	if (token == IDENTIFICADOR)
+	if (token == IDENTIFICADOR &&
+		(Proximo_Token() == OP_SELECAO_IDENTIFICADOR || Proximo_Token() == OP_SELECAO_PONTEIRO))
 	{
 		Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
-		Membro_1();
-	}
-}
+		if (token == OP_SELECAO_IDENTIFICADOR)
+		{
+			Aceitar_Token(OP_SELECAO_IDENTIFICADOR, ERR_OP_SELECAO_IDENTIFICADOR);
+		}
+		else if (token == OP_SELECAO_PONTEIRO)
+		{
+			Aceitar_Token(OP_SELECAO_PONTEIRO, ERR_OP_SELECAO_PONTEIRO);
 
-void C_Analise_Sintatica::Membro_1()
-{
-	if (token == ABRE_PARENTESES)
-	{
-		Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
-		Args();
-		Aceitar_Token(FECHA_PARENTESES, ERR_FECHA_PARENTESES);
-		Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
-	}
-	if (token == ABRE_COLCHETES)
-	{
-		Aceitar_Token(ABRE_COLCHETES, ERR_ABRE_COLCHETES);
-		Exp_soma();
-		Aceitar_Token(FECHA_COLCHETES, ERR_FECHA_COLCHETES);
-		Membro_2();
-	}
-	else if (token == OP_ATRIBUICAO)
-	{
-		Aceitar_Token(OP_ATRIBUICAO, ERR_OP_ATRIBUICAO);
-		Exp();
-		Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
-	}
-}
-
-void C_Analise_Sintatica::Membro_2()
-{
-	if (token == OP_ATRIBUICAO)
-	{
-		Aceitar_Token(OP_ATRIBUICAO, ERR_OP_ATRIBUICAO);
-		Exp();
-		Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
-	}
+		}
+		Id_Composto();
+	} 
+	else
+		Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
 }
 
 
@@ -776,12 +717,16 @@ void C_Analise_Sintatica::Lista_exp_1()
 //EX
 void C_Analise_Sintatica::Exp()
 {
-	if (token == OP_SUBTRACAO ||
+	if (token == IDENTIFICADOR)
+	{
+		Exp_soma();
+		Exp_1();
+	}
+	else if (token == OP_SUBTRACAO ||
 		token == ABRE_PARENTESES ||
 		token == OP_ADICAO ||
 		token == CARACTERE ||
 		token == FALSO ||
-		token == IDENTIFICADOR ||
 		token == OP_NEGACAO ||
 		token == NUM_INT ||
 		token == NUM_REAL ||
@@ -955,7 +900,7 @@ void C_Analise_Sintatica::Exp_simples()
 	}
 	else if (token == IDENTIFICADOR)
 	{
-		Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+		Id_Composto();
 		Exp_simples_1();
 	}
 	else
@@ -1042,7 +987,7 @@ void C_Analise_Sintatica::Args()
 //LV
 void C_Analise_Sintatica::Lista_var()
 {
-	Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+	Id_Composto();
 	
 	Lista_var_1();
 }
@@ -1075,6 +1020,45 @@ void C_Analise_Sintatica::Lista_var_2()
 	{
 		Aceitar_Token(VIRGULA, ERR_VIRGULA);
 		Lista_var();
+	}
+	else if (token != FECHA_PARENTESES &&token != PONTO_VIRGULA &&
+		token != BY)
+		Erro("Esperado \',\' ou \')\' ou \';\' ou \'by\' )");
+}
+
+void C_Analise_Sintatica::Lista_decl_var()
+{
+	Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+
+	Lista_decl_var_1();
+}
+
+void C_Analise_Sintatica::Lista_decl_var_1()
+{
+	if (token == VIRGULA)
+	{
+		Aceitar_Token(VIRGULA, ERR_VIRGULA);
+		Lista_decl_var();
+	}
+	else if (token == ABRE_COLCHETES)
+	{
+		Aceitar_Token(ABRE_COLCHETES, ERR_ABRE_COLCHETES);
+		Exp_soma();
+		Aceitar_Token(FECHA_COLCHETES, ERR_FECHA_COLCHETES);
+		Lista_decl_var_2();
+	}
+	else if (token != FECHA_PARENTESES &&
+		token != PONTO_VIRGULA &&
+		token != BY)
+		Erro("Esperado \',\' ou \'[\' ou \')\' ou \';\' ou \'by\' )");
+}
+
+void C_Analise_Sintatica::Lista_decl_var_2()
+{
+	if (token == VIRGULA)
+	{
+		Aceitar_Token(VIRGULA, ERR_VIRGULA);
+		Lista_decl_var();
 	}
 	else if (token != FECHA_PARENTESES &&token != PONTO_VIRGULA &&
 		token != BY)

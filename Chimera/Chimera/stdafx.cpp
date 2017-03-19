@@ -19,8 +19,8 @@
 #define IDENTIFICADOR "IDENTIFICADOR"
 #define NUM_INT "NUMERO_INTEIRO"
 #define NUM_REAL "NUMERO_REAL" 
-#define OBJ_SEL_IDENTIFICADOR "OBJ_SEL_IDENTIFICADOR"
-#define OBJ_SEL_PONTEIRO "OBJ_SEL_PONTEIRO"
+//#define OBJ_SEL_IDENTIFICADOR "OBJ_SEL_IDENTIFICADOR"
+//#define OBJ_SEL_PONTEIRO "OBJ_SEL_PONTEIRO"
 
 #define CARACTERE "CARACTERE"
 #define STRING "STRING"
@@ -195,8 +195,8 @@
 #define ERR_ACESS_PRIVATE "Esperado private"
 #define ERR_ACESS_PUBLIC "Esperado public"
 
-#define ERR_OBJ_SEL_IDENTIFICADOR "Esperado objeto."
-#define ERR_OBJ_SEL_PONTEIRO "Esperado objeto->"
+#define ERR_OP_SELECAO_IDENTIFICADOR "Esperado ."
+#define ERR_OP_SELECAO_PONTEIRO "Esperado ->"
 
 #define ERR_BY "Esperado by"
 #define ERR_VALUE "Esperado value"
