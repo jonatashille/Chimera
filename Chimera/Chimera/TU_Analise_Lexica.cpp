@@ -111,6 +111,7 @@ void TU_Analise_Lexica::Executar()
 	Teste_060();
 	Teste_061();
 	Teste_062();
+	Teste_063();
 }
 
 
@@ -463,8 +464,7 @@ void TU_Analise_Lexica::Teste_028()
 	string expressao = "objeto.propriedade";
 
 	this->tabelaTeste.clear();
-	this->tabelaTeste.push_back(make_pair("objeto", IDENTIFICADOR));
-	this->tabelaTeste.push_back(make_pair(".", OP_SELECAO_IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("objeto.", ID_SEL_IDENTIFICADOR));
 	this->tabelaTeste.push_back(make_pair("propriedade", IDENTIFICADOR));
 	//this->tabelaTeste.push_back(make_pair("FIM", FIM));
 
@@ -477,8 +477,7 @@ void TU_Analise_Lexica::Teste_029()
 	string expressao = " objeto->propriedade		";
 
 	this->tabelaTeste.clear();
-	this->tabelaTeste.push_back(make_pair("objeto", IDENTIFICADOR));
-	this->tabelaTeste.push_back(make_pair("->", OP_SELECAO_PONTEIRO));
+	this->tabelaTeste.push_back(make_pair("objeto->", ID_SEL_PONTEIRO));
 	this->tabelaTeste.push_back(make_pair("propriedade", IDENTIFICADOR));
 	//this->tabelaTeste.push_back(make_pair("FIM", FIM));
 
@@ -500,18 +499,15 @@ void TU_Analise_Lexica::Teste_030()
 //Teste diverso operadores
 void TU_Analise_Lexica::Teste_031()
 {
-	string expressao = "\"TU_Analise_LexicaTRING\"+\'C\'->555&.99.99.";
+	string expressao = "\"TU_Analise_LexicaTRING\"+\'C\'555&99.99";
 
 	this->tabelaTeste.clear();
 	this->tabelaTeste.push_back(make_pair("\"TU_Analise_LexicaTRING\"", STRING));
 	this->tabelaTeste.push_back(make_pair("+", OP_ADICAO));
 	this->tabelaTeste.push_back(make_pair("\'C\'", CARACTERE));
-	this->tabelaTeste.push_back(make_pair("->", OP_SELECAO_PONTEIRO));
 	this->tabelaTeste.push_back(make_pair("555", NUM_INT));
 	this->tabelaTeste.push_back(make_pair("&", ENDERECO_ELEMENTO));
-	this->tabelaTeste.push_back(make_pair(".", OP_SELECAO_IDENTIFICADOR));
 	this->tabelaTeste.push_back(make_pair("99.99", NUM_REAL));
-	this->tabelaTeste.push_back(make_pair(".", OP_SELECAO_IDENTIFICADOR));
 	//this->tabelaTeste.push_back(make_pair("FIM", FIM));
 
 	Realizar_Testes(expressao, "TESTE_31");
@@ -925,12 +921,9 @@ void TU_Analise_Lexica::Teste_060()
 	string expressao = " objeto->objeto.objeto->propriedade		";
 
 	this->tabelaTeste.clear();
-	this->tabelaTeste.push_back(make_pair("objeto", IDENTIFICADOR));
-	this->tabelaTeste.push_back(make_pair("->", OP_SELECAO_PONTEIRO));
-	this->tabelaTeste.push_back(make_pair("objeto", IDENTIFICADOR));
-	this->tabelaTeste.push_back(make_pair(".", OP_SELECAO_IDENTIFICADOR));
-	this->tabelaTeste.push_back(make_pair("objeto", IDENTIFICADOR));
-	this->tabelaTeste.push_back(make_pair("->", OP_SELECAO_PONTEIRO));
+	this->tabelaTeste.push_back(make_pair("objeto->", ID_SEL_PONTEIRO));
+	this->tabelaTeste.push_back(make_pair("objeto.", ID_SEL_IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("objeto->", ID_SEL_PONTEIRO));
 	this->tabelaTeste.push_back(make_pair("propriedade", IDENTIFICADOR));
 	//this->tabelaTeste.push_back(make_pair("FIM", FIM));
 
@@ -1040,5 +1033,32 @@ void TU_Analise_Lexica::Teste_062()
 	this->tabelaTeste.push_back(make_pair("end_class", END_CLASS));
 
 	Realizar_Testes(expressao, "TESTE_62");
+}
+
+//Teste operador decremento após identificados, para não confundir com ID_SEL_PONTEIRO
+void TU_Analise_Lexica::Teste_063()
+{
+	string expressao = " return (fibonacci(n-1) + fibonacci(n-2));		";
+
+	this->tabelaTeste.clear();
+	this->tabelaTeste.push_back(make_pair("return", RETORNO));
+	this->tabelaTeste.push_back(make_pair("(", ABRE_PARENTESES));
+	this->tabelaTeste.push_back(make_pair("fibonacci", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("(", ABRE_PARENTESES));
+	this->tabelaTeste.push_back(make_pair("n", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("-", OP_SUBTRACAO));
+	this->tabelaTeste.push_back(make_pair("1", NUM_INT));
+	this->tabelaTeste.push_back(make_pair(")", FECHA_PARENTESES));
+	this->tabelaTeste.push_back(make_pair("+", OP_ADICAO));
+	this->tabelaTeste.push_back(make_pair("fibonacci", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("(", ABRE_PARENTESES));
+	this->tabelaTeste.push_back(make_pair("n", IDENTIFICADOR));
+	this->tabelaTeste.push_back(make_pair("-", OP_SUBTRACAO));
+	this->tabelaTeste.push_back(make_pair("2", NUM_INT));
+	this->tabelaTeste.push_back(make_pair(")", FECHA_PARENTESES));
+	this->tabelaTeste.push_back(make_pair(")", FECHA_PARENTESES));
+	this->tabelaTeste.push_back(make_pair(";", PONTO_VIRGULA));
+
+	Realizar_Testes(expressao, "TESTE_63");
 }
 

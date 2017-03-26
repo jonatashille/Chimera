@@ -78,5 +78,6 @@ public:
 	void Teste_060();
 	void Teste_061();
 	void Teste_062();
+	void Teste_063();
 };
 

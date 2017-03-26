@@ -1,0 +1,60 @@
+#    ID             CATEGORIA           TIPO                Escopo  Param     ParametrosPass By   valor               
+------------------------------------------------------------------------------------------------------------------------------------
+0    id             VAR                 TIPO_INT            GLOBAL  0         0                                       
+0    nome           VAR                 TIPO_STRING                 0         0                                       
+0    objr           VAR                 TIPO_BOOLEANO               0         0                                       
+0    id             VAR                 TIPO_INT            GLOBAL  0         0                                       
+0    nome           VAR                 TIPO_STRING                 0         0                                       
+0    platinium      VAR                 TIPO_BOOLEANO               0         0                                       
+0    set_cliente    SUB                                     LOCAL   0         0                                       
+0    _nome          VAR                                     LOCAL   0         0                                       
+0                                                                   1         0                                       
+0    _platinium     VAR                                             0         0                                       
+0                                                                   1         0                                       
+0    id             VAR                 TIPO_INT                    0         0                                       
+0    nome           VAR                 TIPO_STRING                 0         0                                       
+0    platinium      VAR                 TIPO_BOOLEANO               0         0                                       
+0    MAX            CONSTANTE           TIPO_INT            GLOBAL  0         0                   7                   
+0    MAX_ARRAY      CONSTANTE           TIPO_INT            GLOBAL  0         0                   100                 
+0    n              VAR                                     GLOBAL  0         0                                       
+0                                                                   1         0                                       
+0    teste          VAR                 TIPO_BOOLEANO               0         0                                       
+0    p_fibonacci    SUB                 TIPO_INT            LOCAL   0         0                                       
+0    n              VAR                 TIPO_INT            LOCAL   0         0                                       
+0    i              VAR                                             0         0                                       
+0    c              VAR                                             0         0                                       
+0    p_par_impar    SUB                 TIPO_INT            LOCAL   0         0                                       
+0    n              VAR                 TIPO_INT            LOCAL   0         0                                       
+0    n              VAR                 TIPO_STRING         GLOBAL  0         0                                       
+0                                                                   1         0                                       
+0    p_fatorial     SUB                 TIPO_INT            LOCAL   0         0                                       
+0    n              VAR                 TIPO_INT            LOCAL   0         0                                       
+0    f              VAR                 TIPO_INT                    0         0                                       
+0    p_operacoes    SUB                 TIPO_STRING         LOCAL   0         0                                       
+0    num1           VAR                 TIPO_INT            LOCAL   0         0                                       
+0    num2           VAR                                             0         0                                       
+0    soma           VAR                                             0         0                                       
+0    diminui        VAR                                             0         0                                       
+0    multiplica     VAR                                             0         0                                       
+0    divide         VAR                 TIPO_FLOAT                  0         0                                       
+0    p_maior_num_arraySUB                 TIPO_STRING         LOCAL   0         0                                       
+0    array          VAR                 TIPO_INT            LOCAL   0         0                                       
+0    maximo         VAR                                             0         0                                       
+0    tamanho        VAR                                             0         0                                       
+0    c              VAR                                             0         0                                       
+0    local          VAR                                             0         0                                       
+0    bubble_sort    SUB                 TIPO_STRING         LOCAL   0         0                                       
+0    lista          VAR                 TIPO_STRING         LOCAL   0         0                                       
+0                                                                   1         0                                       
+0    n              VAR                                             0         0                                       
+0                                                                   1         0                                       
+0    c              VAR                 TIPO_INT                    0         0                                       
+0    d              VAR                                             0         0                                       
+0    t              VAR                                             0         0                                       
+0    p_bubble_sort  SUB                 TIPO_INT            LOCAL   0         0                                       
+0    array          VAR                 TIPO_INT            LOCAL   0         0                                       
+0    tamanho        VAR                                             0         0                                       
+0    c              VAR                                             0         0                                       
+0    d              VAR                                             0         0                                       
+0    swap           VAR                                             0         0                                       
+0    main           SUB                 TIPO_INT            LOCAL   0         0                                       

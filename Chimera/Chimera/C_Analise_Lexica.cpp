@@ -175,7 +175,7 @@ void C_Analise_Lexica::Estado_01()
 	case '/': estado = 15; return;
 	case '|': estado = 16; return;
 	case ',': Set_Resultado(string(1, ch), VIRGULA); break;
-	case '.': Set_Resultado(string(1, ch), OP_SELECAO_IDENTIFICADOR); break;
+	//case '.': Set_Resultado(string(1, ch), OP_SELECAO_IDENTIFICADOR); break;
 	case ';': Set_Resultado(string(1, ch), PONTO_VIRGULA); break;
 	case '(': Set_Resultado(string(1, ch), ABRE_PARENTESES); break;
 	case ')': Set_Resultado(string(1, ch), FECHA_PARENTESES); break;
@@ -466,13 +466,13 @@ void C_Analise_Lexica::Estado_13()
 		return;
 	}
 
-	if (ch == '>')
+	/*if (ch == '>')
 	{
 		lexema += ch;
 		Set_Resultado(lexema, OP_SELECAO_PONTEIRO);
 		continua = false;
 		return;
-	}
+	}*/
 
 	Voltar_Um();
 	Set_Resultado(lexema, OP_SUBTRACAO);
@@ -556,19 +556,49 @@ void C_Analise_Lexica::Estado_17()
 		ch = ProximoChar();
 	}
 
-	if (Validar_Identificador())
+	//verificar se é objeto. ou objeto->
+	if (ch == '.')
+	{
+		lexema += ch;
+		Set_Resultado(lexema, ID_SEL_IDENTIFICADOR);
+		continua = false;
+	}
+	else if (ch == '-')
+	{
+		char temp_ch = ch;
+		ch = ProximoChar();
+		if (ch != '>')
+		{
+			Voltar_Um();
+			if (Validar_Identificador())
+			{
+				token_palavra_reservada = Buscar_Palavra_Reservada();
+				if (token_palavra_reservada == "")
+					Set_Resultado(lexema, IDENTIFICADOR);
+				else
+					Set_Resultado(lexema, token_palavra_reservada);
+
+				continua = false;
+				Voltar_Um();
+				return;
+			}
+			else
+				ERRO("Identificador: " + lexema + string(1, ch) + " - Caractere invalido: " + string(1, ch));
+		}
+		lexema += temp_ch;
+		lexema += ch;
+		Set_Resultado(lexema, ID_SEL_PONTEIRO);
+		continua = false;
+	}
+	else if (Validar_Identificador())
 	{
 		token_palavra_reservada = Buscar_Palavra_Reservada();
 		if (token_palavra_reservada == "")
-		{
 			Set_Resultado(lexema, IDENTIFICADOR);
-			continua = false;
-		}
 		else
-		{
 			Set_Resultado(lexema, token_palavra_reservada);
-			continua = false;
-		}
+		
+		continua = false;
 		Voltar_Um();
 	}
 	else

@@ -86,10 +86,14 @@ void C_Analise_Sintatica::Lista_decl()
 		token == TIPO_CLASS)
 	{
 		Decl();
-		Lista_decl_1();
+		Lista_decl();
+	}
+	else if (token != FIM_PROGRAMA)
+		Erro("Esperado lista de declaracao");
+	/*	Lista_decl_1();
 	}
 	else
-		Erro("Esperado lista de declaracao");
+		Erro("Esperado lista de declaracao");*/
 }
 
 //LD'
@@ -111,6 +115,8 @@ void C_Analise_Sintatica::Lista_decl_1()
 //D
 void C_Analise_Sintatica::Decl()
 {
+	//Simbolo
+	simbolos.escopo = GLOBAL;
 	if (token == CONSTANTE)
 	{
 		Decl_const();
@@ -144,11 +150,18 @@ void C_Analise_Sintatica::Decl_const()
 {
 	Aceitar_Token(CONSTANTE, ERR_CONTANTE);
 
-	Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+	//Simbolo
+	simbolos.categoria = CONSTANTE;
+
+	simbolos.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
 
 	Aceitar_Token(OP_ATRIBUICAO, ERR_OP_ATRIBUICAO);
 
 	Literal();
+
+	simbolos.linha = iter_token_lexema->linha;
+	ts.Inserir(simbolos);
+	Limpar_Simbolos();
 
 	Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
 }
@@ -158,33 +171,38 @@ void C_Analise_Sintatica::Decl_var()
 {
 	Aceitar_Token(VAR, ERR_VAR);
 
-	Espec_tipo();
+	simbolos.tipo = Espec_tipo();
 	Lista_decl_var();
 
 	Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
 }
 
-void C_Analise_Sintatica::Espec_tipo()
+string C_Analise_Sintatica::Espec_tipo()
 {
 	if (token == TIPO_BOOLEANO)
-	{
+	{	
 		Aceitar_Token(TIPO_BOOLEANO, ERR_TIPO_BOOLEANO);
+	return TIPO_BOOLEANO;
 	}
 	else if (token == TIPO_CHAR)
 	{
 		Aceitar_Token(TIPO_CHAR, ERR_TIPO_CHAR);
+		return TIPO_CHAR;
 	}
 	else if (token == TIPO_FLOAT)
 	{
 		Aceitar_Token(TIPO_FLOAT, ERR_TIPO_FLOAT);
+		return TIPO_FLOAT;
 	}
 	else if (token == TIPO_INT)
 	{
 		Aceitar_Token(TIPO_INT, ERR_TIPO_INT);
+		return TIPO_INT;
 	}
 	else if (token == TIPO_STRING)
 	{
 		Aceitar_Token(TIPO_STRING, ERR_TIPO_STRING);
+		return TIPO_STRING;
 	}
 	else
 		Erro("Esperado tipo");
@@ -195,7 +213,11 @@ void C_Analise_Sintatica::Decl_proc()
 {
 	Aceitar_Token(SUB, ERR_SUB);
 
-	Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+	simbolos.linha = iter_token_lexema->linha;
+	simbolos.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+	simbolos.escopo = LOCAL; //TODO 1 Nao deve ser so local aqui
+	simbolos.categoria = SUB;
+	ts.Inserir(simbolos);
 
 	Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
 
@@ -271,6 +293,10 @@ void C_Analise_Sintatica::Param()
 	Aceitar_Token(BY, ERR_BY);
 
 	Mode();
+
+	simbolos.parametro = true;
+	ts.Inserir(simbolos);
+	Limpar_Simbolos();
 }
 
 //MD
@@ -408,6 +434,8 @@ void C_Analise_Sintatica::Bloco()
 		token == LACO_DO ||
 		token == LACO_FOR ||
 		token == IDENTIFICADOR ||
+		token == ID_SEL_IDENTIFICADOR||
+		token == ID_SEL_PONTEIRO||
 		token == CONDICAO_IF ||
 		token == PRINT ||
 		token == PRINTLN ||
@@ -431,6 +459,8 @@ void C_Analise_Sintatica::Lista_com()
 		token == LACO_DO ||
 		token == LACO_FOR ||
 		token == IDENTIFICADOR ||
+		token == ID_SEL_IDENTIFICADOR ||
+		token == ID_SEL_PONTEIRO ||
 		token == CONDICAO_IF ||
 		token == PRINT ||
 		token == PRINTLN ||
@@ -467,7 +497,7 @@ void C_Analise_Sintatica::Comando()
 	{
 		Com_repeticao();
 	}
-	else if (token == IDENTIFICADOR)
+	else if (token == IDENTIFICADOR || token == ID_SEL_IDENTIFICADOR || token == ID_SEL_PONTEIRO)
 	{
 		Id_Composto();
 		Comando_1();
@@ -658,10 +688,25 @@ void C_Analise_Sintatica::Com_escrita()
 //IC - Navegar até o membo de uma struct/classe
 void C_Analise_Sintatica::Id_Composto()
 {
-	if (token == IDENTIFICADOR &&
+	if (token == IDENTIFICADOR)
+		simbolos.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+	else if (token == ID_SEL_IDENTIFICADOR)
+	{
+		Aceitar_Token(ID_SEL_IDENTIFICADOR, ERR_OP_SELECAO_IDENTIFICADOR);
+		Id_Composto();
+	}
+		
+	else if (token == ID_SEL_PONTEIRO)
+	{
+		Aceitar_Token(ID_SEL_PONTEIRO, ERR_OP_SELECAO_PONTEIRO);
+		Id_Composto();
+	}
+		
+
+	/*if (token == IDENTIFICADOR &&
 		(Proximo_Token() == OP_SELECAO_IDENTIFICADOR || Proximo_Token() == OP_SELECAO_PONTEIRO))
 	{
-		Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+		simbolos.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
 		if (token == OP_SELECAO_IDENTIFICADOR)
 		{
 			Aceitar_Token(OP_SELECAO_IDENTIFICADOR, ERR_OP_SELECAO_IDENTIFICADOR);
@@ -674,7 +719,7 @@ void C_Analise_Sintatica::Id_Composto()
 		Id_Composto();
 	} 
 	else
-		Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+		simbolos.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);*/
 }
 
 
@@ -689,6 +734,8 @@ void C_Analise_Sintatica::Lista_exp()
 		token == CARACTERE ||
 		token == FALSO ||
 		token == IDENTIFICADOR ||
+		token == ID_SEL_IDENTIFICADOR ||
+		token == ID_SEL_PONTEIRO ||
 		token == OP_NEGACAO ||
 		token == NUM_INT ||
 		token == NUM_REAL ||
@@ -717,7 +764,9 @@ void C_Analise_Sintatica::Lista_exp_1()
 //EX
 void C_Analise_Sintatica::Exp()
 {
-	if (token == IDENTIFICADOR)
+	if (token == IDENTIFICADOR ||
+		token == ID_SEL_IDENTIFICADOR ||
+		token == ID_SEL_PONTEIRO)
 	{
 		Exp_soma();
 		Exp_1();
@@ -784,6 +833,8 @@ void C_Analise_Sintatica::Exp_soma()
 		token == CARACTERE ||
 		token == FALSO ||
 		token == IDENTIFICADOR ||
+		token == ID_SEL_IDENTIFICADOR ||
+		token == ID_SEL_PONTEIRO ||
 		token == OP_NEGACAO ||
 		token == NUM_INT ||
 		token == NUM_REAL ||
@@ -831,6 +882,8 @@ void C_Analise_Sintatica::Exp_mult()
 		token == CARACTERE ||
 		token == FALSO ||
 		token == IDENTIFICADOR ||
+		token == ID_SEL_IDENTIFICADOR ||
+		token == ID_SEL_PONTEIRO ||
 		token == OP_NEGACAO ||
 		token == NUM_INT ||
 		token == NUM_REAL ||
@@ -898,7 +951,7 @@ void C_Analise_Sintatica::Exp_simples()
 	{
 		Literal();
 	}
-	else if (token == IDENTIFICADOR)
+	else if (token == IDENTIFICADOR || token == ID_SEL_IDENTIFICADOR || token == ID_SEL_PONTEIRO)
 	{
 		Id_Composto();
 		Exp_simples_1();
@@ -932,19 +985,43 @@ void C_Analise_Sintatica::Literal()
 		Valor_verdade();
 	else if (token == CARACTERE)
 	{
-		Aceitar_Token(CARACTERE, ERR_CARACTERE);
+		simbolos.tipo = TIPO_CHAR;
+		if (simbolos.categoria == CONSTANTE)
+		{
+			simbolos.valor = Aceitar_Token(CARACTERE, ERR_CARACTERE);
+		}
+		else
+			Aceitar_Token(CARACTERE, ERR_CARACTERE);
 	}
 	else if (token == NUM_INT)
 	{
-		Aceitar_Token(NUM_INT, ERR_NUM);
+		simbolos.tipo = TIPO_INT;
+		if (simbolos.categoria == CONSTANTE)
+		{
+			simbolos.valor = Aceitar_Token(NUM_INT, ERR_NUM);
+		}
+		else
+			Aceitar_Token(NUM_INT, ERR_NUM);
 	}
 	else if (token == NUM_REAL)
 	{
-		Aceitar_Token(NUM_REAL, ERR_NUM_REAL);
+		simbolos.tipo = TIPO_FLOAT;
+		if (simbolos.categoria == CONSTANTE)
+		{
+			simbolos.valor = Aceitar_Token(NUM_REAL, ERR_NUM_REAL);
+		}
+		else
+			Aceitar_Token(NUM_REAL, ERR_NUM_REAL);
 	}
 	else if (token == STRING)
 	{
-		Aceitar_Token(STRING, ERR_STRING);
+		simbolos.tipo = TIPO_STRING;
+		if (simbolos.categoria == CONSTANTE)
+		{
+			simbolos.valor = Aceitar_Token(STRING, ERR_STRING);
+		}
+		else
+			Aceitar_Token(STRING, ERR_STRING);
 	}
 	else
 		Erro("Esperado literal");
@@ -955,11 +1032,23 @@ void C_Analise_Sintatica::Valor_verdade()
 {
 	if (token == FALSO)
 	{
-		Aceitar_Token(FALSO, ERR_FALSO);
+		simbolos.tipo = TIPO_BOOLEANO;
+		if (simbolos.categoria == CONSTANTE)
+		{
+			simbolos.valor = Aceitar_Token(FALSO, ERR_FALSO);
+		}
+		else
+			Aceitar_Token(FALSO, ERR_FALSO);
 	}
 	else if (token == VERDADEIRO)
 	{
-		Aceitar_Token(VERDADEIRO, ERR_VERDADEIRO);
+		simbolos.tipo = TIPO_BOOLEANO;
+		if (simbolos.categoria == CONSTANTE)
+		{
+			simbolos.valor = Aceitar_Token(VERDADEIRO, ERR_VERDADEIRO);
+		}
+		else
+			Aceitar_Token(VERDADEIRO, ERR_VERDADEIRO);
 	}
 }
 
@@ -972,6 +1061,8 @@ void C_Analise_Sintatica::Args()
 		token == CARACTERE ||
 		token == FALSO ||
 		token == IDENTIFICADOR ||
+		token == ID_SEL_IDENTIFICADOR ||
+		token == ID_SEL_PONTEIRO ||
 		token == OP_NEGACAO ||
 		token == NUM_INT ||
 		token == NUM_REAL ||
@@ -988,6 +1079,7 @@ void C_Analise_Sintatica::Args()
 void C_Analise_Sintatica::Lista_var()
 {
 	Id_Composto();
+	simbolos.linha = iter_token_lexema->linha;
 	
 	Lista_var_1();
 }
@@ -1028,7 +1120,11 @@ void C_Analise_Sintatica::Lista_var_2()
 
 void C_Analise_Sintatica::Lista_decl_var()
 {
-	Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+	simbolos.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+	simbolos.linha = iter_token_lexema->linha;
+	simbolos.categoria = VAR;
+	ts.Inserir(simbolos);
+	Limpar_Simbolos();
 
 	Lista_decl_var_1();
 }
@@ -1076,4 +1172,18 @@ void C_Analise_Sintatica::Op_unario()
 		Aceitar_Token(OP_NEGACAO, ERR_OP_NEGACAO);
 	else
 		Erro("Esperado operador unario");
+}
+
+void C_Analise_Sintatica::Limpar_Simbolos()
+{
+	simbolos.categoria = "";
+	simbolos.chave = 0;
+	simbolos.escopo = "";
+	simbolos.identificador = "";
+	simbolos.parametro = false;
+	simbolos.params = 0;
+	simbolos.passby = "";
+	simbolos.tipo = "";
+	simbolos.valido = false;
+	simbolos.valor = "";
 }

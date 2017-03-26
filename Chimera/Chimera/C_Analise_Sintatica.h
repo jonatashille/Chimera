@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.cpp"
 #include "S_Token_Lexema.h"
+#include "C_Tabela_Simbolos.h"
 
 using namespace std;
 
@@ -11,7 +12,8 @@ private:
 	vector<S_Token_Lexema>::iterator iter_token_lexema;
 	S_Token_Lexema token_lexema;
 	string token;
-
+	S_Simbolos simbolos;
+	C_Tabela_Simbolos ts;
 public:
 	C_Analise_Sintatica(vector<S_Token_Lexema>);
 	~C_Analise_Sintatica();
@@ -19,7 +21,6 @@ public:
 	void Iniciar();
 
 	void Proximo_Token_Lexema();
-	void Encontrar_Membro();
 	string Proximo_Token();
 
 	void Erro(string);
@@ -32,7 +33,7 @@ public:
 	void Decl();
 	void Decl_const();
 	void Decl_var();
-	void Espec_tipo();
+	string Espec_tipo();
 	void Decl_proc();
 	void Decl_func();
 	void Params();
@@ -85,5 +86,8 @@ public:
 	void Lista_decl_var_1();
 	void Lista_decl_var_2();
 	void Op_unario();
+
+	//Outros métodos
+	void Limpar_Simbolos();
 };
 

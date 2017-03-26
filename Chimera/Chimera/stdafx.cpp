@@ -9,7 +9,7 @@
 
 //#include <utility>
 #include <iomanip>
-//#include <map>
+#include <map>
 
 
 //TOKENS
@@ -19,8 +19,8 @@
 #define IDENTIFICADOR "IDENTIFICADOR"
 #define NUM_INT "NUMERO_INTEIRO"
 #define NUM_REAL "NUMERO_REAL" 
-//#define OBJ_SEL_IDENTIFICADOR "OBJ_SEL_IDENTIFICADOR"
-//#define OBJ_SEL_PONTEIRO "OBJ_SEL_PONTEIRO"
+#define ID_SEL_IDENTIFICADOR "ID_SEL_IDENTIFICADOR"
+#define ID_SEL_PONTEIRO "ID_SEL_PONTEIRO"
 
 #define CARACTERE "CARACTERE"
 #define STRING "STRING"
@@ -113,8 +113,8 @@
 #define OP_INCREMENTO "OP_INCREMENTO"
 #define OP_DECREMENTO "OP_DECREMENTO"
 
-#define OP_SELECAO_IDENTIFICADOR "OP_SELECAO_IDENTIFICADOR"
-#define OP_SELECAO_PONTEIRO "OP_SELECAO_PONTEIRO"
+//#define OP_SELECAO_IDENTIFICADOR "OP_SELECAO_IDENTIFICADOR"
+//#define OP_SELECAO_PONTEIRO "OP_SELECAO_PONTEIRO"
 
 
 #define ENDERECO_ELEMENTO "ENDERECO_ELEMENTO"
@@ -219,3 +219,8 @@
 #define ERR_SCANLN "Esperado scanln"
 #define ERR_PRINT "Esperado print"
 #define ERR_PRINTLN "Esperado println"
+
+
+////////////////////////////////////
+#define GLOBAL "GLOBAL"
+#define LOCAL "LOCAL"
