@@ -13,5 +13,5 @@ void main()
 	//Compilar("Test_Files\\TF_004.chi");
 	//Executar_Testes_Unitatios();
 
-	system("pause");
+	//system("pause");
 }

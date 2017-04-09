@@ -84,8 +84,8 @@ void C_Analise_Lexica::Montar_Tabela_Palavras_Reservadas()
 	palavras_reservadas.push_back(make_pair("div", OP_DIVISAO));
 	palavras_reservadas.push_back(make_pair("mod", OP_MOD));
 	palavras_reservadas.push_back(make_pair("and", OP_LOGICO_E));
-	palavras_reservadas.push_back(make_pair("struct", TIPO_STRUCT));
-	palavras_reservadas.push_back(make_pair("class", TIPO_CLASS));
+	palavras_reservadas.push_back(make_pair("struct", ESTRUTURA));
+	palavras_reservadas.push_back(make_pair("class", CLASSE));
 	palavras_reservadas.push_back(make_pair("end_struct", END_STRUCT));
 	palavras_reservadas.push_back(make_pair("end_class", END_CLASS));
 	palavras_reservadas.push_back(make_pair("private", ACESS_PRIVATE));

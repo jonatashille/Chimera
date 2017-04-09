@@ -12,8 +12,18 @@ private:
 	vector<S_Token_Lexema>::iterator iter_token_lexema;
 	S_Token_Lexema token_lexema;
 	string token;
-	S_Simbolos simbolos;
+	S_Simbolos sdummy;
+	S_Simbolos sfuncao;
+	S_Simbolos sproc;
+	S_Simbolos sconst;
+	S_Simbolos svar;
+	S_Simbolos sstruct;
+	S_Simbolos sclasse;
+	S_Params params;
+	S_Atual satual;
 	C_Tabela_Simbolos ts;
+	int chave;
+	stack<int> pilha_parente;
 public:
 	C_Analise_Sintatica(vector<S_Token_Lexema>);
 	~C_Analise_Sintatica();
@@ -29,7 +39,6 @@ public:
 	//Declarações
 	void Programa(); //P
 	void Lista_decl();
-	void Lista_decl_1();
 	void Decl();
 	void Decl_const();
 	void Decl_var();
@@ -76,8 +85,8 @@ public:
 	void Op_mult();
 	void Exp_simples();
 	void Exp_simples_1();
-	void Literal();
-	void Valor_verdade();
+	void Literal(S_Simbolos&);
+	void Valor_verdade(S_Simbolos&);
 	void Args();
 	void Lista_var();
 	void Lista_var_1();
@@ -88,6 +97,6 @@ public:
 	void Op_unario();
 
 	//Outros métodos
-	void Limpar_Simbolos();
+	void Iniciar_Simbolos(S_Simbolos&);
 };
 

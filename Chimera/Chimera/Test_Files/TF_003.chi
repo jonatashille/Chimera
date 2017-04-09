@@ -4,7 +4,7 @@ struct cliente
     var bool objr;
 end_struct
 
-class cliente
+class cliente_class
     private:
         var int id;
         var string nome;
@@ -12,6 +12,7 @@ class cliente
         function int calcular_id()
             return algum_hashing_maluco;
         end_function
+        const c_privada = 51;
     public:
         sub set_cliente(var string _nome by value, var bool _platinium by value)
             id = calcular_id();
@@ -38,6 +39,7 @@ class cliente
     		a = b1->d;
     		scan(objeto.array[c]);
         end_sub 
+        const c_publica= "const publica";
         function string get_nome()
             return nome;
         end_function    

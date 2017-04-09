@@ -26,8 +26,6 @@ void TU_Analise_Sintatica::Executar()
 //
 void TU_Analise_Sintatica::Teste_001()
 {
-	string expressao = "";
-	C_Analise_Lexica lexica();
 
 }
 

@@ -936,7 +936,7 @@ void TU_Analise_Lexica::Teste_061()
 	string expressao = " struct cliente var int id; var string nome; var bool platinium; end_struct	";
 
 	this->tabelaTeste.clear();
-	this->tabelaTeste.push_back(make_pair("struct", TIPO_STRUCT));
+	this->tabelaTeste.push_back(make_pair("struct", ESTRUTURA));
 	this->tabelaTeste.push_back(make_pair("cliente", IDENTIFICADOR));
 	this->tabelaTeste.push_back(make_pair("var", VAR));
 	this->tabelaTeste.push_back(make_pair("int", TIPO_INT));
@@ -964,7 +964,7 @@ void TU_Analise_Lexica::Teste_062()
 	expressao += " function string get_nome() return nome; end_function end_class";
 
 	this->tabelaTeste.clear();
-	this->tabelaTeste.push_back(make_pair("class", TIPO_CLASS));
+	this->tabelaTeste.push_back(make_pair("class", CLASSE));
 	this->tabelaTeste.push_back(make_pair("cliente", IDENTIFICADOR));
 	this->tabelaTeste.push_back(make_pair("private", ACESS_PRIVATE));
 	this->tabelaTeste.push_back(make_pair(":", DOIS_PONTOS));

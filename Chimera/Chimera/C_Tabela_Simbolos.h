@@ -3,34 +3,16 @@
 
 using namespace std;
 
-struct S_TS_Local
+struct S_Params
 {
 	int chave;
 	string identificador;
+	string categoria = PARAM;
 	string tipo;
-	string categoria;
-	string valor;
 	string passby;
-	bool parametro;
-	int params;
-	//string escopo;
-	bool valido;
-}; typedef struct S_TS_Local S_TS_Local;
-
-struct S_TS_Global
-{
-	int chave;
-	string identificador;
-	string tipo;
-	string categoria;
-	string valor;
-	string passby;
-	bool parametro;
-	int params;
-	//string escopo;
-	bool valido;
-	map<int, S_TS_Local> local;
-}; typedef S_TS_Global S_TS_Global;
+	int pai;
+	int linha;
+}; typedef S_Params S_Params;
 
 struct S_Simbolos
 {
@@ -39,17 +21,31 @@ struct S_Simbolos
 	string tipo;
 	string categoria;
 	string valor;
-	string passby;
-	bool parametro;
-	int params;
-	string escopo;
+	int pai;
 	bool valido;
 	int linha;
+	vector<S_Params> params;
+	Acesso access;
+
+	//Sobrecarga do operador < para ordenar a TS pela chave
+	bool operator < (const S_Simbolos& ts)
+	{
+		return (chave < ts.chave);
+	}
+
 }; typedef S_Simbolos S_Simbolos;
+
+struct S_Atual
+{
+	int chave;
+	string categoria;
+	Acesso access;
+}; typedef S_Atual S_Atual;
 
 class C_Tabela_Simbolos
 {
 private:
+	int chave;
 	//map<int, S_TS_Global> tabela_simbolos;
 public:
 	C_Tabela_Simbolos();

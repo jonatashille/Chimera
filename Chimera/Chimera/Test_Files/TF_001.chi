@@ -5,6 +5,7 @@ const cc = 'a';
 const cs = "Jonatas";
 const cvt = true;
 const cvf = false;
+var int globalvar;
 
 function int fat(var int k by value, var float y by ref) // 2 parametros
 	if(n==0) then

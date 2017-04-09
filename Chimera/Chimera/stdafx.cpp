@@ -5,12 +5,16 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <stack>
 
 
 //#include <utility>
 #include <iomanip>
 #include <map>
 
+
+//Enumeradores
+enum Acesso { PUBLIC, PRIVATE, PROTECTED };
 
 //TOKENS
 #define FIM "FIM"
@@ -37,8 +41,8 @@
 #define TIPO_INT "TIPO_INT"
 #define TIPO_VOID "TIPO_VOID"
 #define TIPO_STRING "TIPO_STRING"
-#define TIPO_STRUCT "TIPO_STRUCT"
-#define TIPO_CLASS "TIPO_CLASS"
+#define ESTRUTURA "ESTRUTURA"
+#define CLASSE "CLASSE"
 #define END_STRUCT "END_STRUCT"
 #define END_CLASS "END_CLASS"
 
@@ -224,3 +228,4 @@
 ////////////////////////////////////
 #define GLOBAL "GLOBAL"
 #define LOCAL "LOCAL"
+#define PARAM "PARAMETRO"
