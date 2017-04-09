@@ -3,17 +3,6 @@
 
 using namespace std;
 
-struct S_Params
-{
-	int chave;
-	string identificador;
-	string categoria = PARAM;
-	string tipo;
-	string passby;
-	int pai;
-	int linha;
-}; typedef S_Params S_Params;
-
 struct S_Simbolos
 {
 	int chave;
@@ -21,10 +10,11 @@ struct S_Simbolos
 	string tipo;
 	string categoria;
 	string valor;
+	string passby;
 	int pai;
+	int classe;
 	bool valido;
 	int linha;
-	vector<S_Params> params;
 	Acesso access;
 
 	//Sobrecarga do operador < para ordenar a TS pela chave
@@ -35,18 +25,10 @@ struct S_Simbolos
 
 }; typedef S_Simbolos S_Simbolos;
 
-struct S_Atual
-{
-	int chave;
-	string categoria;
-	Acesso access;
-}; typedef S_Atual S_Atual;
-
 class C_Tabela_Simbolos
 {
 private:
 	int chave;
-	//map<int, S_TS_Global> tabela_simbolos;
 public:
 	C_Tabela_Simbolos();
 	~C_Tabela_Simbolos();
@@ -57,7 +39,13 @@ public:
 	bool Constultar(string);
 	string Retornar_Tipo(string);
 	bool Remover(string);
+	//Utilizado para inativar os símbolos, dado um escopo
+	void Inativar_Simbolos(int);
+
+	void Existe_ID(S_Simbolos);
 
 	void Imprimir_TS();
+
+	void Erro(string, S_Simbolos);
 };
 

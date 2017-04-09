@@ -101,9 +101,9 @@ void C_Analise_Sintatica::Decl()
 	{
 		//Iniciar simbolo
 		Iniciar_Simbolos(sconst);
-		sconst.categoria = satual.categoria = CONSTANTE;
+		sconst.categoria = CONSTANTE;
 		//Publico por padrão
-		satual.access = PUBLIC;
+		acesso_membro = PUBLIC;
 		sconst.pai = 0;
 
 		Decl_const();
@@ -115,15 +115,17 @@ void C_Analise_Sintatica::Decl()
 		//Empilho a chave atual
 		pilha_parente.push(sfuncao.chave);
 		//Publico por padrão
-		satual.access = PUBLIC;
+		acesso_membro = PUBLIC;
 
-		sfuncao.categoria = satual.categoria = FUNCTION;
+		sfuncao.categoria = FUNCTION;
 		sfuncao.pai = 0;
 
 		Decl_func();
 
 		//Desempilho a chave, pois não terá mais filhos
 		pilha_parente.pop();
+		//Desativo todos os filhos, pois nao existirão mais na tabela de símbolos
+		
 	}
 	else if (token == SUB)
 	{
@@ -132,9 +134,9 @@ void C_Analise_Sintatica::Decl()
 		//Empilho a chave atual
 		pilha_parente.push(sproc.chave);
 		//Publico por padrão
-		satual.access = PUBLIC;
+		acesso_membro = PUBLIC;
 
-		sproc.categoria = satual.categoria = SUB;
+		sproc.categoria = SUB;
 		sproc.pai = 0;
 
 		Decl_proc();
@@ -148,7 +150,7 @@ void C_Analise_Sintatica::Decl()
 		Iniciar_Simbolos(svar);
 		svar.pai = 0;
 		//Publico por padrão
-		satual.access = PUBLIC;
+		acesso_membro = PUBLIC;
 
 		Decl_var();
 	}
@@ -159,7 +161,7 @@ void C_Analise_Sintatica::Decl()
 		//Empilho a chave atual
 		pilha_parente.push(sstruct.chave);
 		//Publico por padrão
-		satual.access = PUBLIC;
+		acesso_membro = PUBLIC;
 
 		sstruct.categoria = ESTRUTURA;
 		sstruct.pai = 0;
@@ -175,14 +177,17 @@ void C_Analise_Sintatica::Decl()
 		//Empilho a chave atual
 		pilha_parente.push(sclasse.chave);
 		//Publico por padrão
-		satual.access = PUBLIC;
+		acesso_membro = PUBLIC;
 
 		sclasse.categoria = CLASSE;
 		sclasse.pai = 0;
+		classe = sclasse.chave;
 
 		Decl_class();
 		//Desempilho a chave, pois não terá mais filhos
 		pilha_parente.pop();
+
+		classe = 0;
 	}
 	else
 		Erro("Esperado declaracao");
@@ -195,13 +200,15 @@ void C_Analise_Sintatica::Decl_const()
 
 	sconst.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
 
+	sconst.linha = iter_token_lexema->linha;
+
 	Aceitar_Token(OP_ATRIBUICAO, ERR_OP_ATRIBUICAO);
 
 	Literal(sconst);
 
 	Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
 
-	sconst.access = satual.access;
+	sconst.access = acesso_membro;
 
 	ts.Inserir(sconst);
 }
@@ -215,7 +222,7 @@ void C_Analise_Sintatica::Decl_var()
 	svar.tipo = Espec_tipo();
 	Lista_decl_var();
 
-	svar.access = satual.access;
+	svar.access = acesso_membro;
 	//Insiro a única ou última variável
 	ts.Inserir(svar);
 
@@ -272,7 +279,7 @@ void C_Analise_Sintatica::Decl_proc()
 
 	Aceitar_Token(END_SUB, ERR_END_SUB);
 
-	sproc.access = satual.access;
+	sproc.access = acesso_membro;
 	ts.Inserir(sproc);
 }
 
@@ -296,7 +303,7 @@ void C_Analise_Sintatica::Decl_func()
 
 	Aceitar_Token(END_FUNCTION, ERR_END_FUNCTION);
 
-	sfuncao.access = satual.access;
+	sfuncao.access = acesso_membro;
 	ts.Inserir(sfuncao);
 }
 
@@ -334,21 +341,17 @@ void C_Analise_Sintatica::Lista_param_1()
 //PM
 void C_Analise_Sintatica::Param()
 {
-	//Limpar Struct Params, chave continua
-	params.identificador = "";
-	params.linha = 0;
-	params.passby = "";
-	params.tipo = "";
-
 	Aceitar_Token(VAR, ERR_VAR);
-	//Incremento a chave do parametro
-	params.chave = ++chave;
+
+	Iniciar_Simbolos(sparams);
 	
+	//Categoria
+	sparams.categoria = PARAM;
 	//Especifico o tipo do parametro
-	params.tipo = Espec_tipo();
+	sparams.tipo = Espec_tipo();
 	
-	params.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
-	params.linha = iter_token_lexema->linha;
+	sparams.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+	sparams.linha = iter_token_lexema->linha;
 	if (token == ABRE_COLCHETES)
 	{
 		Aceitar_Token(ABRE_COLCHETES, ERR_ABRE_COLCHETES);
@@ -360,16 +363,10 @@ void C_Analise_Sintatica::Param()
 
 	Mode();
 	
-	if (satual.categoria == FUNCTION)
-	{
-		params.pai = sfuncao.chave;
-		sfuncao.params.push_back(params);
-	}
-	else //nesse caso é procedure
-	{
-		params.pai = sproc.chave;
-		sproc.params.push_back(params);
-	}
+	sparams.pai = pilha_parente.top();
+	sparams.access = acesso_membro;
+	sparams.classe = classe;
+	ts.Inserir(sparams);
 
 }
 
@@ -379,12 +376,12 @@ void C_Analise_Sintatica::Mode()
 	if (token == VALUE)
 	{
 		Aceitar_Token(VALUE, ERR_VALUE);
-		params.passby = VALUE;
+		sparams.passby = VALUE;
 	}
 	else if (token == REF)
 	{
 		Aceitar_Token(REF, ERR_REF);
-		params.passby = REF;
+		sparams.passby = REF;
 	}
 	else
 		Erro("Esperado mode(value ou ref)");
@@ -394,14 +391,16 @@ void C_Analise_Sintatica::Mode()
 void C_Analise_Sintatica::Decl_struct()
 {
 	Aceitar_Token(ESTRUTURA, ERR_STRUCT);
+	sstruct.linha = iter_token_lexema->linha;
 
 	sstruct.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+	
 
 	Lista_decl_struct();
 
 	Aceitar_Token(END_STRUCT, ERR_END_STRUCT);
 
-	sstruct.access = satual.access;
+	sstruct.access = acesso_membro;
 	ts.Inserir(sstruct);
 }
 
@@ -412,6 +411,7 @@ void C_Analise_Sintatica::Lista_decl_struct()
 	{
 		Iniciar_Simbolos(svar);
 		svar.pai = pilha_parente.top();
+		svar.classe = classe;
 		Decl_var();
 		Lista_decl_struct();
 	}
@@ -423,8 +423,10 @@ void C_Analise_Sintatica::Lista_decl_struct()
 void C_Analise_Sintatica::Decl_class()
 {
 	Aceitar_Token(CLASSE, ERR_CLASS);
+	sclasse.linha = iter_token_lexema->linha;
 
 	sclasse.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+	
 
 	Bloco_class();
 
@@ -459,12 +461,12 @@ void C_Analise_Sintatica::Espec_acesso()
 	if (token == ACESS_PRIVATE)
 	{
 		Aceitar_Token(ACESS_PRIVATE, ERR_ACESS_PRIVATE);
-		satual.access = PRIVATE;
+		acesso_membro = PRIVATE;
 	}
 	else if (token == ACESS_PUBLIC)
 	{
 		Aceitar_Token(ACESS_PUBLIC, ERR_ACESS_PUBLIC);
-		satual.access = PUBLIC;
+		acesso_membro = PUBLIC;
 	}
 	else
 		Erro("Esperado especificacao de acesso private ou public");
@@ -492,6 +494,7 @@ void C_Analise_Sintatica::Membro_class()
 		Iniciar_Simbolos(sconst);
 		sconst.categoria = CONSTANTE;
 		sconst.pai = pilha_parente.top();
+		sconst.classe = classe;
 
 		Decl_const();
 	}
@@ -501,10 +504,12 @@ void C_Analise_Sintatica::Membro_class()
 		Iniciar_Simbolos(sfuncao);
 		//O pai é o topo da pilha
 		sfuncao.pai = pilha_parente.top();
+		//Gravo a classe que a funcao pertence
+		sfuncao.classe = classe;
 		//Empilho a chave atual
 		pilha_parente.push(sfuncao.chave);
 
-		sfuncao.categoria = satual.categoria = FUNCTION;
+		sfuncao.categoria = FUNCTION;
 
 		Decl_func();
 
@@ -517,10 +522,12 @@ void C_Analise_Sintatica::Membro_class()
 		Iniciar_Simbolos(sproc);
 		//O pai é o topo da pilha
 		sproc.pai = pilha_parente.top();
+		//Gravo a classe que a procedure pertence
+		sproc.classe = classe;
 		//Empilho a chave atual
 		pilha_parente.push(sproc.chave);
 
-		sproc.categoria = satual.categoria = SUB;
+		sproc.categoria = SUB;
 
 		Decl_proc();
 
@@ -531,7 +538,10 @@ void C_Analise_Sintatica::Membro_class()
 	{
 		//Iniciar simbolo
 		Iniciar_Simbolos(svar);
+		//O pai é o topo da pilha
 		svar.pai = pilha_parente.top();
+		//Gravo a classe que a variavel pertence
+		svar.classe = classe;
 
 		Decl_var();
 	}
@@ -638,6 +648,7 @@ void C_Analise_Sintatica::Comando()
 	{
 		Iniciar_Simbolos(svar);
 		svar.pai = pilha_parente.top();
+		svar.classe = classe;
 		Decl_var();
 	}
 	else
@@ -1202,7 +1213,7 @@ void C_Analise_Sintatica::Lista_decl_var_1()
 	if (token == VIRGULA)
 	{
 		Aceitar_Token(VIRGULA, ERR_VIRGULA);
-		svar.access = satual.access;
+		svar.access = acesso_membro;
 		//Se encontrei virgula, inserir variável na tabela de símbolo
 		ts.Inserir(svar);
 		//Nova variável virá, incremento a chave
@@ -1228,7 +1239,7 @@ void C_Analise_Sintatica::Lista_decl_var_2()
 	if (token == VIRGULA)
 	{
 		Aceitar_Token(VIRGULA, ERR_VIRGULA);
-		svar.access = satual.access;
+		svar.access = acesso_membro;
 		//Se encontrei virgula, inserir variável na tabela de símbolo
 		ts.Inserir(svar);
 		//Nova variável virá, incremento a chave
@@ -1262,5 +1273,7 @@ void C_Analise_Sintatica::Iniciar_Simbolos(S_Simbolos &_simbolo)
 	_simbolo.tipo = "";
 	_simbolo.valido = false;
 	_simbolo.valor = "";
-	_simbolo.params.clear();
+	_simbolo.linha = 0;
+	_simbolo.passby = "";
+	_simbolo.classe = 0;
 }

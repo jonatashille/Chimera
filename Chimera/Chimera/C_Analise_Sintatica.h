@@ -19,10 +19,11 @@ private:
 	S_Simbolos svar;
 	S_Simbolos sstruct;
 	S_Simbolos sclasse;
-	S_Params params;
-	S_Atual satual;
+	S_Simbolos sparams;
+	Acesso acesso_membro;
 	C_Tabela_Simbolos ts;
 	int chave;
+	int classe;
 	stack<int> pilha_parente;
 public:
 	C_Analise_Sintatica(vector<S_Token_Lexema>);

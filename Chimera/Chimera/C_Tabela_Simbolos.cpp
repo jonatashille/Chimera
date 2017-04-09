@@ -8,7 +8,6 @@ C_Tabela_Simbolos::C_Tabela_Simbolos()
 	tabela_simbolos.clear();
 }
 
-
 C_Tabela_Simbolos::~C_Tabela_Simbolos()
 {
 	Imprimir_TS();
@@ -17,8 +16,11 @@ C_Tabela_Simbolos::~C_Tabela_Simbolos()
 bool C_Tabela_Simbolos::Inserir(S_Simbolos _simbolos)
 {
 	//Na inserção, defino como válido
-	//_simbolos.chave = ++chave;
 	_simbolos.valido = true;
+
+	//Antes de inserir, verifico se o identificador já foi declarado
+	Existe_ID(_simbolos);
+
 	tabela_simbolos.push_back(_simbolos);
 	return true;
 }
@@ -38,6 +40,29 @@ bool C_Tabela_Simbolos::Remover(string)
 	return false;
 }
 
+void C_Tabela_Simbolos::Inativar_Simbolos(int _id)
+{
+
+}
+
+void C_Tabela_Simbolos::Existe_ID(S_Simbolos _simbolo)
+{
+	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+	{
+		//Verificar se é o mesmo identificador e a mesma categoria
+		if (it->identificador == _simbolo.identificador && it->categoria == _simbolo.categoria)
+		{
+			//Se for, verifico se estão no mesmo escopo e se está válido
+			if (it->pai == _simbolo.pai && it->valido == true)
+			{
+				stringstream msg;
+				msg << _simbolo.categoria << " \'" << _simbolo.identificador << "\'" << ERR_SEM_DECLARACAO_DUPLICADA << endl;
+				Erro(msg.str(), _simbolo);
+			}
+		}
+	}
+}
+
 void C_Tabela_Simbolos::Imprimir_TS()
 {
 	fstream arquivo;
@@ -53,8 +78,10 @@ void C_Tabela_Simbolos::Imprimir_TS()
 	ss << setw(15) << left << "valor";
 	ss << setw(10) << left << "Pass By";
 	ss << setw(10) << left << "Pai";
+	ss << setw(10) << left << "Classe";
 	ss << setw(10) << left << "Acesso";
 	ss << setw(10) << left << "Ativo";
+	ss << setw(10) << left << "Linha";
 
 	ss << endl;
 	ss << "------------------------------------------------------------------";
@@ -66,25 +93,12 @@ void C_Tabela_Simbolos::Imprimir_TS()
 		ss << setw(20) << left << it->categoria;
 		ss << setw(20) << left << it->tipo;
 		ss << setw(15) << left << it->valor;
-		ss << setw(10) << left << " ";
+		ss << setw(10) << left << it->passby;
 		ss << setw(10) << left << it->pai;
+		ss << setw(10) << left << it->classe;
 		ss << setw(10) << left << it->access;
 		ss << setw(10) << left << it->valido;
-		for (auto it2 = it->params.begin(); it2 != it->params.end(); it2++)
-		{
-			ss << endl;
-			ss << "------------------------------------------------------------------";
-			ss << "------------------------------------------------------------------" << endl;
-			ss << setw(5) << left << it2->chave;
-			ss << setw(20) << left << it2->identificador;
-			ss << setw(20) << left << it2->categoria;
-			ss << setw(20) << left << it2->tipo;
-			ss << setw(15) << left << " ";
-			ss << setw(10) << left << it2->passby;
-			ss << setw(10) << left << it2->pai;
-			ss << setw(10) << left << " ";
-			ss << setw(10) << left << it->valido;
-		}
+		ss << setw(10) << left << it->linha;
 		ss << endl;
 		ss << "------------------------------------------------------------------";
 		ss << "------------------------------------------------------------------" << endl;
@@ -95,4 +109,11 @@ void C_Tabela_Simbolos::Imprimir_TS()
 	arquivo.close();
 
 	cout << "Arquivo  TS.txt gerado" << endl;
+}
+
+void C_Tabela_Simbolos::Erro(string _msg, S_Simbolos _simbolo)
+{
+	cout << "ERRO-Linha: " << _simbolo.linha << " - " << _simbolo.identificador << " -> " << _msg << endl;
+	system("pause");
+	exit(EXIT_FAILURE);
 }

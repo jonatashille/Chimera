@@ -229,3 +229,9 @@ enum Acesso { PUBLIC, PRIVATE, PROTECTED };
 #define GLOBAL "GLOBAL"
 #define LOCAL "LOCAL"
 #define PARAM "PARAMETRO"
+
+
+////////////////////////////////////
+//ERROS SEMÂNTICOS
+#define ERR_SEM_NAO_DECLARDO "Identificador nao declarado"
+#define ERR_SEM_DECLARACAO_DUPLICADA " ja foi declarado"
