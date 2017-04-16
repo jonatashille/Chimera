@@ -46,8 +46,11 @@ public:
 	void Existe_ID(S_Simbolos);
 	//Verificar se Identificador é um Array
 	bool Verificar_Array(string);
+	//Buscar categogia do identificador
+	string Buscar_Categoria(string);
+	//Buscar tipo do identificador
+	string Buscar_Tipo(string);
 	//Busca dados da TS pelo identificador
-	//S_Simbolos Buscar_Simbolo(string);
 	vector<S_Simbolos>::iterator Buscar_Simbolo(string);
 	void Imprimir_TS();
 

@@ -348,6 +348,7 @@ void C_Analise_Sintatica::Lista_param_1()
 //PM
 void C_Analise_Sintatica::Param()
 {
+	string tipo_exp;
 	Aceitar_Token(VAR, ERR_VAR);
 
 	Iniciar_Simbolos(sparams);
@@ -362,7 +363,10 @@ void C_Analise_Sintatica::Param()
 	if (token == ABRE_COLCHETES)
 	{
 		Aceitar_Token(ABRE_COLCHETES, ERR_ABRE_COLCHETES);
-		Exp_soma();
+		tipo_exp = Exp_soma();
+		//validar se é int, array só pode ter indice int 
+		if (tipo_exp != TIPO_INT)
+			Erro(ERR_SEM_INDEX_DECL_TIPO_INT);
 		Aceitar_Token(FECHA_COLCHETES, ERR_FECHA_COLCHETES);
 		sparams.array = true;
 	}
@@ -635,7 +639,10 @@ void C_Analise_Sintatica::Comando()
 	}
 	else if (token == IDENTIFICADOR || token == ID_SEL_IDENTIFICADOR || token == ID_SEL_PONTEIRO)
 	{
-		Id_Composto();
+		string identificador;
+		identificador = Id_Composto();
+	    if (ts.Buscar_Categoria(identificador) == CONSTANTE) //Constante não pode ser atribuída
+			Erro(identificador, ERR_SEM_CONST_ATRIB);
 		Comando_1();
 	}
 	else if (token == CONDICAO_IF)
@@ -666,6 +673,7 @@ void C_Analise_Sintatica::Comando()
 //CM'
 void C_Analise_Sintatica::Comando_1()
 {
+	string tipo_exp;
 	if (token == ABRE_PARENTESES)
 	{
 		Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
@@ -676,7 +684,10 @@ void C_Analise_Sintatica::Comando_1()
 	else if (token == ABRE_COLCHETES)
 	{
 		Aceitar_Token(ABRE_COLCHETES, ERR_ABRE_COLCHETES);
-		Exp_soma();
+		tipo_exp = Exp_soma();
+		//validar se é int, array só pode ter indice int 
+		if (tipo_exp != TIPO_INT)
+			Erro(ERR_SEM_INDEX_TIPO_INT);
 		Aceitar_Token(FECHA_COLCHETES, ERR_FECHA_COLCHETES);
 		Aceitar_Token(OP_ATRIBUICAO, ERR_OP_ATRIBUICAO);
 		Exp();
@@ -693,8 +704,11 @@ void C_Analise_Sintatica::Comando_1()
 //CS
 void C_Analise_Sintatica::Com_selecao()
 {
+	string tipo_exp;
 	Aceitar_Token(CONDICAO_IF, ERR_CONDICAO_IF);
-	Exp();
+	tipo_exp = Exp();
+	if (tipo_exp != TIPO_INT && tipo_exp != TIPO_BOOLEANO)
+		Erro(ERR_SEM_IF);
 	Aceitar_Token(CONDICAO_THEN, ERR_CONDICAO_THEN);
 	Bloco();
 	Com_selecao_1();
@@ -715,23 +729,35 @@ void C_Analise_Sintatica::Com_selecao_1()
 //CR
 void C_Analise_Sintatica::Com_repeticao()
 {
-	if (token == LACO_DO)
+	string tipo_exp;
+	string identificador;
+	if (token == LACO_DO) //Laço DO pode ser um problema, probabilidade de tirar ele
 	{
 		Aceitar_Token(LACO_DO, ERR_LACO_DO);
 		Bloco();
 		Aceitar_Token(LACO_WHILE, ERR_LACO_WHILE);
-		Exp();
+		tipo_exp = Exp();
+		if (tipo_exp != TIPO_INT || tipo_exp != TIPO_BOOLEANO)
+			Erro(ERR_SEM_DO);
 		Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
 	}
 	else if (token == LACO_FOR)
 	{
 		Aceitar_Token(LACO_FOR, ERR_LACO_FOR);
-		Id_Composto();
-		//Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+		identificador = Id_Composto();
+		//Preciso saber o tipo do identificador para verificar se é int
+		tipo_exp = ts.Buscar_Tipo(identificador);
+		if (tipo_exp != TIPO_INT)
+			Erro(identificador, ERR_SEM_FOR);
 		Aceitar_Token(OP_ATRIBUICAO, ERR_OP_ATRIBUICAO);
-		Exp_soma();
+		tipo_exp = Exp_soma();
+		//Expressão precisa ser int
+		if (tipo_exp != TIPO_INT)
+			Erro(ERR_SEM_FOR);
 		Aceitar_Token(LACO_TO, ERR_LACO_TO);
-		Exp_soma();
+		tipo_exp = Exp_soma();
+		if (tipo_exp != TIPO_INT)
+			Erro(ERR_SEM_FOR);
 		Aceitar_Token(LACO_DO, ERR_LACO_DO);
 		Bloco();
 		Aceitar_Token(LACO_NEXT, ERR_LACO_NEXT);
@@ -741,13 +767,19 @@ void C_Analise_Sintatica::Com_repeticao()
 		Aceitar_Token(LACO_REPEAT, ERR_LACO_REPEAT);
 		Bloco();
 		Aceitar_Token(LACO_UNTIL, ERR_LACO_UNTIL);
-		Exp();
+		tipo_exp = Exp();
+		//Expreção repeat apenas pode ser int ou booleano
+		if (!(tipo_exp == TIPO_INT || tipo_exp == TIPO_BOOLEANO))
+			Erro(ERR_SEM_REAPEAT);
 		Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
 	}
 	else if (token == LACO_WHILE)
 	{
 		Aceitar_Token(LACO_WHILE, ERR_LACO_WHILE);
-		Exp();
+		tipo_exp = Exp();
+		//Expreção while apenas pode ser int ou booleano
+		if (!(tipo_exp == TIPO_INT || tipo_exp == TIPO_BOOLEANO))
+			Erro(ERR_SEM_WHILE);
 		Aceitar_Token(LACO_DO, ERR_LACO_DO);
 		Bloco();
 		Aceitar_Token(LACO_LOOP, ERR_LACO_LOOP);
@@ -826,7 +858,7 @@ void C_Analise_Sintatica::Com_escrita()
 }
 
 //IC - Navegar até o membo de uma struct/classe
-void C_Analise_Sintatica::Id_Composto()
+string C_Analise_Sintatica::Id_Composto()
 {
 	string identificador;
 	if (token == IDENTIFICADOR)
@@ -845,7 +877,7 @@ void C_Analise_Sintatica::Id_Composto()
 		identificador = identificador.substr(0, identificador.size() - 1);
 		if (!ts.Constultar(identificador))
 			Erro(identificador, ERR_SEM_NAO_DECLARDO);
-		Id_Composto();
+		identificador = Id_Composto();
 	}
 		
 	else if (token == ID_SEL_PONTEIRO)
@@ -855,8 +887,9 @@ void C_Analise_Sintatica::Id_Composto()
 		identificador = identificador.substr(0, identificador.size() - 2);
 		if (!ts.Constultar(identificador))
 			Erro(identificador, ERR_SEM_NAO_DECLARDO);
-		Id_Composto();
+		identificador = Id_Composto();
 	}
+	return identificador;
 }
 
 
@@ -899,16 +932,13 @@ void C_Analise_Sintatica::Lista_exp_1()
 }
 
 //EX
-void C_Analise_Sintatica::Exp()
+string C_Analise_Sintatica::Exp()
 {
+	string tipo_exp;
 	if (token == IDENTIFICADOR ||
 		token == ID_SEL_IDENTIFICADOR ||
-		token == ID_SEL_PONTEIRO)
-	{
-		Exp_soma();
-		Exp_1();
-	}
-	else if (token == OP_SUBTRACAO ||
+		token == ID_SEL_PONTEIRO ||
+		token == OP_SUBTRACAO ||
 		token == ABRE_PARENTESES ||
 		token == OP_ADICAO ||
 		token == CARACTERE ||
@@ -919,16 +949,18 @@ void C_Analise_Sintatica::Exp()
 		token == STRING ||
 		token == VERDADEIRO)
 	{
-		Exp_soma();
-		Exp_1();
+		tipo_exp = Exp_soma();
+		Exp_1(tipo_exp);
 	}
 	else
 		Erro("Esperado expressão");
+	return tipo_exp;
 }
 
 //EX'
-void C_Analise_Sintatica::Exp_1()
+void C_Analise_Sintatica::Exp_1(string _tipo_exp)
 {
+	string tipo_exp;
 	if (token == OP_MENOR ||
 		token == OP_MENOR_IGUAL ||
 		token == OP_DIFERENTE ||
@@ -937,8 +969,13 @@ void C_Analise_Sintatica::Exp_1()
 		token == OP_MAIOR_IGUAL)
 	{
 		Op_relac();
-		Exp_soma();
-		Exp_1();
+		tipo_exp = Exp_soma();
+		//Verificar se os tipos são compatíveis para a operação
+		if (tipo_exp != _tipo_exp)
+			Erro(ERR_SEM_INCOMPATIBILIDADE_TIPO);
+		Exp_1(tipo_exp);
+
+		//TODO 01 Verificar a possibilidade de retornar tipo int quando for comparação 
 	}
 }
 
@@ -962,8 +999,9 @@ void C_Analise_Sintatica::Op_relac()
 }
 
 //EA
-void C_Analise_Sintatica::Exp_soma()
+string C_Analise_Sintatica::Exp_soma()
 {
+	string tipo_exp;
 	if (token == OP_SUBTRACAO ||
 		token == ABRE_PARENTESES ||
 		token == OP_ADICAO ||
@@ -978,23 +1016,33 @@ void C_Analise_Sintatica::Exp_soma()
 		token == STRING ||
 		token == VERDADEIRO)
 	{
-		Exp_mult();
-		Exp_soma_1();
+		tipo_exp = Exp_mult();
+		Exp_soma_1(tipo_exp);
+		return tipo_exp;
 	}
 	else
 		Erro("Esperado expressão soma");
+
+	return "";
 }
 
 //EA'
-void C_Analise_Sintatica::Exp_soma_1()
+string C_Analise_Sintatica::Exp_soma_1(string _tipo_exp)
 {
+	string tipo_exp;
 	if (token == OP_SUBTRACAO ||
 		token == OP_ADICAO ||
 		token == OP_LOGICO_OU)
 	{
 		Op_soma();
-		Exp_soma();
+		tipo_exp = Exp_soma();
+
+		//Validar quem tem a predominância na expressão
+		tipo_exp = Retorna_Tipo_Comparado(tipo_exp, _tipo_exp);
+		return tipo_exp;
 	}
+	else
+		return _tipo_exp;
 }
 
 //OS
@@ -1011,8 +1059,9 @@ void C_Analise_Sintatica::Op_soma()
 }
 
 //EM
-void C_Analise_Sintatica::Exp_mult()
+string C_Analise_Sintatica::Exp_mult()
 {
+	string tipo_exp;
 	if (token == OP_SUBTRACAO ||
 		token == ABRE_PARENTESES ||
 		token == OP_ADICAO ||
@@ -1027,25 +1076,34 @@ void C_Analise_Sintatica::Exp_mult()
 		token == STRING ||
 		token == VERDADEIRO)
 	{
-		Exp_simples();
-		Exp_mult_1();
+		tipo_exp = Exp_simples();
+		return Exp_mult_1(tipo_exp);
 	}
 	else
 		Erro("Esperado expressão multiplicacao");
+
+	return "";
 }
 
 //EM'
-void C_Analise_Sintatica::Exp_mult_1()
+string C_Analise_Sintatica::Exp_mult_1(string _tipo_exp)
 {
+	string tipo_exp;
 	if (token == OP_MULTIPLICACAO ||
 		token == OP_DIVISAO ||
 		token == OP_LOGICO_E ||
 		token == OP_MOD)
 	{
 		Op_mult();
-		Exp_simples();
-		Exp_mult_1();
+		tipo_exp = Exp_simples();
+
+		//Validar quem tem a predominância na expressão
+		tipo_exp = Retorna_Tipo_Comparado(tipo_exp, _tipo_exp);
+
+		return Exp_mult_1(tipo_exp);
 	}
+	else
+		return _tipo_exp;
 }
 
 //OM
@@ -1064,19 +1122,20 @@ void C_Analise_Sintatica::Op_mult()
 }
 
 //ES
-void C_Analise_Sintatica::Exp_simples()
+string C_Analise_Sintatica::Exp_simples()
 {
+	string tipo_exp;
 	if (token == OP_SUBTRACAO ||
 		token == OP_ADICAO ||
 		token == OP_NEGACAO)
 	{
 		Op_unario();
-		Exp();
+		tipo_exp = Exp();
 	}
 	else if (token == ABRE_PARENTESES)
 	{
 		Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
-		Exp();
+		tipo_exp = Exp();
 		Aceitar_Token(FECHA_PARENTESES, ERR_FECHA_PARENTESES);
 	}
 	else if (token == CARACTERE ||
@@ -1087,20 +1146,26 @@ void C_Analise_Sintatica::Exp_simples()
 		token == VERDADEIRO)
 	{
 		//Mando um tipo S_Simbolo dummy pois não gravo nada na tabela de símbolos pela expressão simples
-		Literal(sdummy);
+		tipo_exp = Literal(sdummy);
 	}
 	else if (token == IDENTIFICADOR || token == ID_SEL_IDENTIFICADOR || token == ID_SEL_PONTEIRO)
 	{
-		Id_Composto();
+		string identificador;
+		identificador = Id_Composto();
+		//Buscar o tipo do identificador
+		tipo_exp = ts.Buscar_Tipo(identificador);
 		Exp_simples_1();
 	}
 	else
 		Erro("Esperado expressão simples");
+
+	return tipo_exp;
 }
 
 //ES'
 void C_Analise_Sintatica::Exp_simples_1()
 {
+	string tipo_exp;
 	if (token == ABRE_PARENTESES)
 	{
 		Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
@@ -1110,13 +1175,16 @@ void C_Analise_Sintatica::Exp_simples_1()
 	else if (token == ABRE_COLCHETES)
 	{
 		Aceitar_Token(ABRE_COLCHETES, ERR_ABRE_COLCHETES);
-		Exp_soma();
+		tipo_exp = Exp_soma();
+		//validar se é int, array só pode ter indice int 
+		if (tipo_exp != TIPO_INT)
+			Erro(ERR_SEM_INDEX_TIPO_INT);
 		Aceitar_Token(FECHA_COLCHETES, ERR_FECHA_COLCHETES);
 	}
 }
 
 //LI
-void C_Analise_Sintatica::Literal(S_Simbolos& _simbolo)
+string C_Analise_Sintatica::Literal(S_Simbolos& _simbolo)
 {
 	if (token == FALSO ||
 		token == VERDADEIRO)
@@ -1143,6 +1211,8 @@ void C_Analise_Sintatica::Literal(S_Simbolos& _simbolo)
 	}
 	else
 		Erro("Esperado literal");
+
+	return _simbolo.tipo;
 }
 
 //VV
@@ -1194,6 +1264,7 @@ void C_Analise_Sintatica::Lista_var()
 //LV'
 void C_Analise_Sintatica::Lista_var_1()
 {
+	string tipo_exp;
 	if (token == VIRGULA)
 	{
 		Aceitar_Token(VIRGULA, ERR_VIRGULA);
@@ -1202,7 +1273,10 @@ void C_Analise_Sintatica::Lista_var_1()
 	else if (token == ABRE_COLCHETES)
 	{
 		Aceitar_Token(ABRE_COLCHETES, ERR_ABRE_COLCHETES);
-		Exp_soma();
+		tipo_exp = Exp_soma();
+		//validar se é int, array só pode ter indice int 
+		if (tipo_exp != TIPO_INT)
+			Erro(ERR_SEM_INDEX_DECL_TIPO_INT);
 		Aceitar_Token(FECHA_COLCHETES, ERR_FECHA_COLCHETES);
 		Lista_var_2();
 	}
@@ -1235,6 +1309,7 @@ void C_Analise_Sintatica::Lista_decl_var()
 
 void C_Analise_Sintatica::Lista_decl_var_1()
 {
+	string tipo_exp;
 	if (token == VIRGULA)
 	{
 		Aceitar_Token(VIRGULA, ERR_VIRGULA);
@@ -1251,7 +1326,10 @@ void C_Analise_Sintatica::Lista_decl_var_1()
 	else if (token == ABRE_COLCHETES)
 	{
 		Aceitar_Token(ABRE_COLCHETES, ERR_ABRE_COLCHETES);
-		Exp_soma();
+		tipo_exp = Exp_soma();
+		//validar se é int, array só pode ter indice int 
+		if (tipo_exp != TIPO_INT)
+			Erro(ERR_SEM_INDEX_DECL_TIPO_INT);
 		Aceitar_Token(FECHA_COLCHETES, ERR_FECHA_COLCHETES);
 		svar.array = true;
 		Lista_decl_var_2();
@@ -1307,4 +1385,18 @@ void C_Analise_Sintatica::Iniciar_Simbolos(S_Simbolos &_simbolo)
 	_simbolo.linha = 0;
 	_simbolo.passby = "";
 	_simbolo.classe = 0;
+}
+
+string C_Analise_Sintatica::Retorna_Tipo_Comparado(string _tipo1, string _tipo2)
+{
+	if (_tipo1 == TIPO_STRING ||
+		_tipo1 == TIPO_VOID ||
+		_tipo2 == TIPO_STRING ||
+		_tipo2 == TIPO_VOID)
+		Erro(ERR_SEM_INCOMPATIBILIDADE_TIPO);
+	else if (_tipo1 == TIPO_FLOAT || _tipo2 == TIPO_FLOAT)
+		return TIPO_FLOAT;
+
+	//Se cair aqui é porque é TIPO_INT ou TIPO_CHAR ou TIPO_BOOLEANO
+	return _tipo1;
 }

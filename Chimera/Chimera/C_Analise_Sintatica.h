@@ -71,23 +71,23 @@ public:
 	void Com_desvio();
 	void Com_leitura();
 	void Com_escrita();
-	void Id_Composto();
+	string Id_Composto();
 
 	//Expressões
 	void Lista_exp();
 	void Lista_exp_1();
-	void Exp();
-	void Exp_1();
+	string Exp();
+	void Exp_1(string);
 	void Op_relac();
-	void Exp_soma();
-	void Exp_soma_1();
+	string Exp_soma();
+	string Exp_soma_1(string);
 	void Op_soma();
-	void Exp_mult();
-	void Exp_mult_1();
+	string Exp_mult();
+	string Exp_mult_1(string);
 	void Op_mult();
-	void Exp_simples();
+	string Exp_simples();
 	void Exp_simples_1();
-	void Literal(S_Simbolos&);
+	string Literal(S_Simbolos&);
 	void Valor_verdade(S_Simbolos&);
 	void Args();
 	void Lista_var();
@@ -100,5 +100,7 @@ public:
 
 	//Outros métodos
 	void Iniciar_Simbolos(S_Simbolos&);
+	//Métods para a semântica
+	string Retorna_Tipo_Comparado(string, string);
 };
 

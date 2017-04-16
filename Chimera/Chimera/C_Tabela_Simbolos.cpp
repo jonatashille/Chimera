@@ -78,6 +78,24 @@ bool C_Tabela_Simbolos::Verificar_Array(string _identificador)
 	return false;
 }
 
+string C_Tabela_Simbolos::Buscar_Categoria(string _identificador)
+{
+	vector<S_Simbolos>::iterator simbolo;
+	simbolo = Buscar_Simbolo(_identificador);
+	if (simbolo._Ptr != nullptr)
+		return simbolo->categoria;
+	return "";
+}
+
+string C_Tabela_Simbolos::Buscar_Tipo(string _identificador)
+{
+	vector<S_Simbolos>::iterator simbolo;
+	simbolo = Buscar_Simbolo(_identificador);
+	if (simbolo._Ptr != nullptr)
+		return simbolo->tipo;
+	return "";
+}
+
 vector<S_Simbolos>::iterator C_Tabela_Simbolos::Buscar_Simbolo(string _identificador)
 {
 	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)

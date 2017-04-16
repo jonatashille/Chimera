@@ -236,3 +236,16 @@ enum Acesso { PUBLIC, PRIVATE, PROTECTED };
 #define ERR_SEM_NAO_DECLARDO "Identificador nao declarado"
 #define ERR_SEM_DECLARACAO_DUPLICADA " ja foi declarado"
 #define ERR_SEM_INDEX_VAR_SIMPLES "Indexacao de variavel simples"
+#define ERR_SEM_CONST_ATRIB "Constante nao pode ser atribuida"
+
+#define ERR_SEM_IF "Comando IF aceita apenas tipo booleano ou tipo inteiro para expressao"
+#define ERR_SEM_DO "Laco DO aceita apenas tipo booleano ou tipo inteiro para expressao"
+#define ERR_SEM_FOR "Laco FOR aceita apenas tipo inteiro para expressao"
+#define ERR_SEM_REAPEAT "Laco REPEAT aceita apenas tipo booleano ou tipo inteiro para expressao"
+#define ERR_SEM_WHILE "Laco WHILE aceita apenas tipo booleano ou tipo inteiro para expressao"
+
+
+#define ERR_SEM_INCOMPATIBILIDADE_TIPO "Tipos incompativeis"
+
+#define ERR_SEM_INDEX_TIPO_INT "Indice de vetores deve ser do tipo inteiro"
+#define ERR_SEM_INDEX_DECL_TIPO_INT "Tamanho de vetores deve ser do tipo inteiro"
