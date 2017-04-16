@@ -7,15 +7,16 @@ struct S_Simbolos
 {
 	int chave;
 	string identificador;
-	string tipo;
 	string categoria;
+	string tipo;
+	bool array = false;
 	string valor;
 	string passby;
 	int pai;
 	int classe;
+	Acesso access;
 	bool valido;
 	int linha;
-	Acesso access;
 
 	//Sobrecarga do operador < para ordenar a TS pela chave
 	bool operator < (const S_Simbolos& ts)
@@ -41,11 +42,16 @@ public:
 	bool Remover(string);
 	//Utilizado para inativar os símbolos, dado um escopo
 	void Inativar_Simbolos(int);
-
+	//Verifica se já existe a ID na TS
 	void Existe_ID(S_Simbolos);
-
+	//Verificar se Identificador é um Array
+	bool Verificar_Array(string);
+	//Busca dados da TS pelo identificador
+	//S_Simbolos Buscar_Simbolo(string);
+	vector<S_Simbolos>::iterator Buscar_Simbolo(string);
 	void Imprimir_TS();
 
+	void Erro(string);
 	void Erro(string, S_Simbolos);
 };
 

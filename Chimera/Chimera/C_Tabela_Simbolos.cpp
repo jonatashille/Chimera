@@ -25,8 +25,14 @@ bool C_Tabela_Simbolos::Inserir(S_Simbolos _simbolos)
 	return true;
 }
 
-bool C_Tabela_Simbolos::Constultar(string)
+bool C_Tabela_Simbolos::Constultar(string _identificador)
 {
+	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+	{
+		if (it->identificador == _identificador)
+			if (it->valido)
+				return true;
+	}
 	return false;
 }
 
@@ -63,6 +69,26 @@ void C_Tabela_Simbolos::Existe_ID(S_Simbolos _simbolo)
 	}
 }
 
+bool C_Tabela_Simbolos::Verificar_Array(string _identificador)
+{
+	vector<S_Simbolos>::iterator simbolo;
+	simbolo = Buscar_Simbolo(_identificador);
+	if (simbolo._Ptr != nullptr && simbolo->array)
+		return true;
+	return false;
+}
+
+vector<S_Simbolos>::iterator C_Tabela_Simbolos::Buscar_Simbolo(string _identificador)
+{
+	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+	{
+		if (it->identificador == _identificador)
+			if (it->valido)
+				return it;
+	}
+	return vector<S_Simbolos>::iterator();
+}
+
 void C_Tabela_Simbolos::Imprimir_TS()
 {
 	fstream arquivo;
@@ -75,6 +101,7 @@ void C_Tabela_Simbolos::Imprimir_TS()
 	ss << setw(20) << left << "ID";
 	ss << setw(20) << left << "CATEGORIA";
 	ss << setw(20) << left << "TIPO";
+	ss << setw(10) << left << "Array";
 	ss << setw(15) << left << "valor";
 	ss << setw(10) << left << "Pass By";
 	ss << setw(10) << left << "Pai";
@@ -92,6 +119,7 @@ void C_Tabela_Simbolos::Imprimir_TS()
 		ss << setw(20) << left << it->identificador;
 		ss << setw(20) << left << it->categoria;
 		ss << setw(20) << left << it->tipo;
+		ss << setw(10) << left << it->array;
 		ss << setw(15) << left << it->valor;
 		ss << setw(10) << left << it->passby;
 		ss << setw(10) << left << it->pai;
@@ -109,6 +137,13 @@ void C_Tabela_Simbolos::Imprimir_TS()
 	arquivo.close();
 
 	cout << "Arquivo  TS.txt gerado" << endl;
+}
+
+void C_Tabela_Simbolos::Erro(string _msg)
+{
+	cout << _msg << endl;
+	system("pause");
+	exit(EXIT_FAILURE);
 }
 
 void C_Tabela_Simbolos::Erro(string _msg, S_Simbolos _simbolo)

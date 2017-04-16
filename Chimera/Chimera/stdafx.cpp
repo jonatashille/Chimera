@@ -235,3 +235,4 @@ enum Acesso { PUBLIC, PRIVATE, PROTECTED };
 //ERROS SEMÂNTICOS
 #define ERR_SEM_NAO_DECLARDO "Identificador nao declarado"
 #define ERR_SEM_DECLARACAO_DUPLICADA " ja foi declarado"
+#define ERR_SEM_INDEX_VAR_SIMPLES "Indexacao de variavel simples"

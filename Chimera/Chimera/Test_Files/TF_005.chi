@@ -2,6 +2,7 @@ struct cliente
     var int id;
     var string nome;
     var bool objr;
+    var int not_array, array[5];
 end_struct
 
 class cliente_class
@@ -10,12 +11,14 @@ class cliente_class
         var string nome;
         var bool platinium;
         function int calcular_id()
-            return algum_hashing_maluco;
+            return nome;
         end_function
         const c_privada = 51;
     public:
         sub set_cliente(var string _nome by value, var bool _platinium by value)
             var int id;
+            var int a, a1, a2, b1,b2, b, d1, c1, c3, c2, c4, c5, d, c;
+            var string propriedade;
             id = calcular_id();
             nome = _nome;
             platinium = _platinium;
@@ -24,29 +27,34 @@ class cliente_class
             cliente->cliente->nome = "Sage";
             cliente->cliente.nome = "Sage";
             cliente.cliente->nome = "Sage";
-            b = metodo();
-            a.a1.a2 = b1.b2->metodo();
-            a.a1.a2 = b1.b2->metodo(param1, param2);
-            d1 = c1->c2.c3.c4->c5.metodo();
-            d1 = c1->c2.c3.c4->c5.propriedade;
-            d1 = c1->c2.c3.c4->c5.propriedade[1];
-            print(c1->c2.c3.c4->c5.subprog());
-            print(c1->c2.c3.c4->c5->propriedade[1]);
+            b = calcular_id();
+            a.a1.a2 = b1.b2->calcular_id();
+            a.a1.a2 = b1.b2->calcular_id(a, b);
+            d1 = c1->c2.c3.c4->c5.calcular_id();
+            d1 = c1->c2.c3.c4->c5.id;
+            d1 = c1->c2.c3.c4->c5.array[1];
+            print(c1->c2.c3.c4->c5.calcular_id());
+            print(c1->c2.c3.c4->c5->array[1]);
             a->a->a->b.b.b = 1;
-        a = b1->prop;
-        a.a1.a2 = b1->b2->metodo();
-        a = b1 + b1->b2->metodo();
-        c1->c2.c3.c4->c5->propriedade[1] = b1->b2->metodo() + b1 - 5 * b1->b2->metodo() / b1->b2->propriedade + propriedade[1];
+        a = b1->c5;
+        a.a1.a2 = b1->b2->calcular_id();
+        a = b1 + b1->b2->calcular_id();
+        c1->c2.c3.c4->c5->array[1] = b1->b2->calcular_id() + b1 - 5 * b1->b2->calcular_id() / b1->b2->propriedade + array[1];
         a = b1->d;
-        scan(objeto.array[c]);
+        scan(cliente.array[c]);
         end_sub 
         const c_publica= "const publica";
-        function string get_nome()
+        function string get_nome(var int array_int[5] by value)
+              for c1->c2.c3.c4->c5.id = 1 to (c <= d) do
+                print(a);
+                c = c+1;
+                array_int[5] = 5;
+              next
             return nome;
         end_function    
     private:
         function int calcular_id2()
-            return algum_hashing_maluco;
+            return id;
         end_function           
 end_class
 

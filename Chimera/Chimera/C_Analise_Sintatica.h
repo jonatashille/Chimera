@@ -35,6 +35,7 @@ public:
 	string Proximo_Token();
 
 	void Erro(string);
+	void Erro(string, string);
 	string Aceitar_Token(string, string);
 
 	//Declarações

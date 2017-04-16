@@ -52,6 +52,13 @@ void C_Analise_Sintatica::Erro(string _msg)
 	exit(EXIT_FAILURE);
 }
 
+void C_Analise_Sintatica::Erro(string _identificador, string _msg)
+{
+	cout << "ERRO-Linha: " << iter_token_lexema->linha << " - " << _identificador << " -> " << _msg << endl;
+	system("pause");
+	exit(EXIT_FAILURE);
+}
+
 string C_Analise_Sintatica::Aceitar_Token(string _token, string _msg)
 {
 	string lexema;
@@ -292,6 +299,9 @@ void C_Analise_Sintatica::Decl_func()
 	sfuncao.tipo = Espec_tipo();
 
 	sfuncao.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+	sfuncao.access = acesso_membro;
+	//Faço a inserção na TS logo após a declaração, isso precisa ser feito em caso seja uma função recursiva
+	ts.Inserir(sfuncao);
 	
 	Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
 
@@ -302,9 +312,6 @@ void C_Analise_Sintatica::Decl_func()
 	Bloco();
 
 	Aceitar_Token(END_FUNCTION, ERR_END_FUNCTION);
-
-	sfuncao.access = acesso_membro;
-	ts.Inserir(sfuncao);
 }
 
 //PS
@@ -357,6 +364,7 @@ void C_Analise_Sintatica::Param()
 		Aceitar_Token(ABRE_COLCHETES, ERR_ABRE_COLCHETES);
 		Exp_soma();
 		Aceitar_Token(FECHA_COLCHETES, ERR_FECHA_COLCHETES);
+		sparams.array = true;
 	}
 
 	Aceitar_Token(BY, ERR_BY);
@@ -718,7 +726,8 @@ void C_Analise_Sintatica::Com_repeticao()
 	else if (token == LACO_FOR)
 	{
 		Aceitar_Token(LACO_FOR, ERR_LACO_FOR);
-		Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+		Id_Composto();
+		//Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
 		Aceitar_Token(OP_ATRIBUICAO, ERR_OP_ATRIBUICAO);
 		Exp_soma();
 		Aceitar_Token(LACO_TO, ERR_LACO_TO);
@@ -819,17 +828,33 @@ void C_Analise_Sintatica::Com_escrita()
 //IC - Navegar até o membo de uma struct/classe
 void C_Analise_Sintatica::Id_Composto()
 {
+	string identificador;
 	if (token == IDENTIFICADOR)
-		Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+	{
+		identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+		//Caso abra colchetes, é array. Verificar se é mesmo na TS
+		if (token == ABRE_COLCHETES && !ts.Verificar_Array(identificador))
+			Erro(ERR_SEM_INDEX_VAR_SIMPLES);
+		if (!ts.Constultar(identificador))
+			Erro(identificador, ERR_SEM_NAO_DECLARDO);
+	}
 	else if (token == ID_SEL_IDENTIFICADOR)
 	{
-		Aceitar_Token(ID_SEL_IDENTIFICADOR, ERR_OP_SELECAO_IDENTIFICADOR);
+		identificador = Aceitar_Token(ID_SEL_IDENTIFICADOR, ERR_OP_SELECAO_IDENTIFICADOR);
+		//Remover o . 
+		identificador = identificador.substr(0, identificador.size() - 1);
+		if (!ts.Constultar(identificador))
+			Erro(identificador, ERR_SEM_NAO_DECLARDO);
 		Id_Composto();
 	}
 		
 	else if (token == ID_SEL_PONTEIRO)
 	{
-		Aceitar_Token(ID_SEL_PONTEIRO, ERR_OP_SELECAO_PONTEIRO);
+		identificador = Aceitar_Token(ID_SEL_PONTEIRO, ERR_OP_SELECAO_PONTEIRO);
+		//Remover o -> 
+		identificador = identificador.substr(0, identificador.size() - 2);
+		if (!ts.Constultar(identificador))
+			Erro(identificador, ERR_SEM_NAO_DECLARDO);
 		Id_Composto();
 	}
 }
@@ -1218,6 +1243,8 @@ void C_Analise_Sintatica::Lista_decl_var_1()
 		ts.Inserir(svar);
 		//Nova variável virá, incremento a chave
 		svar.chave = ++chave;
+		//Volto Array para falso
+		svar.array = false;
 
 		Lista_decl_var();
 	}
@@ -1226,6 +1253,7 @@ void C_Analise_Sintatica::Lista_decl_var_1()
 		Aceitar_Token(ABRE_COLCHETES, ERR_ABRE_COLCHETES);
 		Exp_soma();
 		Aceitar_Token(FECHA_COLCHETES, ERR_FECHA_COLCHETES);
+		svar.array = true;
 		Lista_decl_var_2();
 	}
 	else if (token != FECHA_PARENTESES &&
@@ -1244,6 +1272,8 @@ void C_Analise_Sintatica::Lista_decl_var_2()
 		ts.Inserir(svar);
 		//Nova variável virá, incremento a chave
 		svar.chave = ++chave;
+		//Volto Array para falso
+		svar.array = false;
 
 		Lista_decl_var();
 	}
@@ -1271,6 +1301,7 @@ void C_Analise_Sintatica::Iniciar_Simbolos(S_Simbolos &_simbolo)
 	_simbolo.categoria = "";
 	_simbolo.identificador = "";
 	_simbolo.tipo = "";
+	_simbolo.array = false;
 	_simbolo.valido = false;
 	_simbolo.valor = "";
 	_simbolo.linha = 0;
