@@ -96,6 +96,13 @@ string C_Tabela_Simbolos::Buscar_Tipo(string _identificador)
 	return "";
 }
 
+int C_Tabela_Simbolos::Buscar_Qtd_Params(string _identificador)
+{
+	vector<S_Simbolos>::iterator simbolo;
+	simbolo = Buscar_Simbolo(_identificador);
+	return simbolo->qtd_params;
+}
+
 vector<S_Simbolos>::iterator C_Tabela_Simbolos::Buscar_Simbolo(string _identificador)
 {
 	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
@@ -121,6 +128,7 @@ void C_Tabela_Simbolos::Imprimir_TS()
 	ss << setw(20) << left << "TIPO";
 	ss << setw(10) << left << "Array";
 	ss << setw(15) << left << "valor";
+	ss << setw(10) << left << "QtdParam";
 	ss << setw(10) << left << "Pass By";
 	ss << setw(10) << left << "Pai";
 	ss << setw(10) << left << "Classe";
@@ -139,6 +147,7 @@ void C_Tabela_Simbolos::Imprimir_TS()
 		ss << setw(20) << left << it->tipo;
 		ss << setw(10) << left << it->array;
 		ss << setw(15) << left << it->valor;
+		ss << setw(10) << left << it->qtd_params;
 		ss << setw(10) << left << it->passby;
 		ss << setw(10) << left << it->pai;
 		ss << setw(10) << left << it->classe;

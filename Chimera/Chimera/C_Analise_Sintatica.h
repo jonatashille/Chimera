@@ -47,9 +47,9 @@ public:
 	string Espec_tipo();
 	void Decl_proc();
 	void Decl_func();
-	void Params();
-	void Lista_param();
-	void Lista_param_1();
+	int Params();
+	int Lista_param();
+	int Lista_param_1(int);
 	void Param();
 	void Mode();
 	void Decl_struct();
@@ -64,7 +64,7 @@ public:
 	void Bloco();
 	void Lista_com();
 	void Comando();
-	void Comando_1();
+	int Comando_1(string);
 	void Com_selecao();
 	void Com_selecao_1();
 	void Com_repeticao();
@@ -74,8 +74,8 @@ public:
 	string Id_Composto();
 
 	//Expressões
-	void Lista_exp();
-	void Lista_exp_1();
+	int Lista_exp();
+	int Lista_exp_1();
 	string Exp();
 	void Exp_1(string);
 	void Op_relac();
@@ -86,10 +86,10 @@ public:
 	string Exp_mult_1(string);
 	void Op_mult();
 	string Exp_simples();
-	void Exp_simples_1();
+	int Exp_simples_1();
 	string Literal(S_Simbolos&);
 	void Valor_verdade(S_Simbolos&);
-	void Args();
+	int Args();
 	void Lista_var();
 	void Lista_var_1();
 	void Lista_var_2();
@@ -102,5 +102,6 @@ public:
 	void Iniciar_Simbolos(S_Simbolos&);
 	//Métods para a semântica
 	string Retorna_Tipo_Comparado(string, string);
+	void Validar_Atribuicao(string, string);
 };
 

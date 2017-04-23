@@ -11,6 +11,7 @@ struct S_Simbolos
 	string tipo;
 	bool array = false;
 	string valor;
+	int qtd_params;
 	string passby;
 	int pai;
 	int classe;
@@ -50,6 +51,8 @@ public:
 	string Buscar_Categoria(string);
 	//Buscar tipo do identificador
 	string Buscar_Tipo(string);
+	//Buscar quantidade de parâmetros de uma função/Procedimento
+	int Buscar_Qtd_Params(string);
 	//Busca dados da TS pelo identificador
 	vector<S_Simbolos>::iterator Buscar_Simbolo(string);
 	void Imprimir_TS();

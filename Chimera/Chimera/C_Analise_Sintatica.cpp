@@ -278,7 +278,7 @@ void C_Analise_Sintatica::Decl_proc()
 
 	Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
 
-	Params();
+	sproc.qtd_params = Params();
 
 	Aceitar_Token(FECHA_PARENTESES, ERR_FECHA_PARENTESES);
 
@@ -300,14 +300,15 @@ void C_Analise_Sintatica::Decl_func()
 
 	sfuncao.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
 	sfuncao.access = acesso_membro;
-	//Faço a inserção na TS logo após a declaração, isso precisa ser feito em caso seja uma função recursiva
-	ts.Inserir(sfuncao);
-	
+		
 	Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
 
-	Params();
+	sfuncao.qtd_params = Params();
 
 	Aceitar_Token(FECHA_PARENTESES, ERR_FECHA_PARENTESES);
+
+	//Faço a inserção na TS logo após a declaração, isso precisa ser feito em caso seja uma função recursiva
+	ts.Inserir(sfuncao);
 
 	Bloco();
 
@@ -315,31 +316,33 @@ void C_Analise_Sintatica::Decl_func()
 }
 
 //PS
-void C_Analise_Sintatica::Params()
+int C_Analise_Sintatica::Params()
 {
 	if (token == VAR)
 	{
-		Lista_param();
+		return Lista_param();
 	}
 	else if (token != FECHA_PARENTESES)
 		Erro(ERR_FECHA_PARENTESES);
 }
 
 //LP
-void C_Analise_Sintatica::Lista_param()
+int C_Analise_Sintatica::Lista_param()
 {
+	int qtd_params = 0;
 	Param();
-	Lista_param_1();
+	qtd_params = Lista_param_1(qtd_params) + 1;
+	return qtd_params;
 }
 
 //LP'
-void C_Analise_Sintatica::Lista_param_1()
+int C_Analise_Sintatica::Lista_param_1(int _qtd_params)
 {
 	if (token == VIRGULA)
 	{
 		Aceitar_Token(VIRGULA, ERR_VIRGULA);
 		Param();
-		Lista_param_1();
+		return Lista_param_1(_qtd_params) + 1;
 	}
 	else if (token != FECHA_PARENTESES)
 		Erro(ERR_FECHA_PARENTESES);
@@ -640,10 +643,21 @@ void C_Analise_Sintatica::Comando()
 	else if (token == IDENTIFICADOR || token == ID_SEL_IDENTIFICADOR || token == ID_SEL_PONTEIRO)
 	{
 		string identificador;
+		string categoria;
+		string qtd_params_decl;
+		string qtd_params_chamada;
 		identificador = Id_Composto();
-	    if (ts.Buscar_Categoria(identificador) == CONSTANTE) //Constante não pode ser atribuída
+		categoria = ts.Buscar_Categoria(identificador);
+	    if (categoria == CONSTANTE) //Constante não pode ser atribuída
 			Erro(identificador, ERR_SEM_CONST_ATRIB);
-		Comando_1();
+		qtd_params_decl = ts.Buscar_Qtd_Params(identificador);
+		//Comando_1 retorna a quantidade de parâmetros e envio o tipo do identificador para verificação de tipos
+		qtd_params_chamada = Comando_1(ts.Buscar_Tipo(identificador));
+
+		//Validação semântica para verificar a quantidade de parâmetros da chamada 
+		if (categoria == FUNCTION || categoria == SUB)
+			if (qtd_params_decl != qtd_params_chamada)
+				Erro(identificador, ERR_SEM_NUM_PARAMS);
 	}
 	else if (token == CONDICAO_IF)
 	{
@@ -671,15 +685,18 @@ void C_Analise_Sintatica::Comando()
 }
 
 //CM'
-void C_Analise_Sintatica::Comando_1()
+int C_Analise_Sintatica::Comando_1(string _tipo_esquerda)
 {
 	string tipo_exp;
+	string tipo_direita;
+	int qtd_params;
 	if (token == ABRE_PARENTESES)
 	{
 		Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
-		Args();
+		qtd_params = Args();
 		Aceitar_Token(FECHA_PARENTESES, ERR_FECHA_PARENTESES);
 		Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
+		return qtd_params;
 	}
 	else if (token == ABRE_COLCHETES)
 	{
@@ -690,13 +707,17 @@ void C_Analise_Sintatica::Comando_1()
 			Erro(ERR_SEM_INDEX_TIPO_INT);
 		Aceitar_Token(FECHA_COLCHETES, ERR_FECHA_COLCHETES);
 		Aceitar_Token(OP_ATRIBUICAO, ERR_OP_ATRIBUICAO);
-		Exp();
+		tipo_direita = Exp();
+		//Validar se a atribuição tem os tipos compatíveis 
+		Validar_Atribuicao(_tipo_esquerda, tipo_direita);
 		Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
 	}
 	else if (token == OP_ATRIBUICAO)
 	{
 		Aceitar_Token(OP_ATRIBUICAO, ERR_OP_ATRIBUICAO);
-		Exp();
+		tipo_direita = Exp();
+		//Validar se a atribuição tem os tipos compatíveis 
+		Validar_Atribuicao(_tipo_esquerda, tipo_direita);
 		Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
 	}
 }
@@ -896,7 +917,7 @@ string C_Analise_Sintatica::Id_Composto()
 /*                   EXPRESSÕES                */
 
 //LE
-void C_Analise_Sintatica::Lista_exp()
+int C_Analise_Sintatica::Lista_exp()
 {
 	if (token == OP_SUBTRACAO ||
 		token == ABRE_PARENTESES ||
@@ -913,19 +934,19 @@ void C_Analise_Sintatica::Lista_exp()
 		token == VERDADEIRO)
 	{
 		Exp();
-		Lista_exp_1();
+		return Lista_exp_1();
 	}
 	else
 		Erro("Esperado lista de expressão");
 }
 
 //LE'
-void C_Analise_Sintatica::Lista_exp_1()
+int C_Analise_Sintatica::Lista_exp_1()
 {
 	if (token == VIRGULA)
 	{
 		Aceitar_Token(VIRGULA, ERR_VIRGULA);
-		Lista_exp();
+		return Lista_exp() + 1;
 	}
 	else if (token != FECHA_PARENTESES)
 		Erro(ERR_FECHA_PARENTESES);
@@ -1151,10 +1172,20 @@ string C_Analise_Sintatica::Exp_simples()
 	else if (token == IDENTIFICADOR || token == ID_SEL_IDENTIFICADOR || token == ID_SEL_PONTEIRO)
 	{
 		string identificador;
+		string categoria;
 		identificador = Id_Composto();
+		//Buscar a categoria do identificador
+		categoria = ts.Buscar_Categoria(identificador);
 		//Buscar o tipo do identificador
 		tipo_exp = ts.Buscar_Tipo(identificador);
-		Exp_simples_1();
+		if (categoria == FUNCTION || categoria == SUB)
+		{
+			//Validação semântica para garantir que a quantidade de parâmetros na chamada da função é a mesma que a da declaração
+			if (Exp_simples_1() != ts.Buscar_Qtd_Params(identificador))
+				Erro(identificador, ERR_SEM_NUM_PARAMS);
+		}
+		else
+			Exp_simples_1();
 	}
 	else
 		Erro("Esperado expressão simples");
@@ -1163,14 +1194,16 @@ string C_Analise_Sintatica::Exp_simples()
 }
 
 //ES'
-void C_Analise_Sintatica::Exp_simples_1()
+int C_Analise_Sintatica::Exp_simples_1()
 {
 	string tipo_exp;
+	int qtd_params;
 	if (token == ABRE_PARENTESES)
 	{
 		Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
-		Args();
+		qtd_params = Args();
 		Aceitar_Token(FECHA_PARENTESES, ERR_FECHA_PARENTESES);
+		return qtd_params;
 	}
 	else if (token == ABRE_COLCHETES)
 	{
@@ -1231,7 +1264,7 @@ void C_Analise_Sintatica::Valor_verdade(S_Simbolos& _simbolo)
 }
 
 //AR
-void C_Analise_Sintatica::Args()
+int C_Analise_Sintatica::Args()
 {
 	if (token == OP_SUBTRACAO ||
 		token == ABRE_PARENTESES ||
@@ -1247,7 +1280,8 @@ void C_Analise_Sintatica::Args()
 		token == STRING ||
 		token == VERDADEIRO)
 	{
-		Lista_exp();
+		//Preciso adicionar 1 pois a função de lista_exp devolve a quantidade contata do segundo argumento em diantes
+		return Lista_exp() + 1;
 	}
 	else if (token != FECHA_PARENTESES)
 		Erro(ERR_FECHA_PARENTESES);
@@ -1399,4 +1433,40 @@ string C_Analise_Sintatica::Retorna_Tipo_Comparado(string _tipo1, string _tipo2)
 
 	//Se cair aqui é porque é TIPO_INT ou TIPO_CHAR ou TIPO_BOOLEANO
 	return _tipo1;
+}
+
+void C_Analise_Sintatica::Validar_Atribuicao(string _tipo_esquerda, string _tipo_direita)
+{
+	if (_tipo_esquerda == TIPO_BOOLEANO)
+	{
+		//BOOL aceita BOOL ou INT
+		if (_tipo_direita != TIPO_BOOLEANO && _tipo_direita != TIPO_INT)
+			Erro(ERR_SEM_ATRIB_BOOL);
+	}
+	else if (_tipo_esquerda == TIPO_CHAR)
+	{
+		//CHAR aceita CHAR ou INT
+		if (_tipo_direita != TIPO_CHAR && _tipo_direita != TIPO_INT)
+			Erro(ERR_SEM_ATRIB_CHAR);
+	}
+	else if (_tipo_esquerda == TIPO_FLOAT)
+	{
+		//FLOAT aceita FLOAT ou INT
+		if (_tipo_direita != TIPO_FLOAT && _tipo_direita != TIPO_INT)
+			Erro(ERR_SEM_ATRIB_FLOAT);
+	}
+	else if (_tipo_esquerda == TIPO_INT)
+	{
+		//INT aceita INT ou CHAR
+		if (_tipo_direita != TIPO_CHAR && _tipo_direita != TIPO_INT)
+			Erro(ERR_SEM_ATRIB_INTEIRO);
+	}
+	else if (_tipo_esquerda == TIPO_STRING)
+	{
+		//STRING aceita apenas STRING
+		if (_tipo_direita != _tipo_esquerda)
+			Erro(ERR_SEM_ATRIB_STRING);
+	}
+	else
+		Erro(ERR_SEM_INCOMPATIBILIDADE_TIPO);
 }

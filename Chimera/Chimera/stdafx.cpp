@@ -246,6 +246,13 @@ enum Acesso { PUBLIC, PRIVATE, PROTECTED };
 
 
 #define ERR_SEM_INCOMPATIBILIDADE_TIPO "Tipos incompativeis"
+#define ERR_SEM_NUM_PARAMS "Numero de parametros inconsistente com a declaracao da funcao/procedimento"
 
 #define ERR_SEM_INDEX_TIPO_INT "Indice de vetores deve ser do tipo inteiro"
 #define ERR_SEM_INDEX_DECL_TIPO_INT "Tamanho de vetores deve ser do tipo inteiro"
+
+#define ERR_SEM_ATRIB_BOOL "Atribuicao a um tipo incompativel - BOOLEANO aceita BOOLEANO ou INTEIRO"
+#define ERR_SEM_ATRIB_CHAR "Atribuicao a um tipo incompativel - CHAR aceita CHAR ou INTEIRO"
+#define ERR_SEM_ATRIB_FLOAT "Atribuicao a um tipo incompativel - FLOAT aceita FLOAT ou INTEIRO"
+#define ERR_SEM_ATRIB_INTEIRO "Atribuicao a um tipo incompativel - INTEIRO aceita INTEIRO ou CHAR"
+#define ERR_SEM_ATRIB_STRING "Atribuicao a um tipo incompativel - STRING aceita apenas STRING"

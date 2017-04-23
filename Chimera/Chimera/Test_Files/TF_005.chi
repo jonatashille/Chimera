@@ -16,10 +16,10 @@ class cliente_class
               return count;
             end_if
             repeat 
-              objr = "true";
+              objr = true;
             until (id==id);
             while (id==id) do
-              objr = "true";
+              objr = true;
             loop
             return nome;
         end_function
@@ -39,7 +39,7 @@ class cliente_class
             cliente.cliente->nome = "Sage";
             b = calcular_id();
             a.a1.a2 = b1.b2->calcular_id();
-            a.a1.a2 = b1.b2->calcular_id(a, b);
+            a.a1.a2 = b1.b2->calcular_id();
             d1 = c1->c2.c3.c4->c5.calcular_id();
             d1 = c1->c2.c3.c4->c5.id;
             d1 = c1->c2.c3.c4->c5.array[1];
@@ -54,11 +54,11 @@ class cliente_class
         scan(cliente.array[c]);
         end_sub 
         const c_publica= "const publica";
-        function string get_nome(var int array_int[5] by value)
+        function string get_nome(var int array_int[5] by value, var string s1 by ref, var bool b1 by value, var int i1 by value)
               for c1->c2.c3.c4->c5.a = 1 to (c <= array_int[5]) do //array_int[5]
                 print(a);
                 c = c+1;
-                array_int[propriedade] = 5;
+                array_int[5] = 5;
               next
             return nome;
         end_function    
@@ -85,7 +85,6 @@ function int fibonacci(var int n by value)
 end_function
 
 sub p_fibonacci()
-  
   //Programa serie de Fibonacci 
   var int n, i, c;
   i = 0;

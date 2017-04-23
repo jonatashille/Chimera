@@ -39,6 +39,9 @@
     <ClCompile Include="C_Tabela_Simbolos.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C_Mepa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="S_Token_Lexema.h">
@@ -66,6 +69,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C_Tabela_Simbolos.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C_Mepa.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

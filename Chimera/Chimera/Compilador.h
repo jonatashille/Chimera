@@ -3,7 +3,7 @@
 #include "C_Arquivo.h"
 #include "C_Analise_Lexica.h"
 #include "C_Analise_Sintatica.h"
-
+#include "C_Mepa.h"
 
 void Compilar(string _nome_arquivo)
 {
@@ -22,6 +22,10 @@ void Compilar(string _nome_arquivo)
 	//Inicio a analise sintatica
 	sintatica.Iniciar();
 
+	//Gero um arquivo csv com a tabela de tokens/lexema
 	lexica.Gravar_Tabela_Token(_nome_arquivo + ".csv");
+
+	C_Mepa mepa;
+	mepa.Gerar_Arquivo("MEPA.txt");
 
 }
