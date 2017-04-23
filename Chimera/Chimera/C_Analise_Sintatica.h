@@ -2,6 +2,7 @@
 #include "stdafx.cpp"
 #include "S_Token_Lexema.h"
 #include "C_Tabela_Simbolos.h"
+#include "C_Mepa.h"
 
 using namespace std;
 
@@ -25,6 +26,7 @@ private:
 	int chave;
 	int classe;
 	stack<int> pilha_parente;
+	C_Mepa mepa;
 public:
 	C_Analise_Sintatica(vector<S_Token_Lexema>);
 	~C_Analise_Sintatica();
@@ -103,5 +105,8 @@ public:
 	//Métods para a semântica
 	string Retorna_Tipo_Comparado(string, string);
 	void Validar_Atribuicao(string, string);
+
+	//Imprimir Arquivos (TS, MEPA)
+	void Gravar_Arquivos(string);
 };
 

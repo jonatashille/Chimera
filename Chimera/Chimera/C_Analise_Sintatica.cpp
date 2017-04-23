@@ -227,6 +227,7 @@ void C_Analise_Sintatica::Decl_var()
 
 	svar.categoria = VAR;
 	svar.tipo = Espec_tipo();
+	svar.pos_pilha = -1;
 	Lista_decl_var();
 
 	svar.access = acesso_membro;
@@ -658,6 +659,8 @@ void C_Analise_Sintatica::Comando()
 		if (categoria == FUNCTION || categoria == SUB)
 			if (qtd_params_decl != qtd_params_chamada)
 				Erro(identificador, ERR_SEM_NUM_PARAMS);
+
+		//MEPA - 
 	}
 	else if (token == CONDICAO_IF)
 	{
@@ -1335,6 +1338,7 @@ void C_Analise_Sintatica::Lista_var_2()
 
 void C_Analise_Sintatica::Lista_decl_var()
 {
+	svar.pos_pilha++;
 	svar.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
 	svar.linha = iter_token_lexema->linha;
 
@@ -1365,6 +1369,7 @@ void C_Analise_Sintatica::Lista_decl_var_1()
 		if (tipo_exp != TIPO_INT)
 			Erro(ERR_SEM_INDEX_DECL_TIPO_INT);
 		Aceitar_Token(FECHA_COLCHETES, ERR_FECHA_COLCHETES);
+		//Se abre colchetes, é array
 		svar.array = true;
 		Lista_decl_var_2();
 	}
@@ -1419,6 +1424,7 @@ void C_Analise_Sintatica::Iniciar_Simbolos(S_Simbolos &_simbolo)
 	_simbolo.linha = 0;
 	_simbolo.passby = "";
 	_simbolo.classe = 0;
+	_simbolo.pos_pilha = -1;
 }
 
 string C_Analise_Sintatica::Retorna_Tipo_Comparado(string _tipo1, string _tipo2)
@@ -1469,4 +1475,11 @@ void C_Analise_Sintatica::Validar_Atribuicao(string _tipo_esquerda, string _tipo
 	}
 	else
 		Erro(ERR_SEM_INCOMPATIBILIDADE_TIPO);
+}
+
+void C_Analise_Sintatica::Gravar_Arquivos(string _nome_arquivo)
+{
+	ts.Imprimir_TS(_nome_arquivo);
+	ts.Gravar_TS(_nome_arquivo);
+	mepa.Gerar_Arquivo(_nome_arquivo);
 }

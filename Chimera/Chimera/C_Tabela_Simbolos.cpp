@@ -10,7 +10,6 @@ C_Tabela_Simbolos::C_Tabela_Simbolos()
 
 C_Tabela_Simbolos::~C_Tabela_Simbolos()
 {
-	Imprimir_TS();
 }
 
 bool C_Tabela_Simbolos::Inserir(S_Simbolos _simbolos)
@@ -20,6 +19,10 @@ bool C_Tabela_Simbolos::Inserir(S_Simbolos _simbolos)
 
 	//Antes de inserir, verifico se o identificador já foi declarado
 	Existe_ID(_simbolos);
+
+	//Só variável tem posição na pilha
+	if (_simbolos.categoria != VAR)
+		_simbolos.pos_pilha = -1;
 
 	tabela_simbolos.push_back(_simbolos);
 	return true;
@@ -114,10 +117,11 @@ vector<S_Simbolos>::iterator C_Tabela_Simbolos::Buscar_Simbolo(string _identific
 	return vector<S_Simbolos>::iterator();
 }
 
-void C_Tabela_Simbolos::Imprimir_TS()
+void C_Tabela_Simbolos::Imprimir_TS(string _nome_arquivo)
 {
 	fstream arquivo;
 	stringstream ss;
+	string nome_arquivo_final;
 
 	//Ordenar tabela de símbolos pela chave
 	sort(tabela_simbolos.begin(), tabela_simbolos.end());
@@ -135,10 +139,11 @@ void C_Tabela_Simbolos::Imprimir_TS()
 	ss << setw(10) << left << "Acesso";
 	ss << setw(10) << left << "Ativo";
 	ss << setw(10) << left << "Linha";
+	ss << setw(10) << left << "Pilha";
 
 	ss << endl;
-	ss << "------------------------------------------------------------------";
-	ss << "------------------------------------------------------------------" << endl;
+	ss << "----------------------------------------------------------------------------------";
+	ss << "----------------------------------------------------------------------------------" << endl;
 	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
 	{
 		ss << setw(5) << left << it->chave;
@@ -154,16 +159,80 @@ void C_Tabela_Simbolos::Imprimir_TS()
 		ss << setw(10) << left << it->access;
 		ss << setw(10) << left << it->valido;
 		ss << setw(10) << left << it->linha;
+		ss << setw(10) << left << it->pos_pilha;
 		ss << endl;
-		ss << "------------------------------------------------------------------";
-		ss << "------------------------------------------------------------------" << endl;
+		ss << "----------------------------------------------------------------------------------";
+		ss << "----------------------------------------------------------------------------------" << endl;
 	}
 
-	arquivo.open("TS.txt", ios::out | ios::trunc);
+	//Remover a extensão .chi do arquivo
+	nome_arquivo_final = _nome_arquivo.substr(0, _nome_arquivo.size() - 4);
+
+	//Adicionar informações ao nome do arquivo e extensão .txt
+	nome_arquivo_final = nome_arquivo_final + "_TabSim.txt";
+
+	arquivo.open(nome_arquivo_final, ios::out | ios::trunc);
 	arquivo << ss.str();
 	arquivo.close();
 
-	cout << "Arquivo  TS.txt gerado" << endl;
+	cout << "Arquivo \"" << nome_arquivo_final << "\" gerado" << endl;
+}
+
+void C_Tabela_Simbolos::Gravar_TS(string _nome_arquivo)
+{
+	fstream arquivo;
+	stringstream ss;
+	string nome_arquivo_final;
+
+	//Ordenar tabela de símbolos pela chave
+	sort(tabela_simbolos.begin(), tabela_simbolos.end());
+
+	ss << "#;";
+	ss << "ID;";
+	ss << "CATEGORIA;";
+	ss << "TIPO;";
+	ss << "Array;";
+	ss << "valor;";
+	ss << "QtdParam;";
+	ss << "Pass By;";
+	ss << "Pai;";
+	ss << "Classe;";
+	ss << "Acesso;";
+	ss << "Ativo;";
+	ss << "Linha;";
+	ss << "Pilha;";
+	ss << endl;
+
+	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+	{
+		ss << it->chave << ";";
+		ss << it->identificador << ";";
+		ss << it->categoria << ";";
+		ss << it->tipo << ";";
+		ss << it->array << ";";
+		ss << it->valor << ";";
+		ss << it->qtd_params << ";";
+		ss << it->passby << ";";
+		ss << it->pai << ";";
+		ss << it->classe << ";";
+		ss << it->access << ";";
+		ss << it->valido << ";";
+		ss << it->linha << ";";
+		ss << it->pos_pilha << ";";
+		ss << endl;
+	}
+
+	//Remover a extensão .chi do arquivo
+	nome_arquivo_final = _nome_arquivo.substr(0, _nome_arquivo.size() - 4);
+
+	//Adicionar informações ao nome do arquivo e extensão .csv
+	nome_arquivo_final = nome_arquivo_final + "_TabSim.csv";
+
+	arquivo.open(nome_arquivo_final, ios::out | ios::trunc);
+	arquivo << ss.str();
+	arquivo.close();
+
+	cout << "Arquivo \"" << nome_arquivo_final << "\" gerado" << endl;
 }
 
 void C_Tabela_Simbolos::Erro(string _msg)

@@ -25,6 +25,7 @@ string C_Mepa::Cabelho()
 
 	ss << "inicio PROC  FAR" << endl;
 	ss << "; ----------Inicio das Instrucoes MEPA" << endl;
+	ss << "INPP" << endl;
 
 	return ss.str();
 }
@@ -32,6 +33,7 @@ string C_Mepa::Cabelho()
 string C_Mepa::Rodape()
 {
 	stringstream ss;
+	ss << "PARA" << endl;
 	ss << "; ----------Fim das Instrucoes MEPA" << endl;
 	ss << "inicio  ENDP" << endl;
 	ss << "codigo  ENDS" << endl;
@@ -197,13 +199,22 @@ void C_Mepa::Gerar_Arquivo(string _nome_arquivo)
 {
 	fstream arquivo;
 	stringstream ss;
+	string nome_arquivo_final;
 
 	ss << Cabelho();
 	//Conteúdo MEPA
 	ss << mepa.str();
 	ss << Rodape();
 
-	arquivo.open(_nome_arquivo, ios::out | ios::trunc);
+	//Remover a extensão .chi do arquivo
+	nome_arquivo_final = _nome_arquivo.substr(0, _nome_arquivo.size() - 4);
+
+	//Adicionar informações ao nome do arquivo e extensão .txt
+	nome_arquivo_final = nome_arquivo_final + "_MEPA.txt";
+
+	arquivo.open(nome_arquivo_final, ios::out | ios::trunc);
 	arquivo << ss.str();
 	arquivo.close();
+
+	cout << "Arquivo \"" << nome_arquivo_final << "\" gerado" << endl;
 }

@@ -22,10 +22,9 @@ void Compilar(string _nome_arquivo)
 	//Inicio a analise sintatica
 	sintatica.Iniciar();
 
+	//Gerar arquivo csv com a tabela de símbolos
+	sintatica.Gravar_Arquivos(_nome_arquivo);
+
 	//Gero um arquivo csv com a tabela de tokens/lexema
-	lexica.Gravar_Tabela_Token(_nome_arquivo + ".csv");
-
-	C_Mepa mepa;
-	mepa.Gerar_Arquivo("MEPA.txt");
-
+	lexica.Gravar_Tabela_Token(_nome_arquivo);
 }

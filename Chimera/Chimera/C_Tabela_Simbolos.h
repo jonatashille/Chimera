@@ -18,6 +18,7 @@ struct S_Simbolos
 	Acesso access;
 	bool valido;
 	int linha;
+	int pos_pilha;
 
 	//Sobrecarga do operador < para ordenar a TS pela chave
 	bool operator < (const S_Simbolos& ts)
@@ -55,7 +56,10 @@ public:
 	int Buscar_Qtd_Params(string);
 	//Busca dados da TS pelo identificador
 	vector<S_Simbolos>::iterator Buscar_Simbolo(string);
-	void Imprimir_TS();
+	//Gravar arquivo txt com a tabela de símbolos
+	void Imprimir_TS(string);
+	//Gravar arquivo csv com a tabela de símbolos
+	void Gravar_TS(string);
 
 	void Erro(string);
 	void Erro(string, S_Simbolos);

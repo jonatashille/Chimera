@@ -736,6 +736,7 @@ void C_Analise_Lexica::Gravar_Tabela_Token(string _nome_arquivo)
 {
 	fstream arquivo;
 	stringstream ss;
+	string nome_arquivo_final;
 
 	ss << "LEXEMA;TOKEN;LINHA" << endl;
 	for (auto it = tabela_token_lexema.begin(); it != tabela_token_lexema.end(); it++)
@@ -746,9 +747,15 @@ void C_Analise_Lexica::Gravar_Tabela_Token(string _nome_arquivo)
 			ss << it->lexema << ";" << it->token << ";" << it->linha << endl;
 	}
 
-	arquivo.open(_nome_arquivo, ios::out | ios::trunc);
+	//Remover a extensão .chi do arquivo
+	nome_arquivo_final = _nome_arquivo.substr(0, _nome_arquivo.size() - 4);
+
+	//Adicionar informações ao nome do arquivo e extensão .csv
+	nome_arquivo_final = nome_arquivo_final + "_TokLex.csv";
+
+	arquivo.open(nome_arquivo_final, ios::out | ios::trunc);
 	arquivo << ss.str();
 	arquivo.close();
 
-	cout << "Arquivo \"" << _nome_arquivo << "\" gerado" << endl;
+	cout << "Arquivo \"" << nome_arquivo_final << "\" gerado" << endl;
 }
