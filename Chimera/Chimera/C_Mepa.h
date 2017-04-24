@@ -15,9 +15,14 @@ public:
 
 	//Armazenamento e E/S
 	void CRCT(string);
+	void CRCT_String(string);
 	void CRVL(string, string);
+	void ARMZ(string, string);
+	void ARMZ(string);
 	void LEIT();
+	void LECH();
 	void IMPR();
+	void IMPC(string);
 
 	//Expressões
 	void SOMA();

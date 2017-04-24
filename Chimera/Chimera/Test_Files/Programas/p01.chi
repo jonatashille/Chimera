@@ -4,6 +4,6 @@ sub main()
 	scan(x);
 	scan(y);
 	soma = x+y;
-	print("Soma = ");
+	print("Soma=");
 	println(soma);
 end_sub

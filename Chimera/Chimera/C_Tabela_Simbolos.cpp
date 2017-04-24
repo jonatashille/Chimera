@@ -106,6 +106,13 @@ int C_Tabela_Simbolos::Buscar_Qtd_Params(string _identificador)
 	return simbolo->qtd_params;
 }
 
+int C_Tabela_Simbolos::Buscar_Pos_Pilha(string _identificador)
+{
+	vector<S_Simbolos>::iterator simbolo;
+	simbolo = Buscar_Simbolo(_identificador);
+	return simbolo->pos_pilha;
+}
+
 vector<S_Simbolos>::iterator C_Tabela_Simbolos::Buscar_Simbolo(string _identificador)
 {
 	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)

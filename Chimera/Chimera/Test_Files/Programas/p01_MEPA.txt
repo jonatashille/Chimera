@@ -15,6 +15,25 @@ ASSUME SS : pilha, CS : codigo, DS : dados, ES : dados
 inicio PROC  FAR
 ; ----------Inicio das Instrucoes MEPA
 INPP
+AMEM 3
+LEIT
+ARMZ 1,0
+LEIT
+ARMZ 1,1
+CRVL 1,0
+SOMA
+CRVL 1,1
+CRCT 'S'
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'm'
+IMPC
+CRCT 'a'
+IMPC
+CRCT '='
+IMPC
+CRVL 1,2
 PARA
 ; ----------Fim das Instrucoes MEPA
 inicio  ENDP

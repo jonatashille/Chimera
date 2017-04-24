@@ -54,6 +54,8 @@ public:
 	string Buscar_Tipo(string);
 	//Buscar quantidade de parâmetros de uma função/Procedimento
 	int Buscar_Qtd_Params(string);
+	//Buscar a posição da pilha da variável
+	int Buscar_Pos_Pilha(string);
 	//Busca dados da TS pelo identificador
 	vector<S_Simbolos>::iterator Buscar_Simbolo(string);
 	//Gravar arquivo txt com a tabela de símbolos

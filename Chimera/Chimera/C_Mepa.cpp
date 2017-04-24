@@ -55,9 +55,28 @@ void C_Mepa::CRCT(string _c)
 	mepa << "CRCT " << _c << endl;
 }
 
+void C_Mepa::CRCT_String(string _c)
+{
+	// +1 e -1 para eliminar o "
+	for (auto it = _c.begin() + 1; it != _c.end() - 1; it++)
+	{
+		mepa << "CRCT \'" << string(1, *it) << "\'" << endl;
+	}
+}
+
 void C_Mepa::CRVL(string _k, string _n)
 {
 	mepa << "CRVL " << _k << "," << _n << endl;
+}
+
+void C_Mepa::ARMZ(string _k, string _n)
+{
+	mepa << "ARMZ " << _k << "," << _n << endl;
+}
+
+void C_Mepa::ARMZ(string _n)
+{
+	mepa << "ARMZ " << 1 << "," << _n << endl;
 }
 
 void C_Mepa::LEIT()
@@ -65,9 +84,24 @@ void C_Mepa::LEIT()
 	mepa << "LEIT" << endl;
 }
 
+void C_Mepa::LECH()
+{
+	mepa << "LECH" << endl;
+}
+
 void C_Mepa::IMPR()
 {
 	mepa << "IMPR" << endl;
+}
+
+void C_Mepa::IMPC(string _c)
+{
+	// +1 e -1 para eliminar o "
+	for (auto it = _c.begin() + 1; it != _c.end() - 1; it++)
+	{
+		mepa << "CRCT \'" << string(1, *it) << "\'" << endl;
+		mepa << "IMPC" << endl;
+	}
 }
 
 void C_Mepa::SOMA()

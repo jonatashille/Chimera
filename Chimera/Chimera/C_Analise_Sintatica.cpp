@@ -213,6 +213,9 @@ void C_Analise_Sintatica::Decl_const()
 
 	Literal(sconst);
 
+	//MEPA - CRCT Carrego o valor da constante
+	//mepa.CRCT(sconst.valor);
+
 	Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
 
 	sconst.access = acesso_membro;
@@ -233,6 +236,9 @@ void C_Analise_Sintatica::Decl_var()
 	svar.access = acesso_membro;
 	//Insiro a única ou última variável
 	ts.Inserir(svar);
+
+	//MEPA - AMEM com a quantidade de variáveis declaradas
+	mepa.AMEM(to_string(svar.pos_pilha+1));
 
 	Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
 }
@@ -1073,9 +1079,17 @@ string C_Analise_Sintatica::Exp_soma_1(string _tipo_exp)
 void C_Analise_Sintatica::Op_soma()
 {
 	if (token == OP_SUBTRACAO)
+	{
 		Aceitar_Token(OP_SUBTRACAO, ERR_OP_SUBTRACAO);
+		//MEPA - SUBT Operador subtração
+		mepa.SUBT();
+	}
 	else if (token == OP_ADICAO)
+	{
 		Aceitar_Token(OP_ADICAO, ERR_OP_ADICAO);
+		//MEPA - SOMA Operador soma
+		mepa.SOMA();
+	}
 	else if (token == OP_LOGICO_OU)
 		Aceitar_Token(OP_LOGICO_OU, ERR_OP_LOGICO_OU);
 	else
@@ -1181,6 +1195,12 @@ string C_Analise_Sintatica::Exp_simples()
 		categoria = ts.Buscar_Categoria(identificador);
 		//Buscar o tipo do identificador
 		tipo_exp = ts.Buscar_Tipo(identificador);
+
+		if (categoria == VAR)
+		{
+			mepa.CRVL("1", to_string(ts.Buscar_Pos_Pilha(identificador)));
+		}
+
 		if (categoria == FUNCTION || categoria == SUB)
 		{
 			//Validação semântica para garantir que a quantidade de parâmetros na chamada da função é a mesma que a da declaração
@@ -1229,21 +1249,37 @@ string C_Analise_Sintatica::Literal(S_Simbolos& _simbolo)
 	{
 		_simbolo.tipo = TIPO_CHAR;
 		_simbolo.valor = Aceitar_Token(CARACTERE, ERR_CARACTERE);
+		//MEPA - CRCT Carrego o valor da constante
+		mepa.CRCT(_simbolo.valor);
 	}
 	else if (token == NUM_INT)
 	{
 		_simbolo.tipo = TIPO_INT;
 		_simbolo.valor = Aceitar_Token(NUM_INT, ERR_NUM);
+		//MEPA - CRCT Carrego o valor da constante
+		mepa.CRCT(_simbolo.valor);
 	}
 	else if (token == NUM_REAL)
 	{
 		_simbolo.tipo = TIPO_FLOAT;
 		_simbolo.valor = Aceitar_Token(NUM_REAL, ERR_NUM_REAL);
+		//MEPA - CRCT Carrego o valor da constante
+		mepa.CRCT(_simbolo.valor);
 	}
 	else if (token == STRING)
 	{
 		_simbolo.tipo = TIPO_STRING;
 		_simbolo.valor = Aceitar_Token(STRING, ERR_STRING);
+		if (_simbolo.categoria == CONSTANTE)
+		{
+			//MEPA - CRCT Carrego o valor da constante - Neste caso de String, desmembro ela e grava o CRCT
+			mepa.CRCT_String(_simbolo.valor);
+		}
+		else
+		{
+			//MEPA - IMPC Se não for da categoria constante, leio o valor e imprimo o caractere
+			mepa.IMPC(_simbolo.valor);
+		}
 	}
 	else
 		Erro("Esperado literal");
@@ -1293,8 +1329,25 @@ int C_Analise_Sintatica::Args()
 //LV
 void C_Analise_Sintatica::Lista_var()
 {
-	Id_Composto();
-	
+	string identificador;
+	string tipo;
+
+	identificador = Id_Composto();
+	tipo = ts.Buscar_Tipo(identificador);
+
+	if (tipo != CARACTERE || tipo != STRING)
+		//MEPA - LEIT Leitura de inteiro
+		mepa.LEIT();
+	else
+		//MEPA - LECH Leitura de caractere
+		mepa.LECH();
+
+	if (ts.Buscar_Categoria(identificador) == VAR)
+	{
+		//MEPA - ARMZ Armazenar o valor da variável na posição correta
+		mepa.ARMZ(to_string(ts.Buscar_Pos_Pilha(identificador)));
+	}
+		
 	Lista_var_1();
 }
 
