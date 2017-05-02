@@ -10,6 +10,10 @@ private:
 	string Rodape();
 	stringstream mepa;
 public:
+	//Variáveis
+	stack<string> pilha_ARMZ;
+	stack<string> pilha_EXP;
+	stack<string> pilha_Com_Escrita;
 	C_Mepa();
 	~C_Mepa();
 
@@ -23,6 +27,7 @@ public:
 	void LECH();
 	void IMPR();
 	void IMPC(string);
+	void IMPE();
 
 	//Expressões
 	void SOMA();
@@ -56,6 +61,9 @@ public:
 	void PARA();
 	void AMEM(string);
 	void DMEM(string);
+
+	//Genéricos
+	void Add_Comando(string);
 
 	void Gerar_Arquivo(string);
 };

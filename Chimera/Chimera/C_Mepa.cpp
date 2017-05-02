@@ -104,6 +104,11 @@ void C_Mepa::IMPC(string _c)
 	}
 }
 
+void C_Mepa::IMPE()
+{
+	mepa << "IMPE" << endl;
+}
+
 void C_Mepa::SOMA()
 {
 	mepa << "SOMA" << endl;
@@ -229,6 +234,11 @@ void C_Mepa::DMEM(string _m)
 	mepa << "DMEM " << _m << endl;
 }
 
+void C_Mepa::Add_Comando(string _str)
+{
+	mepa << _str << endl;
+}
+
 void C_Mepa::Gerar_Arquivo(string _nome_arquivo)
 {
 	fstream arquivo;
@@ -244,7 +254,7 @@ void C_Mepa::Gerar_Arquivo(string _nome_arquivo)
 	nome_arquivo_final = _nome_arquivo.substr(0, _nome_arquivo.size() - 4);
 
 	//Adicionar informações ao nome do arquivo e extensão .txt
-	nome_arquivo_final = nome_arquivo_final + "_MEPA.txt";
+	nome_arquivo_final = nome_arquivo_final + ".mep";
 
 	arquivo.open(nome_arquivo_final, ios::out | ios::trunc);
 	arquivo << ss.str();

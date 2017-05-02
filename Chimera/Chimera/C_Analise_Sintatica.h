@@ -26,6 +26,8 @@ private:
 	int chave;
 	int classe;
 	stack<int> pilha_parente;
+	int posicao_pilha_local;
+	int posicao_pilha_global;
 	C_Mepa mepa;
 public:
 	C_Analise_Sintatica(vector<S_Token_Lexema>);

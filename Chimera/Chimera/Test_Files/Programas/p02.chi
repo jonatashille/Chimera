@@ -1,8 +1,16 @@
 sub main()
 	var int a;
-	var int b;
-	var int c,e;
-	a = 25;
-	b = a;
-	c = a+b-a*d/e;
+	a = 5+5*a+5;
+	println(a);
 end_sub
+/*sub main()
+	var int a;
+	var int b;
+	var int h, i, j, k, l, m;
+	var int c;
+	var int d, e, f, g;
+	a = 5;
+	b = a;
+	c = a+(b*5);
+	println(c);
+end_sub*/

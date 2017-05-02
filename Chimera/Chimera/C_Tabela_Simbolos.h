@@ -40,8 +40,6 @@ public:
 
 	bool Inserir(S_Simbolos);
 	bool Constultar(string);
-	string Retornar_Tipo(string);
-	bool Remover(string);
 	//Utilizado para inativar os símbolos, dado um escopo
 	void Inativar_Simbolos(int);
 	//Verifica se já existe a ID na TS
@@ -56,8 +54,12 @@ public:
 	int Buscar_Qtd_Params(string);
 	//Buscar a posição da pilha da variável
 	int Buscar_Pos_Pilha(string);
+	//Buscar o escopo pai
+	int Buscar_Pai(string);
 	//Busca dados da TS pelo identificador
 	vector<S_Simbolos>::iterator Buscar_Simbolo(string);
+	//Remover/Inutilizar variáveis internas/filhos - Retorna quantidade de variáveis desativadas
+	int Remover_Internos(string);
 	//Gravar arquivo txt com a tabela de símbolos
 	void Imprimir_TS(string);
 	//Gravar arquivo csv com a tabela de símbolos

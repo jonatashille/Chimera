@@ -1,7 +1,10 @@
 
 sub main()
 	var int x,y, soma;
+	println("Programa que soma dois valores");
+	print("Digite o primeiro valor: ");
 	scan(x);
+	print("Digite o segundo valor: ");
 	scan(y);
 	soma = x+y;
 	print("Soma=");

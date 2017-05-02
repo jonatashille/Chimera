@@ -39,16 +39,6 @@ bool C_Tabela_Simbolos::Constultar(string _identificador)
 	return false;
 }
 
-string C_Tabela_Simbolos::Retornar_Tipo(string)
-{
-	return string();
-}
-
-bool C_Tabela_Simbolos::Remover(string)
-{
-	return false;
-}
-
 void C_Tabela_Simbolos::Inativar_Simbolos(int _id)
 {
 
@@ -113,6 +103,13 @@ int C_Tabela_Simbolos::Buscar_Pos_Pilha(string _identificador)
 	return simbolo->pos_pilha;
 }
 
+int C_Tabela_Simbolos::Buscar_Pai(string _identificador)
+{
+	vector<S_Simbolos>::iterator simbolo;
+	simbolo = Buscar_Simbolo(_identificador);
+	return simbolo->pai;
+}
+
 vector<S_Simbolos>::iterator C_Tabela_Simbolos::Buscar_Simbolo(string _identificador)
 {
 	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
@@ -122,6 +119,27 @@ vector<S_Simbolos>::iterator C_Tabela_Simbolos::Buscar_Simbolo(string _identific
 				return it;
 	}
 	return vector<S_Simbolos>::iterator();
+}
+
+int C_Tabela_Simbolos::Remover_Internos(string _identificador)
+{
+	vector<S_Simbolos>::iterator simbolo;
+	simbolo = Buscar_Simbolo(_identificador);
+	
+	int cont = 0;
+
+	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+	{
+		if (it->pai == simbolo->chave)
+		{
+			it->valido = false;
+			cont++;
+		}
+			
+	}
+	//TODO 02 - Desativar ou não?
+	//simbolo->valido = false;
+	return cont;
 }
 
 void C_Tabela_Simbolos::Imprimir_TS(string _nome_arquivo)
