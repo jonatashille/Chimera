@@ -41,6 +41,94 @@ string C_Mepa::Rodape()
 	return ss.str();
 }
 
+//Função que converte uma expressão para pos fixa e retorna um vetor
+void C_Mepa::Converter_Pos_Fixa(stack<string>& _p, C_Tabela_Simbolos _ts)
+{
+	//Preciso reverter a pilha para pegar da posição certa
+	stack<string> r_stack;
+	while (!_p.empty())
+	{
+		r_stack.push(_p.top());
+		_p.pop();
+	}
+	_p = r_stack;
+
+	stack<string> p_temp;
+
+	while (!_p.empty())
+	{
+		if (E_Operador(_p.top()))
+		{
+			while (!p_temp.empty() && p_temp.top() != "(" && Get_Peso_Operador(p_temp.top()) >= Get_Peso_Operador(_p.top()))
+			{
+				Add_Comando(p_temp.top());
+				p_temp.pop();
+			}
+			p_temp.push(_p.top());
+			_p.pop();
+		}
+		else if (_p.top() == "(")
+		{
+			p_temp.push(_p.top());
+			_p.pop();
+		}
+		else if (_p.top() == ")")
+		{
+			while (!p_temp.empty() && p_temp.top() != "(")
+			{
+				Add_Comando(p_temp.top());
+				p_temp.pop();
+			}
+			p_temp.pop();
+		}
+		//Caso seja operando, empilho na pos_fixa e desempilho da expressão
+		else
+		{
+			//Se for identificador, preciso inserir o endereço da memória dele
+			if (Validar_Identificador(_p.top()))
+				CRVL("1", to_string(_ts.Buscar_Pos_Pilha(_p.top())));
+			else
+				CRCT(_p.top());
+			_p.pop();
+		}
+	}
+
+	while (!p_temp.empty())
+	{
+		Add_Comando(p_temp.top());
+		p_temp.pop();
+	}
+}
+
+//Função que verifica se um caracter é um simbolo operador ou não
+bool C_Mepa::E_Operador(string _str)
+{
+	if (_str == "SOMA" || _str == "SUBT" || _str == "MULT" || _str == "DIVI" || _str == "%")
+		return true;
+
+	return false;
+}
+
+//Função que retorna o peso do operador. Operador com o peso mais alto tem maior precedência
+int C_Mepa::Get_Peso_Operador(string _str)
+{
+	if (_str == "SOMA" || _str == "SUBT")
+		return 1;
+	else if (_str == "MULT" || _str == "DIVI")
+		return 2;
+	else
+		return -1;
+}
+
+//Função que valida se a string é ou não um identificador
+bool C_Mepa::Validar_Identificador(string _str)
+{
+	if (regex_match(_str, regex("(_)*[a-zA-Z][a-zA-Z0-9_]*")))
+		return true;
+	else
+		return false;
+}
+
 C_Mepa::C_Mepa()
 {
 }
@@ -237,6 +325,11 @@ void C_Mepa::DMEM(string _m)
 void C_Mepa::Add_Comando(string _str)
 {
 	mepa << _str << endl;
+}
+
+void C_Mepa::Avaliar_Expressao(stack<string>& _p, const C_Tabela_Simbolos& _ts)
+{
+	Converter_Pos_Fixa(_p, _ts);
 }
 
 void C_Mepa::Gerar_Arquivo(string _nome_arquivo)

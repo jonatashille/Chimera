@@ -761,7 +761,8 @@ int C_Analise_Sintatica::Comando_1(string _tipo_esquerda)
 		Aceitar_Token(OP_ATRIBUICAO, ERR_OP_ATRIBUICAO);
 		tipo_direita = Exp();
 		//TODO 03 - Validar Expressão aqui
-
+		mepa.Avaliar_Expressao(mepa.pilha_EXP, ts);
+		
 		//Validar se a atribuição tem os tipos compatíveis 
 		Validar_Atribuicao(_tipo_esquerda, tipo_direita);
 		Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);

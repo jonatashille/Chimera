@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.cpp"
+#include "C_Tabela_Simbolos.h"
 
 using namespace std;
 
@@ -9,6 +10,10 @@ private:
 	string Cabelho();
 	string Rodape();
 	stringstream mepa;
+	void Converter_Pos_Fixa(stack<string>&, C_Tabela_Simbolos);
+	bool E_Operador(string);
+	int Get_Peso_Operador(string);
+	bool Validar_Identificador(string);
 public:
 	//Variáveis
 	stack<string> pilha_ARMZ;
@@ -64,6 +69,7 @@ public:
 
 	//Genéricos
 	void Add_Comando(string);
+	void Avaliar_Expressao(stack<string>&, const C_Tabela_Simbolos&);
 
 	void Gerar_Arquivo(string);
 };
