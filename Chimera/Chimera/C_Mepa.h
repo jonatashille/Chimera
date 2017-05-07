@@ -10,6 +10,7 @@ private:
 	string Cabelho();
 	string Rodape();
 	stringstream mepa;
+	int linha_mepa;
 	void Converter_Pos_Fixa(stack<string>&, C_Tabela_Simbolos);
 	bool E_Operador(string);
 	int Get_Peso_Operador(string);
@@ -52,9 +53,11 @@ public:
 	void INRV();
 
 	//Desvios
-	void DSVF(string);
+	string DSVF();
+	string DSVS();
 	void DSVS(string);
-	void NADA();
+	void NADA(string);
+	string NADA();
 
 	//Procedimentos
 	void CHPR(string, string);

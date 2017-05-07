@@ -59,7 +59,8 @@ void C_Mepa::Converter_Pos_Fixa(stack<string>& _p, C_Tabela_Simbolos _ts)
 	{
 		if (E_Operador(_p.top()))
 		{
-			while (!p_temp.empty() && p_temp.top() != "(" && Get_Peso_Operador(p_temp.top()) >= Get_Peso_Operador(_p.top()))
+			// TODO 04 - Verificar caso 1==1 + 3 * 5 tem ques er igual a 0 e é igual a 16
+			while (!p_temp.empty() && p_temp.top() != ABRE_PARENTESES && Get_Peso_Operador(p_temp.top()) >= Get_Peso_Operador(_p.top()))
 			{
 				Add_Comando(p_temp.top());
 				p_temp.pop();
@@ -67,19 +68,20 @@ void C_Mepa::Converter_Pos_Fixa(stack<string>& _p, C_Tabela_Simbolos _ts)
 			p_temp.push(_p.top());
 			_p.pop();
 		}
-		else if (_p.top() == "(")
+		else if (_p.top() == ABRE_PARENTESES)
 		{
 			p_temp.push(_p.top());
 			_p.pop();
 		}
-		else if (_p.top() == ")")
+		else if (_p.top() == FECHA_PARENTESES)
 		{
-			while (!p_temp.empty() && p_temp.top() != "(")
+			while (!p_temp.empty() && p_temp.top() != ABRE_PARENTESES)
 			{
 				Add_Comando(p_temp.top());
 				p_temp.pop();
 			}
 			p_temp.pop();
+			_p.pop();
 		}
 		//Caso seja operando, empilho na pos_fixa e desempilho da expressão
 		else
@@ -103,7 +105,8 @@ void C_Mepa::Converter_Pos_Fixa(stack<string>& _p, C_Tabela_Simbolos _ts)
 //Função que verifica se um caracter é um simbolo operador ou não
 bool C_Mepa::E_Operador(string _str)
 {
-	if (_str == "SOMA" || _str == "SUBT" || _str == "MULT" || _str == "DIVI" || _str == "%")
+	if (_str == "SOMA" || _str == "SUBT" || _str == "MULT" || _str == "DIVI" || _str == "%" ||
+		_str == "CMME" || _str == "CMEG" || _str == "CMDG" || _str == "CMIG" || _str == "CMMA" || _str == "CMAG")
 		return true;
 
 	return false;
@@ -112,7 +115,8 @@ bool C_Mepa::E_Operador(string _str)
 //Função que retorna o peso do operador. Operador com o peso mais alto tem maior precedência
 int C_Mepa::Get_Peso_Operador(string _str)
 {
-	if (_str == "SOMA" || _str == "SUBT")
+	if (_str == "SOMA" || _str == "SUBT" ||
+		_str == "CMME" || _str == "CMEG" || _str == "CMDG" || _str == "CMIG" || _str == "CMMA" || _str == "CMAG")
 		return 1;
 	else if (_str == "MULT" || _str == "DIVI")
 		return 2;
@@ -131,6 +135,7 @@ bool C_Mepa::Validar_Identificador(string _str)
 
 C_Mepa::C_Mepa()
 {
+	linha_mepa = 0;
 }
 
 
@@ -140,6 +145,7 @@ C_Mepa::~C_Mepa()
 
 void C_Mepa::CRCT(string _c)
 {
+	linha_mepa++;
 	mepa << "CRCT " << _c << endl;
 }
 
@@ -148,37 +154,44 @@ void C_Mepa::CRCT_String(string _c)
 	// +1 e -1 para eliminar o "
 	for (auto it = _c.begin() + 1; it != _c.end() - 1; it++)
 	{
+		linha_mepa++;
 		mepa << "CRCT \'" << string(1, *it) << "\'" << endl;
 	}
 }
 
 void C_Mepa::CRVL(string _k, string _n)
 {
+	linha_mepa++;
 	mepa << "CRVL " << _k << "," << _n << endl;
 }
 
 void C_Mepa::ARMZ(string _k, string _n)
 {
+	linha_mepa++;
 	mepa << "ARMZ " << _k << "," << _n << endl;
 }
 
 void C_Mepa::ARMZ(string _n)
 {
+	linha_mepa++;
 	mepa << "ARMZ " << 1 << "," << _n << endl;
 }
 
 void C_Mepa::LEIT()
 {
+	linha_mepa++;
 	mepa << "LEIT" << endl;
 }
 
 void C_Mepa::LECH()
 {
+	linha_mepa++;
 	mepa << "LECH" << endl;
 }
 
 void C_Mepa::IMPR()
 {
+	linha_mepa++;
 	mepa << "IMPR" << endl;
 }
 
@@ -187,143 +200,189 @@ void C_Mepa::IMPC(string _c)
 	// +1 e -1 para eliminar o "
 	for (auto it = _c.begin() + 1; it != _c.end() - 1; it++)
 	{
+		linha_mepa++;
 		mepa << "CRCT \'" << string(1, *it) << "\'" << endl;
+		linha_mepa++;
 		mepa << "IMPC" << endl;
 	}
 }
 
 void C_Mepa::IMPE()
 {
+	linha_mepa++;
 	mepa << "IMPE" << endl;
 }
 
 void C_Mepa::SOMA()
 {
+	linha_mepa++;
 	mepa << "SOMA" << endl;
 }
 
 void C_Mepa::SUBT()
 {
+	linha_mepa++;
 	mepa << "SUBT" << endl;
 }
 
 void C_Mepa::MULT()
 {
+	linha_mepa++;
 	mepa << "MULT" << endl;
 }
 
 void C_Mepa::DIVI()
 {
+	linha_mepa++;
 	mepa << "DIVI" << endl;
 }
 
 void C_Mepa::MODI()
 {
+	linha_mepa++;
 	mepa << "MODI" << endl;
 }
 
 void C_Mepa::CONJ()
 {
+	linha_mepa++;
 	mepa << "CONJ" << endl;
 }
 
 void C_Mepa::DISJ()
 {
+	linha_mepa++;
 	mepa << "DISJ" << endl;
 }
 
 void C_Mepa::NEGA()
 {
+	linha_mepa++;
 	mepa << "NEGA" << endl;
 }
 
 void C_Mepa::CMME()
 {
+	linha_mepa++;
 	mepa << "CMME" << endl;
 }
 
 void C_Mepa::CMMA()
 {
+	linha_mepa++;
 	mepa << "CMMA" << endl;
 }
 
 void C_Mepa::CMIG()
 {
+	linha_mepa++;
 	mepa << "CMIG" << endl;
 }
 
 void C_Mepa::CMDG()
 {
+	linha_mepa++;
 	mepa << "CMDG" << endl;
 }
 
 void C_Mepa::CMAG()
 {
+	linha_mepa++;
 	mepa << "CMAG" << endl;
 }
 
 void C_Mepa::CMEG()
 {
+	linha_mepa++;
 	mepa << "CMEG" << endl;
 }
 
 void C_Mepa::INRV()
 {
+	linha_mepa++;
 	mepa << "INRV" << endl;
 }
 
-void C_Mepa::DSVF(string _p)
+string C_Mepa::DSVF()
 {
-	mepa << "DSVF " << _p << endl;
+	linha_mepa++;
+	mepa << "DSVF DSVF" << linha_mepa  << endl;
+	return "DSVF" + to_string(linha_mepa);
 }
 
-void C_Mepa::DSVS(string _p)
+string C_Mepa::DSVS()
 {
-	mepa << "DSVS " << _p << endl;
+	linha_mepa++;
+	mepa << "DSVS DSVS" << linha_mepa << endl;
+	return "DSVS" + to_string(linha_mepa);
 }
 
-void C_Mepa::NADA()
+void C_Mepa::DSVS(string _str)
 {
-	mepa << "NADA" << endl;
+	linha_mepa++;
+	mepa << "DSVS " << _str << endl;
+}
+
+void C_Mepa::NADA(string _str)
+{
+	linha_mepa++;
+	mepa << _str << ":NADA" << endl;
+}
+
+string C_Mepa::NADA()
+{
+	string rotulo;
+	linha_mepa++;
+	rotulo = "ND" + to_string(linha_mepa);
+	mepa << rotulo << ":NADA" << endl;
+	return rotulo;
 }
 
 void C_Mepa::CHPR(string _p, string _k)
 {
+	linha_mepa++;
 	mepa << "CHPR " << _p  << ","<< _k << endl;
 }
 
 void C_Mepa::ENPR(string _k)
 {
+	linha_mepa++;
 	mepa << "ENPR " << _k << endl;
 }
 
 void C_Mepa::RTPR(string _k, string _n)
 {
+	linha_mepa++;
 	mepa << "RTPR " << _k << "," << _n << endl;
 }
 
 void C_Mepa::INPP()
 {
+	linha_mepa++;
 	mepa << "INPP" << endl;
 }
 
 void C_Mepa::PARA()
 {
+	linha_mepa++;
 	mepa << "PARA" << endl;
 }
 
 void C_Mepa::AMEM(string _m)
 {
+	linha_mepa++;
 	mepa << "AMEM " << _m << endl;
 }
 
 void C_Mepa::DMEM(string _m)
 {
+	linha_mepa++;
 	mepa << "DMEM " << _m << endl;
 }
 
 void C_Mepa::Add_Comando(string _str)
 {
+	linha_mepa++;
 	mepa << _str << endl;
 }
 

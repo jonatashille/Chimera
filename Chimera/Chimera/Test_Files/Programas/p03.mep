@@ -1,0 +1,170 @@
+include macros.asm
+pilha SEGMENT PARA STACK 'STACK'
+dw  100  dup(? )
+pilha ENDS
+dados   SEGMENT PARA 'DATA'
+dw  10  dup(0)
+buffer db 5 dup(' ')
+mesg   db  10, ? , 11 dup(0)
+dados   ENDS
+procs   SEGMENT PARA 'DATA'
+dw  32000 dup(0)
+procs   ENDS
+codigo  SEGMENT PARA 'CODE'
+ASSUME SS : pilha, CS : codigo, DS : dados, ES : dados
+inicio PROC  FAR
+; ----------Inicio das Instrucoes MEPA
+INPP
+AMEM 2
+LEIT
+IMPE
+ARMZ 1,0
+LEIT
+IMPE
+ARMZ 1,1
+CRVL 1,0
+CRVL 1,1
+CMMA
+DSVF DSVF11
+CRCT 'P'
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'm'
+IMPC
+CRCT 'e'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'o'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'v'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'l'
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'r'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'M'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'r'
+IMPC
+IMPE
+DSVS DSVS53
+DSVF11:NADA
+CRVL 1,0
+CRVL 1,1
+CMME
+DSVF DSVF58
+CRCT 'S'
+IMPC
+CRCT 'e'
+IMPC
+CRCT 'g'
+IMPC
+CRCT 'u'
+IMPC
+CRCT 'n'
+IMPC
+CRCT 'd'
+IMPC
+CRCT 'o'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'v'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'l'
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'r'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'M'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'r'
+IMPC
+IMPE
+DSVS DSVS98
+DSVF58:NADA
+CRCT 'V'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'l'
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'e'
+IMPC
+CRCT 's'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'g'
+IMPC
+CRCT 'u'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 's'
+IMPC
+IMPE
+DSVS98:NADA
+DSVS53:NADA
+ND131:NADA
+CRVL 1,0
+CRCT 20
+CMME
+DSVF DSVF135
+CRVL 1,0
+CRCT 1
+SOMA
+ARMZ 1,0
+CRVL 1,0
+IMPR
+IMPE
+DSVS ND131
+DSVF135:NADA
+CRVL 1,1
+IMPR
+IMPE
+DMEM 2
+PARA
+; ----------Fim das Instrucoes MEPA
+inicio  ENDP
+codigo  ENDS
+END    inicio

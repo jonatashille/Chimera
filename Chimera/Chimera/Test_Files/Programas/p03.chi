@@ -1,11 +1,19 @@
 sub main()
-	var int a,b,c,e;
+	var int a,b;
+	scan(a);
+	scan(b);
 	if a>b then
-		c = 9;
+		println("Primeiro valor Maior");
+	else if a<b then
+		println("Segundo valor Maior");
 	else
-		c = 2;
+		println("Valores iguais");
 	end_if
-	while (a<>b) do
-		c= c + 1;
+	end_if
+
+	while (a<20) do
+		a = a + 1;
+		println(a);
 	loop
+	println(b);
 end_sub

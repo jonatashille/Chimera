@@ -773,13 +773,25 @@ int C_Analise_Sintatica::Comando_1(string _tipo_esquerda)
 void C_Analise_Sintatica::Com_selecao()
 {
 	string tipo_exp;
+	string DSVF, DSVS;
+
 	Aceitar_Token(CONDICAO_IF, ERR_CONDICAO_IF);
 	tipo_exp = Exp();
+	//TODO 05 - Validar Expressão aqui
+	mepa.Avaliar_Expressao(mepa.pilha_EXP, ts);
+	//MEPA - Desvia se for falso
+	DSVF = mepa.DSVF();
 	if (tipo_exp != TIPO_INT && tipo_exp != TIPO_BOOLEANO)
 		Erro(ERR_SEM_IF);
 	Aceitar_Token(CONDICAO_THEN, ERR_CONDICAO_THEN);
 	Bloco();
+	//MEPA - Desvia sempre
+	DSVS = mepa.DSVS();
+	//MEPA - NADA - caso o IF tenha sido falso cai aqui
+	mepa.NADA(DSVF);
 	Com_selecao_1();
+	//MEPA - NADA - Caso o IF tenha sido verdadeiro, cai direto aqui
+	mepa.NADA(DSVS);
 }
 
 //CS'
@@ -843,13 +855,23 @@ void C_Analise_Sintatica::Com_repeticao()
 	}
 	else if (token == LACO_WHILE)
 	{
+		string DSVS, DSVF;
 		Aceitar_Token(LACO_WHILE, ERR_LACO_WHILE);
+		//MEPA - NADA -> Desvia sempre pra cá, só não quando a expressão é falsa
+		DSVS = mepa.NADA();
 		tipo_exp = Exp();
+		//TODO 06 - Validar Expressão aqui
+		mepa.Avaliar_Expressao(mepa.pilha_EXP, ts);
+		DSVF = mepa.DSVF();
 		//Expreção while apenas pode ser int ou booleano
 		if (!(tipo_exp == TIPO_INT || tipo_exp == TIPO_BOOLEANO))
 			Erro(ERR_SEM_WHILE);
 		Aceitar_Token(LACO_DO, ERR_LACO_DO);
 		Bloco();
+		//MEPA - DSVS - Desvio sempre ao fim do bloco, nova verificação do while
+		mepa.DSVS(DSVS);
+		//MEPA - NADA - caso o while tenha sido falso cai aqui
+		mepa.NADA(DSVF);
 		Aceitar_Token(LACO_LOOP, ERR_LACO_LOOP);
 	}
 	else
@@ -1248,8 +1270,10 @@ string C_Analise_Sintatica::Exp_simples()
 	else if (token == ABRE_PARENTESES)
 	{
 		Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
+		mepa.pilha_EXP.push(ABRE_PARENTESES);
 		tipo_exp = Exp();
 		Aceitar_Token(FECHA_PARENTESES, ERR_FECHA_PARENTESES);
+		mepa.pilha_EXP.push(FECHA_PARENTESES);
 	}
 	else if (token == CARACTERE ||
 		token == FALSO ||
@@ -1281,6 +1305,7 @@ string C_Analise_Sintatica::Exp_simples()
 			//Se tiver algum comando de escrita empilhado, preciso inserir ele na MEPA
 			if (!mepa.pilha_Com_Escrita.empty())
 			{
+				mepa.CRVL("1", to_string(ts.Buscar_Pos_Pilha(identificador)));
 				mepa.IMPR();
 				//MEPA - IMPE Adiciono enter somente se for PRINTLN, PRINT imprime na mesma linha
 				if (mepa.pilha_Com_Escrita.top() == PRINTLN)

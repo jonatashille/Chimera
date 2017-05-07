@@ -1,0 +1,4 @@
+#;ID;CATEGORIA;TIPO;Array;valor;QtdParam;Pass By;Pai;Classe;Acesso;Ativo;Linha;Pilha;
+1;main;SUB;;0;;0;;0;0;0;1;1;-1;
+2;a;VAR;TIPO_INT;0;;0;;1;0;0;0;2;0;
+3;b;VAR;TIPO_INT;0;;0;;1;0;0;0;2;1;
