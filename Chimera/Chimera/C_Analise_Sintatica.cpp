@@ -7,6 +7,8 @@ C_Analise_Sintatica::C_Analise_Sintatica(vector<S_Token_Lexema> _tabela_token_le
 {
 	chave = 0;
 	posicao_pilha_global = -1;
+	existe_main = false;
+	existe_CHPR_main = false;
 
 	tabela_token_lexema = _tabela_token_lexema;
 	if (tabela_token_lexema.begin() != tabela_token_lexema.end())
@@ -79,6 +81,13 @@ string C_Analise_Sintatica::Aceitar_Token(string _token, string _msg)
 void C_Analise_Sintatica::Programa()
 {
 	Lista_decl();
+	if (!existe_main)
+		Erro("Nao existe subprograma main");
+	//MEPA - DSVS Final, desalocar memória atribuídas globalmente
+	mepa.NADA("FIM");
+	mepa.DMEM(to_string(ts.Remover_Globais()));
+
+	//Se cheguei ao fim do programa, compilação ok
 	if (token == FIM_PROGRAMA)
 		cout << "Compilacao - OK" << endl;
 	else
@@ -95,6 +104,14 @@ void C_Analise_Sintatica::Lista_decl()
 		token == ESTRUTURA ||
 		token == CLASSE)
 	{
+		//Garanto que o desvio para o main ocorra assim que não tiver mais constantes ou variáveis declaradas globalmente
+		//Também garanto que crio apenas 1 desvio para o main
+		if (token != CONSTANTE && token != VAR && !existe_CHPR_main)
+		{
+			mepa.CHPR("MAIN", "1");
+			mepa.DSVS("FIM");
+			existe_CHPR_main = true;
+		}
 		Decl();
 		Lista_decl();
 	}
@@ -287,6 +304,20 @@ void C_Analise_Sintatica::Decl_proc()
 	sproc.linha = iter_token_lexema->linha;
 	sproc.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
 
+	//Garanto que exista um Subprograma Main
+	if (sproc.identificador == "main")
+	{
+		existe_main = true;
+		mepa.NADA("MAIN");
+	}
+	else
+	{
+		sproc.rotulo = mepa.NADA();
+	}
+
+	//MEPA - ENPR -Entrada do procedimento
+	mepa.ENPR("1");
+
 	Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
 
 	sproc.qtd_params = Params();
@@ -302,10 +333,14 @@ void C_Analise_Sintatica::Decl_proc()
 	
 	//Inativar todas as variáveis que foram declaradas dentro desta procedure/subprograma
 	int qtd_removida = ts.Remover_Internos(sproc.identificador);
-	mepa.DMEM(to_string(qtd_removida));
 	//Preciso desempilhar a variável que controla a posição da pilha, somente se tiver removido
 	if (qtd_removida > 0)
+	{
+		mepa.DMEM(to_string(qtd_removida));
 		posicao_pilha_global = posicao_pilha_global - qtd_removida;
+	}
+	//MEPA - RTPR Retorno da procedure
+	mepa.RTPR("1", "0");
 }
 
 //DF
@@ -334,10 +369,12 @@ void C_Analise_Sintatica::Decl_func()
 
 	//Inativar todas as variáveis que foram declaradas dentro desta função
 	int qtd_removida =	ts.Remover_Internos(sfuncao.identificador);
-	mepa.DMEM(to_string(qtd_removida));
 	//Preciso desempilhar a variável que controla a posição da pilha, somente se tiver removido
 	if (qtd_removida > 0)
+	{
+		mepa.DMEM(to_string(qtd_removida));
 		posicao_pilha_global = posicao_pilha_global - qtd_removida;
+	}
 }
 
 //PS
@@ -694,14 +731,15 @@ void C_Analise_Sintatica::Comando()
 			mepa.pilha_ARMZ.pop();
 		}
 
-		//Validação semântica para verificar a quantidade de parâmetros da chamada 
+		
 		if (categoria == FUNCTION || categoria == SUB)
+		{
+			//Validação semântica para verificar a quantidade de parâmetros da chamada 
 			if (qtd_params_decl != qtd_params_chamada)
 				Erro(identificador, ERR_SEM_NUM_PARAMS);
-
-
-
-
+			//MEPA - CHPR Chamada de procedimento
+			mepa.CHPR(ts.Buscar_Rotulo(identificador), "1");
+		}
 	}
 	else if (token == CONDICAO_IF)
 	{
@@ -811,7 +849,8 @@ void C_Analise_Sintatica::Com_repeticao()
 {
 	string tipo_exp;
 	string identificador;
-	if (token == LACO_DO) //Laço DO pode ser um problema, probabilidade de tirar ele
+	string DSVS, DSVF;
+	/*if (token == LACO_DO) //Laço DO pode ser um problema, probabilidade de tirar ele
 	{
 		Aceitar_Token(LACO_DO, ERR_LACO_DO);
 		Bloco();
@@ -821,7 +860,8 @@ void C_Analise_Sintatica::Com_repeticao()
 			Erro(ERR_SEM_DO);
 		Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
 	}
-	else if (token == LACO_FOR)
+	else*/
+	if (token == LACO_FOR)
 	{
 		Aceitar_Token(LACO_FOR, ERR_LACO_FOR);
 		identificador = Id_Composto();
@@ -834,20 +874,58 @@ void C_Analise_Sintatica::Com_repeticao()
 		//Expressão precisa ser int
 		if (tipo_exp != TIPO_INT)
 			Erro(ERR_SEM_FOR);
+		//TODO 08 - Validar Expressão aqui
+		mepa.Avaliar_Expressao(mepa.pilha_EXP, ts);
+		//MEPA - ARMZ Armazeno o resultado da expressão no identificador
+		int pai = ts.Buscar_Pai(identificador);
+		if (pai != 0)
+			pai = 1;
+		mepa.ARMZ(to_string(pai), to_string(ts.Buscar_Pos_Pilha(identificador)));
+		//MEPA - NADA -> Desvia sempre pra cá, só não quando a expressão é falsa
+		DSVS = mepa.NADA();
 		Aceitar_Token(LACO_TO, ERR_LACO_TO);
+		//MEPA - CRVL Carrego o valor atual do identificador
+		mepa.CRVL(to_string(pai), to_string(ts.Buscar_Pos_Pilha(identificador)));
 		tipo_exp = Exp_soma();
 		if (tipo_exp != TIPO_INT)
 			Erro(ERR_SEM_FOR);
+		//TODO 08 - Validar Expressão aqui
+		mepa.Avaliar_Expressao(mepa.pilha_EXP, ts);
+		//MEPA - CMEG Comparar se é menor igual
+		mepa.CMEG();
 		Aceitar_Token(LACO_DO, ERR_LACO_DO);
+		//MEPA - Desvia se for falso
+		DSVF = mepa.DSVF();
 		Bloco();
 		Aceitar_Token(LACO_NEXT, ERR_LACO_NEXT);
+		//MEPA - CRVL carrega valor atual do identificador
+		mepa.CRVL(to_string(pai), to_string(ts.Buscar_Pos_Pilha(identificador)));
+		//MEPA - CRCT Carrego constante 1 para adicionar no NEXT
+		mepa.CRCT("1");
+		//MEPA - SOMA Somo +1 no identificador para o NEXT
+		mepa.SOMA();
+		//MEPA - ARMZ Armazeno o novo valor no identificador
+		mepa.ARMZ(to_string(pai), to_string(ts.Buscar_Pos_Pilha(identificador)));
+		//MEPA - DSVS - Desvio sempre ao fim do bloco, nova verificação do FOR
+		mepa.DSVS(DSVS);
+		//MEPA - NADA - caso o FOR tenha sido falso cai aqui
+		mepa.NADA(DSVF);
 	}
 	else if (token == LACO_REPEAT)
 	{
 		Aceitar_Token(LACO_REPEAT, ERR_LACO_REPEAT);
+		//MEPA - NADA -> Desvia sempre pra cá, só não quando a expressão é falsa
+		DSVS = mepa.NADA();
 		Bloco();
 		Aceitar_Token(LACO_UNTIL, ERR_LACO_UNTIL);
 		tipo_exp = Exp();
+		//TODO 07 - Validar Expressão aqui
+		mepa.Avaliar_Expressao(mepa.pilha_EXP, ts);
+		DSVF = mepa.DSVF();
+		//MEPA - DSVS - Desvio sempre ao fim do bloco, nova verificação do REPEAT
+		mepa.DSVS(DSVS);
+		//MEPA - NADA - caso o UNTIL tenha sido falso cai aqui
+		mepa.NADA(DSVF);
 		//Expreção repeat apenas pode ser int ou booleano
 		if (!(tipo_exp == TIPO_INT || tipo_exp == TIPO_BOOLEANO))
 			Erro(ERR_SEM_REAPEAT);
@@ -855,7 +933,6 @@ void C_Analise_Sintatica::Com_repeticao()
 	}
 	else if (token == LACO_WHILE)
 	{
-		string DSVS, DSVF;
 		Aceitar_Token(LACO_WHILE, ERR_LACO_WHILE);
 		//MEPA - NADA -> Desvia sempre pra cá, só não quando a expressão é falsa
 		DSVS = mepa.NADA();
@@ -1298,6 +1375,9 @@ string C_Analise_Sintatica::Exp_simples()
 		//MEPA
 		if (categoria == VAR)
 		{
+			int pai = ts.Buscar_Pai(identificador);
+			if (pai != 0)
+				pai = 1;
 			//Sempre carrego o valor na MEPA se for uma variável
 			//mepa.CRVL("1", to_string(ts.Buscar_Pos_Pilha(identificador)));
 			mepa.pilha_EXP.push(identificador);
@@ -1305,7 +1385,7 @@ string C_Analise_Sintatica::Exp_simples()
 			//Se tiver algum comando de escrita empilhado, preciso inserir ele na MEPA
 			if (!mepa.pilha_Com_Escrita.empty())
 			{
-				mepa.CRVL("1", to_string(ts.Buscar_Pos_Pilha(identificador)));
+				mepa.CRVL(to_string(pai), to_string(ts.Buscar_Pos_Pilha(identificador)));
 				mepa.IMPR();
 				//MEPA - IMPE Adiciono enter somente se for PRINTLN, PRINT imprime na mesma linha
 				if (mepa.pilha_Com_Escrita.top() == PRINTLN)
@@ -1627,6 +1707,7 @@ void C_Analise_Sintatica::Iniciar_Simbolos(S_Simbolos &_simbolo)
 	_simbolo.passby = "";
 	_simbolo.classe = 0;
 	_simbolo.pos_pilha = -1;
+	_simbolo.rotulo = "";
 }
 
 string C_Analise_Sintatica::Retorna_Tipo_Comparado(string _tipo1, string _tipo2)

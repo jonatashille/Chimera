@@ -1,0 +1,13 @@
+var int a;
+
+sub p1(var int _b by value)
+	a=a + _b;
+end_sub
+
+sub main()
+	var int b;
+	b=7;
+	a=0;
+	p1(b);
+	println(a);
+end_sub

@@ -19,6 +19,7 @@ struct S_Simbolos
 	bool valido;
 	int linha;
 	int pos_pilha;
+	string rotulo;
 
 	//Sobrecarga do operador < para ordenar a TS pela chave
 	bool operator < (const S_Simbolos& ts)
@@ -56,10 +57,14 @@ public:
 	int Buscar_Pos_Pilha(string);
 	//Buscar o escopo pai
 	int Buscar_Pai(string);
+	//Busca o rótulo de um identificador / Usado para Funções e Procedimentos
+	string Buscar_Rotulo(string);
 	//Busca dados da TS pelo identificador
 	vector<S_Simbolos>::iterator Buscar_Simbolo(string);
 	//Remover/Inutilizar variáveis internas/filhos - Retorna quantidade de variáveis desativadas
 	int Remover_Internos(string);
+	//Remover/Inutilizar variáveis globais - Retorna quantidade de variáveis desativadas
+	int Remover_Globais();
 	//Gravar arquivo txt com a tabela de símbolos
 	void Imprimir_TS(string);
 	//Gravar arquivo csv com a tabela de símbolos

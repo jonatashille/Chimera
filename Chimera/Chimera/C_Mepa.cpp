@@ -88,7 +88,12 @@ void C_Mepa::Converter_Pos_Fixa(stack<string>& _p, C_Tabela_Simbolos _ts)
 		{
 			//Se for identificador, preciso inserir o endereço da memória dele
 			if (Validar_Identificador(_p.top()))
-				CRVL("1", to_string(_ts.Buscar_Pos_Pilha(_p.top())));
+			{
+				int pai = _ts.Buscar_Pai(_p.top());
+				if (pai != 0)
+					pai = 1;
+				CRVL(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(_p.top())));
+			}
 			else
 				CRCT(_p.top());
 			_p.pop();
@@ -333,7 +338,7 @@ string C_Mepa::NADA()
 {
 	string rotulo;
 	linha_mepa++;
-	rotulo = "ND" + to_string(linha_mepa);
+	rotulo = "R" + to_string(linha_mepa);
 	mepa << rotulo << ":NADA" << endl;
 	return rotulo;
 }

@@ -29,6 +29,8 @@ private:
 	int posicao_pilha_local;
 	int posicao_pilha_global;
 	C_Mepa mepa;
+	bool existe_main;
+	bool existe_CHPR_main;
 public:
 	C_Analise_Sintatica(vector<S_Token_Lexema>);
 	~C_Analise_Sintatica();

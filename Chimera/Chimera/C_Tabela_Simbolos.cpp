@@ -110,6 +110,15 @@ int C_Tabela_Simbolos::Buscar_Pai(string _identificador)
 	return simbolo->pai;
 }
 
+string C_Tabela_Simbolos::Buscar_Rotulo(string _identificador)
+{
+	vector<S_Simbolos>::iterator simbolo;
+	simbolo = Buscar_Simbolo(_identificador);
+	if (simbolo._Ptr != nullptr)
+		return simbolo->rotulo;
+	return "";
+}
+
 vector<S_Simbolos>::iterator C_Tabela_Simbolos::Buscar_Simbolo(string _identificador)
 {
 	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
@@ -130,15 +139,36 @@ int C_Tabela_Simbolos::Remover_Internos(string _identificador)
 
 	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
 	{
-		if (it->pai == simbolo->chave)
+		//Só conto removidos as variáveis, mas desativo as constantes locais
+		if (it->pai == simbolo->chave && it->categoria == VAR)
 		{
 			it->valido = false;
 			cont++;
+		}
+		else if (it->pai == simbolo->chave && it->categoria == CONSTANTE)
+		{
+			it->valido = false;
 		}
 			
 	}
 	//TODO 02 - Desativar ou não?
 	//simbolo->valido = false;
+	return cont;
+}
+
+int C_Tabela_Simbolos::Remover_Globais()
+{
+	int cont = 0;
+
+	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+	{
+		if (it->pai == 0 && it->categoria == VAR)
+		{
+			it->valido = false;
+			cont++;
+		}
+	}
+
 	return cont;
 }
 
@@ -165,6 +195,7 @@ void C_Tabela_Simbolos::Imprimir_TS(string _nome_arquivo)
 	ss << setw(10) << left << "Ativo";
 	ss << setw(10) << left << "Linha";
 	ss << setw(10) << left << "Pilha";
+	ss << setw(20) << left << "Rotulo";
 
 	ss << endl;
 	ss << "----------------------------------------------------------------------------------";
@@ -185,6 +216,7 @@ void C_Tabela_Simbolos::Imprimir_TS(string _nome_arquivo)
 		ss << setw(10) << left << it->valido;
 		ss << setw(10) << left << it->linha;
 		ss << setw(10) << left << it->pos_pilha;
+		ss << setw(20) << left << it->rotulo;
 		ss << endl;
 		ss << "----------------------------------------------------------------------------------";
 		ss << "----------------------------------------------------------------------------------" << endl;
@@ -226,6 +258,7 @@ void C_Tabela_Simbolos::Gravar_TS(string _nome_arquivo)
 	ss << "Ativo;";
 	ss << "Linha;";
 	ss << "Pilha;";
+	ss << "Rotulo;";
 	ss << endl;
 
 	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
@@ -244,6 +277,7 @@ void C_Tabela_Simbolos::Gravar_TS(string _nome_arquivo)
 		ss << it->valido << ";";
 		ss << it->linha << ";";
 		ss << it->pos_pilha << ";";
+		ss << it->rotulo << ";";
 		ss << endl;
 	}
 
