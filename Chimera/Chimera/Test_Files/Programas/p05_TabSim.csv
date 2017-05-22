@@ -1,0 +1,11 @@
+#;ID;CATEGORIA;TIPO;Array;valor;QtdParam;Pass By;Pai;Classe;Acesso;Ativo;Linha;Pilha;Rotulo;
+1;p1;SUB;;0;;5;;0;0;0;1;13;-1;R3;
+2;_a;PARAMETRO;TIPO_INT;0;;0;REF;1;0;0;1;13;-8;;
+3;_b;PARAMETRO;TIPO_INT;0;;0;VALUE;1;0;0;0;13;0;;
+4;_c;PARAMETRO;TIPO_INT;0;;0;REF;1;0;0;1;13;-6;;
+5;_d;PARAMETRO;TIPO_INT;0;;0;VALUE;1;0;0;0;13;1;;
+6;_e;PARAMETRO;TIPO_INT;0;;0;REF;1;0;0;1;13;-4;;
+7;main;SUB;;0;;0;;0;0;0;1;17;-1;;
+8;a;VAR;TIPO_INT;0;;0;;7;0;0;0;18;0;;
+9;b;VAR;TIPO_INT;0;;0;;7;0;0;0;18;1;;
+10;c;VAR;TIPO_INT;0;;0;;7;0;0;0;18;2;;

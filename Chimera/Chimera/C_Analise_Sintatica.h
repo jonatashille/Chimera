@@ -6,6 +6,12 @@
 
 using namespace std;
 
+struct S_Param
+{
+	int val;
+	int ref;
+}; typedef S_Param S_Param;
+
 class C_Analise_Sintatica
 {
 private:
@@ -26,11 +32,15 @@ private:
 	int chave;
 	int classe;
 	stack<int> pilha_parente;
-	int posicao_pilha_local;
-	int posicao_pilha_global;
+	//int posicao_pilha_local;
+	//int posicao_pilha_global;
 	C_Mepa mepa;
 	bool existe_main;
 	bool existe_CHPR_main;
+	bool eh_argumento;
+	S_Param qtd_param; //Struct para tratar a quantidade de parâmetros (valor/referência) 
+	string Proc_Func_Atual; //Variável que armazena o procedimento/função atual -> Auxilia na construção da MEPA
+	stack<int> pilha_var_mem; //Contém a quantidade de memória separada para as variáveis. O Topo da pilha é sempre a função/Procedure corrente.
 public:
 	C_Analise_Sintatica(vector<S_Token_Lexema>);
 	~C_Analise_Sintatica();
@@ -55,7 +65,7 @@ public:
 	void Decl_func();
 	int Params();
 	int Lista_param();
-	int Lista_param_1(int);
+	void Lista_param_1();
 	void Param();
 	void Mode();
 	void Decl_struct();

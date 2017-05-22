@@ -6,9 +6,13 @@
 C_Analise_Sintatica::C_Analise_Sintatica(vector<S_Token_Lexema> _tabela_token_lexema)
 {
 	chave = 0;
-	posicao_pilha_global = -1;
+	//posicao_pilha_global = -1;
 	existe_main = false;
 	existe_CHPR_main = false;
+	eh_argumento = false;
+	Proc_Func_Atual = "";
+	//MEPA - Inicio a pilha que vai armazenar a quantidade de variáveis alocadas - Inicio com zero - Posição 0 é globais
+	pilha_var_mem.push(0);
 
 	tabela_token_lexema = _tabela_token_lexema;
 	if (tabela_token_lexema.begin() != tabela_token_lexema.end())
@@ -85,7 +89,7 @@ void C_Analise_Sintatica::Programa()
 		Erro("Nao existe subprograma main");
 	//MEPA - DSVS Final, desalocar memória atribuídas globalmente
 	mepa.NADA("FIM");
-	mepa.DMEM(to_string(ts.Remover_Globais()));
+	mepa.DMEM(to_string(pilha_var_mem.top()));
 
 	//Se cheguei ao fim do programa, compilação ok
 	if (token == FIM_PROGRAMA)
@@ -248,17 +252,21 @@ void C_Analise_Sintatica::Decl_var()
 
 	svar.categoria = VAR;
 	svar.tipo = Espec_tipo();
-	posicao_pilha_local = -1;
+	//posicao_pilha_local = -1;
 	Lista_decl_var();
 
 	svar.access = acesso_membro;
 
 	//Insiro a única ou última variável
-	svar.pos_pilha = posicao_pilha_global;
+	//if (svar.pai == 0) //Global
+		//svar.pos_pilha = posicao_pilha_global;
+	//else //Local
+		svar.pos_pilha = pilha_var_mem.top()-1;
+
 	ts.Inserir(svar);
 
 	//MEPA - AMEM com a quantidade de variáveis declaradas
-	mepa.AMEM(to_string(posicao_pilha_local +1));
+	mepa.AMEM(to_string(pilha_var_mem.top()));
 
 
 	Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
@@ -304,11 +312,14 @@ void C_Analise_Sintatica::Decl_proc()
 	sproc.linha = iter_token_lexema->linha;
 	sproc.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
 
+	Proc_Func_Atual = sproc.identificador;
+
 	//Garanto que exista um Subprograma Main
 	if (sproc.identificador == "main")
 	{
 		existe_main = true;
 		mepa.NADA("MAIN");
+		sproc.rotulo = "MAIN";
 	}
 	else
 	{
@@ -324,6 +335,32 @@ void C_Analise_Sintatica::Decl_proc()
 
 	Aceitar_Token(FECHA_PARENTESES, ERR_FECHA_PARENTESES);
 
+	//MEPA - Inicio a pilha que vai armazenar a quantidade de variáveis alocadas - Inicio com zero
+	pilha_var_mem.push(0);
+
+	//Se existir parametros por valor, preciso armazenar memória
+	if (qtd_param.val > 0)
+	{
+		mepa.AMEM(to_string(qtd_param.val));
+		pilha_var_mem.top() += qtd_param.val;
+	}
+
+
+	//Atualizar posição da pilha dos parâmetros e envio uma pilha para depois conseguir atribuir os valores para os parâmetros passados por cópia
+	if (sproc.qtd_params > 0)
+	{
+		stack<pair<int, int>> pparamval;
+		ts.Atualizar_Pilha_Param(sproc.chave, sproc.qtd_params, pparamval);
+		//Para os params que foram passador por valor, armazeno os valores localmente 
+		while (!pparamval.empty())
+		{
+			mepa.CRVL("1", to_string(pparamval.top().first));
+			mepa.ARMZ("1", to_string(pparamval.top().second));
+			pparamval.pop();
+		}
+	}
+
+
 	Bloco();
 
 	sproc.access = acesso_membro;
@@ -331,16 +368,27 @@ void C_Analise_Sintatica::Decl_proc()
 
 	Aceitar_Token(END_SUB, ERR_END_SUB);
 	
+	//Quando precisar ir para o fim do procedimento
+	//mepa.Add_Comando(sproc.rotulo + "_FIM:NADA");
+
 	//Inativar todas as variáveis que foram declaradas dentro desta procedure/subprograma
-	int qtd_removida = ts.Remover_Internos(sproc.identificador);
+	//int qtd_removida = ts.Remover_Internos(sproc.identificador);
+	ts.Remover_Internos(sproc.identificador);
 	//Preciso desempilhar a variável que controla a posição da pilha, somente se tiver removido
-	if (qtd_removida > 0)
+	if (!pilha_var_mem.empty() && pilha_var_mem.top() > 0)
 	{
-		mepa.DMEM(to_string(qtd_removida));
-		posicao_pilha_global = posicao_pilha_global - qtd_removida;
+		mepa.DMEM(to_string(pilha_var_mem.top()));
+		//posicao_pilha_global = posicao_pilha_global - qtd_removida;
 	}
 	//MEPA - RTPR Retorno da procedure
-	mepa.RTPR("1", "0");
+	mepa.RTPR("1", to_string(sproc.qtd_params));
+
+	qtd_param.val = 0;
+	qtd_param.ref = 0;
+	Proc_Func_Atual = "";
+	//Tiro do topo o contador de memoria desta função (Caso não tenha sido desempilhado anterirmente por um retorno)
+	if (!pilha_var_mem.empty())
+		pilha_var_mem.pop();
 }
 
 //DF
@@ -352,13 +400,46 @@ void C_Analise_Sintatica::Decl_func()
 	sfuncao.tipo = Espec_tipo();
 
 	sfuncao.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+
+	Proc_Func_Atual = sfuncao.identificador;
+
 	sfuncao.access = acesso_membro;
+
+	sfuncao.rotulo = mepa.NADA();
+
+	//MEPA - ENPR -Entrada do procedimento
+	mepa.ENPR("1");
 		
 	Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
 
 	sfuncao.qtd_params = Params();
 
 	Aceitar_Token(FECHA_PARENTESES, ERR_FECHA_PARENTESES);
+
+	//MEPA - Inicio a pilha que vai armazenar a quantidade de variáveis alocadas - Inicio com zero
+	pilha_var_mem.push(0);
+
+	//Se existir parametros por valor, preciso armazenar memória
+	if (qtd_param.val > 0)
+	{
+		mepa.AMEM(to_string(qtd_param.val));
+		pilha_var_mem.top() += qtd_param.val;
+	}
+
+
+	//Atualizar posição da pilha dos parâmetros e envio uma pilha para depois conseguir atribuir os valores para os parâmetros passados por cópia
+	if (sfuncao.qtd_params > 0)
+	{
+		stack<pair<int, int>> pparamval;
+		ts.Atualizar_Pilha_Param(sfuncao.chave, sfuncao.qtd_params, pparamval);
+		//Para os params que foram passador por valor, armazeno os valores localmente 
+		while (!pparamval.empty())
+		{
+			mepa.CRVL("1", to_string(pparamval.top().first));
+			mepa.ARMZ("1", to_string(pparamval.top().second));
+			pparamval.pop();
+		}
+	}
 
 	//Faço a inserção na TS logo após a declaração, isso precisa ser feito em caso seja uma função recursiva
 	ts.Inserir(sfuncao);
@@ -367,14 +448,34 @@ void C_Analise_Sintatica::Decl_func()
 
 	Aceitar_Token(END_FUNCTION, ERR_END_FUNCTION);
 
+	//Quando precisar ir para o fim da função
+	//mepa.Add_Comando(sfuncao.rotulo + "_FIM:NADA");
+
 	//Inativar todas as variáveis que foram declaradas dentro desta função
 	int qtd_removida =	ts.Remover_Internos(sfuncao.identificador);
 	//Preciso desempilhar a variável que controla a posição da pilha, somente se tiver removido
 	if (qtd_removida > 0)
 	{
-		mepa.DMEM(to_string(qtd_removida));
-		posicao_pilha_global = posicao_pilha_global - qtd_removida;
+		//Verifico se é diferente de VOID, aí adiciona 1 DMEM por causa do retorno
+		//if (sfuncao.tipo != TIPO_VOID)
+			//mepa.DMEM(to_string(qtd_removida + 1));
+		//else
+			mepa.DMEM(to_string(qtd_removida));
+		//posicao_pilha_global = posicao_pilha_global - qtd_removida;
 	}
+	//else if (sfuncao.tipo != TIPO_VOID) //Não teve parâmetros, mas é diferente de void então tem o DMEM do retorno
+		//mepa.DMEM("1");
+
+
+	//MEPA - RTPR Retorno da procedure
+	mepa.RTPR("1", to_string(sfuncao.qtd_params));
+
+	qtd_param.val = 0;
+	qtd_param.ref = 0;
+	Proc_Func_Atual = "";
+	//Tiro do topo o contador de memoria desta função (Caso não tenha sido desempilhado anterirmente por um retorno)
+	if (!pilha_var_mem.empty())
+		pilha_var_mem.pop();
 }
 
 //PS
@@ -391,20 +492,21 @@ int C_Analise_Sintatica::Params()
 //LP
 int C_Analise_Sintatica::Lista_param()
 {
-	int qtd_params = 0;
+	qtd_param.val = 0;
+	qtd_param.ref = 0;
 	Param();
-	qtd_params = Lista_param_1(qtd_params) + 1;
-	return qtd_params;
+	Lista_param_1();
+	return qtd_param.val + qtd_param.ref;
 }
 
 //LP'
-int C_Analise_Sintatica::Lista_param_1(int _qtd_params)
+void C_Analise_Sintatica::Lista_param_1()
 {
 	if (token == VIRGULA)
 	{
 		Aceitar_Token(VIRGULA, ERR_VIRGULA);
 		Param();
-		return Lista_param_1(_qtd_params) + 1;
+		Lista_param_1();
 	}
 	else if (token != FECHA_PARENTESES)
 		Erro(ERR_FECHA_PARENTESES);
@@ -454,11 +556,13 @@ void C_Analise_Sintatica::Mode()
 	{
 		Aceitar_Token(VALUE, ERR_VALUE);
 		sparams.passby = VALUE;
+		qtd_param.val++;
 	}
 	else if (token == REF)
 	{
 		Aceitar_Token(REF, ERR_REF);
 		sparams.passby = REF;
+		qtd_param.ref++;
 	}
 	else
 		Erro("Esperado mode(value ou ref)");
@@ -715,14 +819,18 @@ void C_Analise_Sintatica::Comando()
 		qtd_params_decl = ts.Buscar_Qtd_Params(identificador);
 
 		//MEPA - Empilho a variável, irá desempilhar somente depois que inserir a CRCT/CRVL do valor atribuído
-		if (categoria == VAR)
+		if (categoria == VAR || categoria == PARAM)
 			mepa.pilha_ARMZ.push(identificador);
+
+		//TODO Separar memória para retorno de função
+
+		//TODO Separar memória para os parâmetros passador por referência
 
 		//Comando_1 retorna a quantidade de parâmetros e envio o tipo do identificador para verificação de tipos
 		qtd_params_chamada = Comando_1(ts.Buscar_Tipo(identificador));
 
 		//MEPA - Desempilho
-		if (categoria == VAR && !mepa.pilha_ARMZ.empty())
+		if ((categoria == VAR || categoria == PARAM) && !mepa.pilha_ARMZ.empty())
 		{
 			int pai = ts.Buscar_Pai(mepa.pilha_ARMZ.top());
 			if (pai != 0)
@@ -739,6 +847,8 @@ void C_Analise_Sintatica::Comando()
 				Erro(identificador, ERR_SEM_NUM_PARAMS);
 			//MEPA - CHPR Chamada de procedimento
 			mepa.CHPR(ts.Buscar_Rotulo(identificador), "1");
+			//TODO Atualizar valores que foram passador como referência
+
 		}
 	}
 	else if (token == CONDICAO_IF)
@@ -972,7 +1082,31 @@ void C_Analise_Sintatica::Com_desvio()
 	{
 		Aceitar_Token(RETORNO, "Esperado return");
 		Exp();
+		//TODO 10 - Validar Expressão aqui
+		mepa.Avaliar_Expressao(mepa.pilha_EXP, ts);
 		Aceitar_Token(PONTO_VIRGULA, "Esperado ;");
+
+		//PBuscar quantidade de parâmetros da função/procedimento atual
+		int qtd_params = ts.Buscar_Qtd_Params(Proc_Func_Atual);
+		//Caso seja função, preciso armazenar o retorno
+		if (ts.Buscar_Categoria(Proc_Func_Atual) == FUNCTION && ts.Buscar_Tipo(Proc_Func_Atual) != TIPO_VOID)
+		{
+			//Armazenar o valor na pilha para o retorno (ARMZ k, -(4+n))
+			mepa.ARMZ("1", to_string(-(4 + qtd_params)));
+			//mepa.DMEM("1");
+			mepa.DMEM(to_string(pilha_var_mem.top()));
+			mepa.RTPR("1", to_string(qtd_params));
+			//Função/Procedure retornou aqui, acabo com o topo da pilha dela
+			//pilha_var_mem.pop();
+		}
+		else
+		{
+			if (!pilha_var_mem.empty() && pilha_var_mem.top() > 0)
+				mepa.DMEM(to_string(pilha_var_mem.top()));
+			mepa.RTPR("1", to_string(qtd_params));
+		}
+		//Desvio para o fim do procedimento/função
+		//mepa.DSVS(ts.Buscar_Rotulo(Proc_Func_Atual) + "_FIM");
 	}
 	else
 		Erro("Esperado comando de desvio");
@@ -1038,7 +1172,7 @@ string C_Analise_Sintatica::Id_Composto()
 		//Caso abra colchetes, é array. Verificar se é mesmo na TS
 		if (token == ABRE_COLCHETES && !ts.Verificar_Array(identificador))
 			Erro(ERR_SEM_INDEX_VAR_SIMPLES);
-		if (!ts.Constultar(identificador))
+		if (!ts.Consultar(identificador))
 			Erro(identificador, ERR_SEM_NAO_DECLARDO);
 	}
 	else if (token == ID_SEL_IDENTIFICADOR)
@@ -1046,7 +1180,7 @@ string C_Analise_Sintatica::Id_Composto()
 		identificador = Aceitar_Token(ID_SEL_IDENTIFICADOR, ERR_OP_SELECAO_IDENTIFICADOR);
 		//Remover o . 
 		identificador = identificador.substr(0, identificador.size() - 1);
-		if (!ts.Constultar(identificador))
+		if (!ts.Consultar(identificador))
 			Erro(identificador, ERR_SEM_NAO_DECLARDO);
 		identificador = Id_Composto();
 	}
@@ -1056,7 +1190,7 @@ string C_Analise_Sintatica::Id_Composto()
 		identificador = Aceitar_Token(ID_SEL_PONTEIRO, ERR_OP_SELECAO_PONTEIRO);
 		//Remover o -> 
 		identificador = identificador.substr(0, identificador.size() - 2);
-		if (!ts.Constultar(identificador))
+		if (!ts.Consultar(identificador))
 			Erro(identificador, ERR_SEM_NAO_DECLARDO);
 		identificador = Id_Composto();
 	}
@@ -1084,6 +1218,12 @@ int C_Analise_Sintatica::Lista_exp()
 		token == VERDADEIRO)
 	{
 		Exp();
+		//MEPA se for argumento, já valido e insiro no vetor
+		if (eh_argumento)
+		{
+			//TODO 06 - Validar Expressão aqui
+			mepa.Avaliar_Expressao(mepa.pilha_EXP, ts);
+		}
 		return Lista_exp_1();
 	}
 	else
@@ -1373,7 +1513,7 @@ string C_Analise_Sintatica::Exp_simples()
 		tipo_exp = ts.Buscar_Tipo(identificador);
 
 		//MEPA
-		if (categoria == VAR)
+		if (categoria == VAR || categoria == PARAM)
 		{
 			int pai = ts.Buscar_Pai(identificador);
 			if (pai != 0)
@@ -1403,9 +1543,24 @@ string C_Analise_Sintatica::Exp_simples()
 
 		if (categoria == FUNCTION || categoria == SUB)
 		{
+			//Caso seja função, preciso inserir um AMEM 1 para o retorno da função
+			//Se for TIPO VOID não retorna e não é inserido o AMEM
+			if (categoria == FUNCTION && tipo_exp != TIPO_VOID)
+			{
+				mepa.AMEM("1");
+				pilha_var_mem.top()++;
+			}
+			int qtd_params = ts.Buscar_Qtd_Params(identificador);
 			//Validação semântica para garantir que a quantidade de parâmetros na chamada da função é a mesma que a da declaração
-			if (Exp_simples_1() != ts.Buscar_Qtd_Params(identificador))
+			if (Exp_simples_1() != qtd_params)
 				Erro(identificador, ERR_SEM_NUM_PARAMS);
+			//MEPA - CHPR Chamada de procedimento
+			mepa.CHPR(ts.Buscar_Rotulo(identificador), "1");
+			//TODO Atualizar valores que foram passador como referência
+			if (categoria == FUNCTION && tipo_exp != TIPO_VOID)
+			{
+				mepa.CRVL("1", to_string(pilha_var_mem.top()-1));
+			}
 		}
 		else
 			Exp_simples_1();
@@ -1521,6 +1676,7 @@ void C_Analise_Sintatica::Valor_verdade(S_Simbolos& _simbolo)
 //AR
 int C_Analise_Sintatica::Args()
 {
+	int resultado;
 	if (token == OP_SUBTRACAO ||
 		token == ABRE_PARENTESES ||
 		token == OP_ADICAO ||
@@ -1535,8 +1691,18 @@ int C_Analise_Sintatica::Args()
 		token == STRING ||
 		token == VERDADEIRO)
 	{
-		//Preciso adicionar 1 pois a função de lista_exp devolve a quantidade contata do segundo argumento em diantes
-		return Lista_exp() + 1;
+		//MEPA - Inicio o armazenamento dos argumentos
+		//Inicio a flag para argumentos para true
+		eh_argumento = true;
+		//limpo o vetor que vai armazenar as expressões 
+		mepa.vetor_EXP.clear();
+		//Preciso adicionar 1 pois a função de lista_exp devolve a quantidade contada do segundo argumento em diantes
+		resultado = Lista_exp() + 1;
+		//Valido as expressões de cada argumento
+		//TODO
+		//Fecho a flag para argumentos = false
+		eh_argumento = false;
+		return resultado;
 	}
 	else if (token != FECHA_PARENTESES)
 		Erro(ERR_FECHA_PARENTESES);
@@ -1616,8 +1782,9 @@ void C_Analise_Sintatica::Lista_var_2()
 void C_Analise_Sintatica::Lista_decl_var()
 {
 	//svar.pos_pilha++;
-	posicao_pilha_local++;
-	posicao_pilha_global++;
+	//posicao_pilha_local++;
+	//posicao_pilha_global++;
+	pilha_var_mem.top()++;
 
 	svar.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
 	svar.linha = iter_token_lexema->linha;
@@ -1632,8 +1799,11 @@ void C_Analise_Sintatica::Lista_decl_var_1()
 	{
 		Aceitar_Token(VIRGULA, ERR_VIRGULA);
 		svar.access = acesso_membro;
-		//Atribuo o valor da pilha global
-		svar.pos_pilha = posicao_pilha_global;
+		//Atribuo o valor da pilha
+		//if (svar.pai == 0) //Global
+			//svar.pos_pilha = posicao_pilha_global;
+		//else //Local
+			svar.pos_pilha = pilha_var_mem.top()-1;
 		//Se encontrei virgula, inserir variável na tabela de símbolo
 		ts.Inserir(svar);
 		//Nova variável virá, incremento a chave

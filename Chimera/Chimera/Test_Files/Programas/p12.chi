@@ -1,12 +1,13 @@
-function fat(var int n):int
+function int fat(var int n by value)
 	if(n==0) then
 		return 1;
 	else
 		return fat(n-1)*n;
-	end-if
+	end_if
 end_function
 
 sub main()
 	var int x;
-	x = fat(5,2);
+	x = fat(5);
+	println(x);
 end_sub

@@ -1,0 +1,63 @@
+include macros.asm
+pilha SEGMENT PARA STACK 'STACK'
+dw  100  dup(? )
+pilha ENDS
+dados   SEGMENT PARA 'DATA'
+dw  10  dup(0)
+buffer db 5 dup(' ')
+mesg   db  10, ? , 11 dup(0)
+dados   ENDS
+procs   SEGMENT PARA 'DATA'
+dw  32000 dup(0)
+procs   ENDS
+codigo  SEGMENT PARA 'CODE'
+ASSUME SS : pilha, CS : codigo, DS : dados, ES : dados
+inicio PROC  FAR
+; ----------Inicio das Instrucoes MEPA
+INPP
+CHPR MAIN,1
+DSVS FIM
+R3:NADA
+ENPR 1
+AMEM 2
+CRVL 1,-5
+ARMZ 1,1
+CRVL 1,-7
+ARMZ 1,0
+CRVL 1,0
+CRVL 1,-6
+SOMA
+CRVL 1,1
+SOMA
+CRVL 1,-4
+SOMA
+ARMZ 1,-8
+DMEM 2
+RTPR 1,5
+MAIN:NADA
+ENPR 1
+AMEM 3
+CRCT 0
+ARMZ 1,0
+CRCT 1
+ARMZ 1,1
+CRCT 3
+ARMZ 1,2
+CRVL 1,0
+CRCT 4
+CRVL 1,1
+CRCT 5
+CRVL 1,2
+CHPR R3,1
+CRVL 1,0
+IMPR
+IMPE
+DMEM 3
+RTPR 1,0
+FIM:NADA
+DMEM 0
+PARA
+; ----------Fim das Instrucoes MEPA
+inicio  ENDP
+codigo  ENDS
+END    inicio

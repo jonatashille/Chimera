@@ -28,7 +28,7 @@ bool C_Tabela_Simbolos::Inserir(S_Simbolos _simbolos)
 	return true;
 }
 
-bool C_Tabela_Simbolos::Constultar(string _identificador)
+bool C_Tabela_Simbolos::Consultar(string _identificador)
 {
 	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
 	{
@@ -130,6 +130,28 @@ vector<S_Simbolos>::iterator C_Tabela_Simbolos::Buscar_Simbolo(string _identific
 	return vector<S_Simbolos>::iterator();
 }
 
+void C_Tabela_Simbolos::Atualizar_Pilha_Param(int _pai, int _qtd_params, stack<pair<int,int>>& _pilha)
+{
+	if (_qtd_params > 0)
+	{
+		int temp_param = 0;
+		int temp_val = 0;
+		for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+		{
+			if (it->pai == _pai && it->categoria == PARAM && it->valido)
+			{
+				it->pos_pilha = -3 - (_qtd_params - temp_param++);
+				if (it->passby == VALUE)
+				{
+					_pilha.push(make_pair(it->pos_pilha, temp_val));
+					//Preciso alterar o valor da tabela de símbolos, agora é o endereço local, pois foi passado por valor
+					it->pos_pilha = temp_val++;//Inicia com o 0 e vou incrementando
+				}
+			}
+		}
+	}
+}
+
 int C_Tabela_Simbolos::Remover_Internos(string _identificador)
 {
 	vector<S_Simbolos>::iterator simbolo;
@@ -139,8 +161,8 @@ int C_Tabela_Simbolos::Remover_Internos(string _identificador)
 
 	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
 	{
-		//Só conto removidos as variáveis, mas desativo as constantes locais
-		if (it->pai == simbolo->chave && it->categoria == VAR)
+		//Só conto removidos as variáveis e parâmetros(que tenham sido passados por valor), mas desativo as constantes locais
+		if (it->pai == simbolo->chave && (it->categoria == VAR || (it->categoria == PARAM && it->passby == VALUE)))
 		{
 			it->valido = false;
 			cont++;

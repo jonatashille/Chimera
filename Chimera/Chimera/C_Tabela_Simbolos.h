@@ -20,6 +20,8 @@ struct S_Simbolos
 	int linha;
 	int pos_pilha;
 	string rotulo;
+	int k; //Endereço Léxico
+	int n; //Endereço de memória (Usado para parâmetros, primeiro inicia com -4, próximos -5,-6...)
 
 	//Sobrecarga do operador < para ordenar a TS pela chave
 	bool operator < (const S_Simbolos& ts)
@@ -40,7 +42,7 @@ public:
 	vector<S_Simbolos> tabela_simbolos;
 
 	bool Inserir(S_Simbolos);
-	bool Constultar(string);
+	bool Consultar(string);
 	//Utilizado para inativar os símbolos, dado um escopo
 	void Inativar_Simbolos(int);
 	//Verifica se já existe a ID na TS
@@ -61,6 +63,8 @@ public:
 	string Buscar_Rotulo(string);
 	//Busca dados da TS pelo identificador
 	vector<S_Simbolos>::iterator Buscar_Simbolo(string);
+	//Atualizar posição da pilha dos parâmetros / Se for ref mantém o valor da pilha da mepa, se for valor atualiza para o valor interno
+	void Atualizar_Pilha_Param(int,int, stack<pair<int, int>>&);
 	//Remover/Inutilizar variáveis internas/filhos - Retorna quantidade de variáveis desativadas
 	int Remover_Internos(string);
 	//Remover/Inutilizar variáveis globais - Retorna quantidade de variáveis desativadas

@@ -15,9 +15,10 @@ void main()
 	//Compilar("Test_Files\\Programas\\p01.chi");
 	//Compilar("Test_Files\\Programas\\p02.chi");
 	//Compilar("Test_Files\\Programas\\p03.chi");
-	Compilar("Test_Files\\Programas\\p04.chi");
+	//Compilar("Test_Files\\Programas\\p04.chi");
+	//Compilar("Test_Files\\Programas\\p05.chi");
 	//Compilar("Test_Files\\Programas\\p06.chi");
-	//Compilar("Test_Files\\Programas\\p12.chi");
+	Compilar("Test_Files\\Programas\\p12.chi");
 	//Executar_Testes_Unitatios();
 
 	/*int a;
