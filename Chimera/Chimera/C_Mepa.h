@@ -19,6 +19,7 @@ public:
 	//Variáveis
 	stack<string> pilha_ARMZ;
 	stack<string> pilha_EXP;
+	stack<string> pilha_EXP_args;
 	vector<string> vetor_EXP;
 	stack<string> pilha_Com_Escrita;
 	C_Mepa();

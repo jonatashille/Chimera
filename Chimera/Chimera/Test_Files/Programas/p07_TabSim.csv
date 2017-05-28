@@ -1,0 +1,5 @@
+#;ID;CATEGORIA;TIPO;Array;valor;QtdParam;Pass By;Pai;Classe;Acesso;Ativo;Linha;Pilha;Rotulo;
+1;fibonacci;FUNCTION;TIPO_INT;0;;1;;0;0;0;1;1;-1;R3;
+2;n;PARAMETRO;TIPO_INT;0;;0;VALUE;1;0;0;0;1;0;;
+3;main;SUB;;0;;0;;0;0;0;1;13;-1;MAIN;
+4;x;VAR;TIPO_INT;0;;0;;3;0;0;0;14;0;;

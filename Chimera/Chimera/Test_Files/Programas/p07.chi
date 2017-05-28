@@ -1,0 +1,17 @@
+function int fibonacci(var int n by value)
+	if(n<1) then
+		return 0;
+	else
+	if(n==1) then
+		return 1;
+	else
+		return fibonacci(n-1) + fibonacci(n-2);
+	end_if
+	end_if
+end_function
+
+sub main()
+	var int x;
+	x = fibonacci(15);
+	println(x);
+end_sub
