@@ -2,6 +2,7 @@ sub main()
 	var int a,b;
 	scan(a);
 	scan(b);
+
 	if a>b then
 		println("Primeiro valor Maior");
 	else if a<b then
@@ -11,18 +12,20 @@ sub main()
 	end_if
 	end_if
 
-	/*while (a<20) do
+	a=17;
+	while (a<20) do
 		a = a + 1;
 		println(a);
-	loop*/
+	loop
 
-	/*repeat
+	a=16;
+	repeat
 		a = a + 1;
 		println(a); 
 	until
-		(a<20);*/
+		(a<20);
 
-	for a = 1 to 20 do
+	for a = 15 to 20 do
 		println(a); 
 	next
 

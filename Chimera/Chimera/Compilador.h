@@ -17,6 +17,9 @@ void Compilar(string _nome_arquivo)
 	//A analise lexica me gera uma tabela com token e lexemas, que serão utilizado nas analises seguintes
 	vector<S_Token_Lexema> tabela_token_lexema = lexica.Get_Tabela_Token_Lexema();
 
+	//Gero um arquivo csv com a tabela de tokens/lexema
+	lexica.Gravar_Tabela_Token(_nome_arquivo);
+
 	//Realizo a analise sintática
 	C_Analise_Sintatica sintatica(tabela_token_lexema);
 	//Inicio a analise sintatica
@@ -24,7 +27,4 @@ void Compilar(string _nome_arquivo)
 
 	//Gerar arquivo csv com a tabela de símbolos
 	sintatica.Gravar_Arquivos(_nome_arquivo);
-
-	//Gero um arquivo csv com a tabela de tokens/lexema
-	lexica.Gravar_Tabela_Token(_nome_arquivo);
 }

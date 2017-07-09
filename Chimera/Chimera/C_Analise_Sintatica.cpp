@@ -299,6 +299,20 @@ string C_Analise_Sintatica::Espec_tipo()
 		Aceitar_Token(TIPO_STRING, ERR_TIPO_STRING);
 		return TIPO_STRING;
 	}
+	else if (token == IDENTIFICADOR)
+	{
+		string identificador;
+		string categoria;
+		identificador = Id_Composto();
+		categoria = ts.Buscar_Categoria(identificador);
+		if (categoria == ESTRUTURA)
+		{
+			//Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+			return identificador;
+		}
+		else
+			Erro("Esperado tipo estrutura");
+	}
 	else
 		Erro("Esperado tipo");
 	return "";
@@ -806,7 +820,7 @@ void C_Analise_Sintatica::Comando()
 	{
 		Com_repeticao();
 	}
-	else if (token == IDENTIFICADOR || token == ID_SEL_IDENTIFICADOR || token == ID_SEL_PONTEIRO)
+	else if (token == ENDERECO_ELEMENTO || token == IDENTIFICADOR || token == ID_SEL_IDENTIFICADOR || token == ID_SEL_PONTEIRO)
 	{
 		string identificador;
 		string categoria;
@@ -1166,6 +1180,11 @@ void C_Analise_Sintatica::Com_escrita()
 string C_Analise_Sintatica::Id_Composto()
 {
 	string identificador;
+
+	if (token == ENDERECO_ELEMENTO)
+	{
+		Aceitar_Token(ENDERECO_ELEMENTO, ERR_ENDERECO_ELEMENTO);
+	}
 	if (token == IDENTIFICADOR)
 	{
 		identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
@@ -1208,6 +1227,7 @@ int C_Analise_Sintatica::Lista_exp()
 		token == OP_ADICAO ||
 		token == CARACTERE ||
 		token == FALSO ||
+		token == ENDERECO_ELEMENTO ||
 		token == IDENTIFICADOR ||
 		token == ID_SEL_IDENTIFICADOR ||
 		token == ID_SEL_PONTEIRO ||
@@ -1246,7 +1266,8 @@ int C_Analise_Sintatica::Lista_exp_1()
 string C_Analise_Sintatica::Exp()
 {
 	string tipo_exp;
-	if (token == IDENTIFICADOR ||
+	if (token == ENDERECO_ELEMENTO ||
+		token == IDENTIFICADOR ||
 		token == ID_SEL_IDENTIFICADOR ||
 		token == ID_SEL_PONTEIRO ||
 		token == OP_SUBTRACAO ||
@@ -1355,6 +1376,7 @@ string C_Analise_Sintatica::Exp_soma()
 		token == OP_ADICAO ||
 		token == CARACTERE ||
 		token == FALSO ||
+		token == ENDERECO_ELEMENTO ||
 		token == IDENTIFICADOR ||
 		token == ID_SEL_IDENTIFICADOR ||
 		token == ID_SEL_PONTEIRO ||
@@ -1429,6 +1451,7 @@ string C_Analise_Sintatica::Exp_mult()
 		token == OP_ADICAO ||
 		token == CARACTERE ||
 		token == FALSO ||
+		token == ENDERECO_ELEMENTO ||
 		token == IDENTIFICADOR ||
 		token == ID_SEL_IDENTIFICADOR ||
 		token == ID_SEL_PONTEIRO ||
@@ -1530,7 +1553,7 @@ string C_Analise_Sintatica::Exp_simples()
 		//Mando um tipo S_Simbolo dummy pois não gravo nada na tabela de símbolos pela expressão simples
 		tipo_exp = Literal(sdummy);
 	}
-	else if (token == IDENTIFICADOR || token == ID_SEL_IDENTIFICADOR || token == ID_SEL_PONTEIRO)
+	else if (token == ENDERECO_ELEMENTO || token == IDENTIFICADOR || token == ID_SEL_IDENTIFICADOR || token == ID_SEL_PONTEIRO)
 	{
 		string identificador;
 		string categoria;
@@ -1702,6 +1725,7 @@ int C_Analise_Sintatica::Args()
 		token == OP_ADICAO ||
 		token == CARACTERE ||
 		token == FALSO ||
+		token == ENDERECO_ELEMENTO ||
 		token == IDENTIFICADOR ||
 		token == ID_SEL_IDENTIFICADOR ||
 		token == ID_SEL_PONTEIRO ||

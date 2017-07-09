@@ -142,6 +142,7 @@ enum Acesso { PUBLIC, PRIVATE, PROTECTED };
 #define ERR_ABRE_PARENTESES "Esperado ("
 #define ERR_FECHA_PARENTESES "Esperado )"
 
+#define ERR_ENDERECO_ELEMENTO "Esperado operador &"
 #define ERR_IDENTIFICADOR "Esperado identificador"
 
 #define ERR_END_FUNCTION "Esperado end_function"

@@ -12,6 +12,6 @@ end_function
 
 sub main()
 	var int x;
-	x = fibonacci(15);
+	x = fibonacci(20);
 	println(x);
 end_sub

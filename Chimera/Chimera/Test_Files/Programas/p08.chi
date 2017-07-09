@@ -1,0 +1,9 @@
+struct cliente
+    var int id;
+    var string nome;
+    var bool objr;
+end_struct
+
+sub main()
+	var cliente cli;
+end_sub
