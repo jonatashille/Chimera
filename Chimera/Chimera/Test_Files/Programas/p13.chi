@@ -1,0 +1,6 @@
+sub main()
+	var ref int a;
+	var pointer int b;
+	a = 20;
+	b = 10;
+end_sub

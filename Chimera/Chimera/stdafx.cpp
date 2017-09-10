@@ -77,6 +77,7 @@ enum Acesso { PUBLIC, PRIVATE, PROTECTED };
 #define BY "BY" 
 #define VALUE "VALUE" 
 #define REF "REF" 
+#define POINTER "POINTER" 
 #define PRINT "PRINT" 
 #define PRINTLN "PRINTLN" 
 #define SCAN "SCAN" 
@@ -206,6 +207,7 @@ enum Acesso { PUBLIC, PRIVATE, PROTECTED };
 #define ERR_BY "Esperado by"
 #define ERR_VALUE "Esperado value"
 #define ERR_REF "Esperado ref"
+#define ERR_POINTER "Esperado pointer"
 
 #define ERR_CONDICAO_IF "Esperado if"
 #define ERR_CONDICAO_THEN "Esperado then"

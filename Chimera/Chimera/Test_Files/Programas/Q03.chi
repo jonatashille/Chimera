@@ -1,0 +1,20 @@
+sub troca(var int p by ref, var int q by ref)
+	var int aux;
+	aux = p;
+	p = q;
+	q = aux;
+end_sub
+
+sub main()
+	var int a, b, c;
+	a=10;
+	b=20;
+	c=30;
+
+	troca(&a, &b);
+	troca(&b, &c);
+
+	println(a);
+	println(b);
+	println(c);
+end_sub

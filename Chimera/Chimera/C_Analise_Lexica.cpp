@@ -66,6 +66,7 @@ void C_Analise_Lexica::Montar_Tabela_Palavras_Reservadas()
 	palavras_reservadas.push_back(make_pair("by", BY));
 	palavras_reservadas.push_back(make_pair("value", VALUE));
 	palavras_reservadas.push_back(make_pair("ref", REF));
+	palavras_reservadas.push_back(make_pair("pointer", POINTER));
 	palavras_reservadas.push_back(make_pair("print", PRINT));
 	palavras_reservadas.push_back(make_pair("println", PRINTLN));
 	palavras_reservadas.push_back(make_pair("repeat", LACO_REPEAT));

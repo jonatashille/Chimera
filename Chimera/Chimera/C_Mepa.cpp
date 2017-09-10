@@ -42,10 +42,10 @@ string C_Mepa::Rodape()
 }
 
 //Função que converte uma expressão para pos fixa e retorna um vetor
-void C_Mepa::Converter_Pos_Fixa(stack<string>& _p, C_Tabela_Simbolos _ts)
+void C_Mepa::Converter_Pos_Fixa(stack<S_EXP>& _p, C_Tabela_Simbolos _ts)
 {
 	//Preciso reverter a pilha para pegar da posição certa
-	stack<string> r_stack;
+	stack<S_EXP> r_stack;
 	while (!_p.empty())
 	{
 		r_stack.push(_p.top());
@@ -53,31 +53,31 @@ void C_Mepa::Converter_Pos_Fixa(stack<string>& _p, C_Tabela_Simbolos _ts)
 	}
 	_p = r_stack;
 
-	stack<string> p_temp;
+	stack<S_EXP> p_temp;
 
 	while (!_p.empty())
 	{
-		if (E_Operador(_p.top()))
+		if (E_Operador(_p.top().token))
 		{
 			// TODO 04 - Verificar caso 1==1 + 3 * 5 tem ques er igual a 0 e é igual a 16
-			while (!p_temp.empty() && p_temp.top() != ABRE_PARENTESES && Get_Peso_Operador(p_temp.top()) >= Get_Peso_Operador(_p.top()))
+			while (!p_temp.empty() && p_temp.top().token != ABRE_PARENTESES && Get_Peso_Operador(p_temp.top().token) >= Get_Peso_Operador(_p.top().token))
 			{
-				Add_Comando(p_temp.top());
+				Add_Comando(p_temp.top().token);
 				p_temp.pop();
 			}
 			p_temp.push(_p.top());
 			_p.pop();
 		}
-		else if (_p.top() == ABRE_PARENTESES)
+		else if (_p.top().token == ABRE_PARENTESES)
 		{
 			p_temp.push(_p.top());
 			_p.pop();
 		}
-		else if (_p.top() == FECHA_PARENTESES)
+		else if (_p.top().token == FECHA_PARENTESES)
 		{
-			while (!p_temp.empty() && p_temp.top() != ABRE_PARENTESES)
+			while (!p_temp.empty() && p_temp.top().token != ABRE_PARENTESES)
 			{
-				Add_Comando(p_temp.top());
+				Add_Comando(p_temp.top().token);
 				p_temp.pop();
 			}
 			p_temp.pop();
@@ -87,22 +87,27 @@ void C_Mepa::Converter_Pos_Fixa(stack<string>& _p, C_Tabela_Simbolos _ts)
 		else
 		{
 			//Se for identificador, preciso inserir o endereço da memória dele
-			if (Validar_Identificador(_p.top()))
+			if (Validar_Identificador(_p.top().token))
 			{
-				int pai = _ts.Buscar_Pai(_p.top());
+				int pai = _ts.Buscar_Pai(_p.top().token);
 				if (pai != 0)
 					pai = 1;
-				CRVL(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(_p.top())));
+				if (_p.top().end_elemento)
+					CREN(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(_p.top().token)));
+				else if (_ts.Verificar_Ponteiro(_p.top().token))
+					CRVI(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(_p.top().token)));
+				else
+					CRVL(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(_p.top().token)));
 			}
 			else
-				CRCT(_p.top());
+				CRCT(_p.top().token);
 			_p.pop();
 		}
 	}
 
 	while (!p_temp.empty())
 	{
-		Add_Comando(p_temp.top());
+		Add_Comando(p_temp.top().token);
 		p_temp.pop();
 	}
 }
@@ -170,6 +175,18 @@ void C_Mepa::CRVL(string _k, string _n)
 	mepa << "CRVL " << _k << "," << _n << endl;
 }
 
+void C_Mepa::CRVI(string _k, string _n)
+{
+	linha_mepa++;
+	mepa << "CRVI " << _k << "," << _n << endl;
+}
+
+void C_Mepa::CREN(string _k, string _n)
+{
+	linha_mepa++;
+	mepa << "CREN " << _k << "," << _n << endl;
+}
+
 void C_Mepa::ARMZ(string _k, string _n)
 {
 	linha_mepa++;
@@ -180,6 +197,18 @@ void C_Mepa::ARMZ(string _n)
 {
 	linha_mepa++;
 	mepa << "ARMZ " << 1 << "," << _n << endl;
+}
+
+void C_Mepa::ARMI(string _k, string _n)
+{
+	linha_mepa++;
+	mepa << "ARMI " << _k << "," << _n << endl;
+}
+
+void C_Mepa::ARMI(string _n)
+{
+	linha_mepa++;
+	mepa << "ARMI " << 1 << "," << _n << endl;
 }
 
 void C_Mepa::LEIT()
@@ -391,7 +420,7 @@ void C_Mepa::Add_Comando(string _str)
 	mepa << _str << endl;
 }
 
-void C_Mepa::Avaliar_Expressao(stack<string>& _p, const C_Tabela_Simbolos& _ts)
+void C_Mepa::Avaliar_Expressao(stack<S_EXP>& _p, const C_Tabela_Simbolos& _ts)
 {
 	Converter_Pos_Fixa(_p, _ts);
 }

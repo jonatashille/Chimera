@@ -89,6 +89,15 @@ string C_Tabela_Simbolos::Buscar_Tipo(string _identificador)
 	return "";
 }
 
+bool C_Tabela_Simbolos::Verificar_Ponteiro(string _identificador)
+{
+	vector<S_Simbolos>::iterator simbolo;
+	simbolo = Buscar_Simbolo(_identificador);
+	if (simbolo._Ptr != nullptr && simbolo->ponteiro)
+		return true;
+	return false;
+}
+
 int C_Tabela_Simbolos::Buscar_Qtd_Params(string _identificador)
 {
 	vector<S_Simbolos>::iterator simbolo;
@@ -207,6 +216,7 @@ void C_Tabela_Simbolos::Imprimir_TS(string _nome_arquivo)
 	ss << setw(20) << left << "ID";
 	ss << setw(20) << left << "CATEGORIA";
 	ss << setw(20) << left << "TIPO";
+	ss << setw(20) << left << "Ponteiro";
 	ss << setw(10) << left << "Array";
 	ss << setw(15) << left << "valor";
 	ss << setw(10) << left << "QtdParam";
@@ -228,6 +238,7 @@ void C_Tabela_Simbolos::Imprimir_TS(string _nome_arquivo)
 		ss << setw(20) << left << it->identificador;
 		ss << setw(20) << left << it->categoria;
 		ss << setw(20) << left << it->tipo;
+		ss << setw(20) << left << it->ponteiro;
 		ss << setw(10) << left << it->array;
 		ss << setw(15) << left << it->valor;
 		ss << setw(10) << left << it->qtd_params;
@@ -270,6 +281,7 @@ void C_Tabela_Simbolos::Gravar_TS(string _nome_arquivo)
 	ss << "ID;";
 	ss << "CATEGORIA;";
 	ss << "TIPO;";
+	ss << "Ponteiro;";
 	ss << "Array;";
 	ss << "valor;";
 	ss << "QtdParam;";
@@ -289,6 +301,7 @@ void C_Tabela_Simbolos::Gravar_TS(string _nome_arquivo)
 		ss << it->identificador << ";";
 		ss << it->categoria << ";";
 		ss << it->tipo << ";";
+		ss << it->ponteiro << ";";
 		ss << it->array << ";";
 		ss << it->valor << ";";
 		ss << it->qtd_params << ";";

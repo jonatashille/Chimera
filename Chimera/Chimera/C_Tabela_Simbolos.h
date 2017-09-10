@@ -9,6 +9,7 @@ struct S_Simbolos
 	string identificador;
 	string categoria;
 	string tipo;
+	bool ponteiro = false;
 	bool array = false;
 	string valor;
 	int qtd_params;
@@ -53,6 +54,8 @@ public:
 	string Buscar_Categoria(string);
 	//Buscar tipo do identificador
 	string Buscar_Tipo(string);
+	//Verifica se é um ponteiro
+	bool Verificar_Ponteiro(string);
 	//Buscar quantidade de parâmetros de uma função/Procedimento
 	int Buscar_Qtd_Params(string);
 	//Buscar a posição da pilha da variável

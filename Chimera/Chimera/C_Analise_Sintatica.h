@@ -41,6 +41,8 @@ private:
 	S_Param qtd_param; //Struct para tratar a quantidade de parâmetros (valor/referência) 
 	string Proc_Func_Atual; //Variável que armazena o procedimento/função atual -> Auxilia na construção da MEPA
 	stack<int> pilha_var_mem; //Contém a quantidade de memória separada para as variáveis. O Topo da pilha é sempre a função/Procedure corrente.
+	int var_mem; //contém a quantidade de variáveis declaradas em uma linha de declaração. Será usada para o AMEM
+	S_EXP sexpressao;
 public:
 	C_Analise_Sintatica(vector<S_Token_Lexema>);
 	~C_Analise_Sintatica();

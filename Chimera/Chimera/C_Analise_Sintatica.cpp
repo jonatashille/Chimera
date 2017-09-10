@@ -251,7 +251,19 @@ void C_Analise_Sintatica::Decl_var()
 	Aceitar_Token(VAR, ERR_VAR);
 
 	svar.categoria = VAR;
+
+	if (token == REF) 
+		Aceitar_Token(REF, ERR_REF);
+	else if (token == POINTER)
+	{
+		Aceitar_Token(POINTER, ERR_POINTER);
+		svar.ponteiro = true;
+	}
+		
 	svar.tipo = Espec_tipo();
+
+	//Zerar var_mem a cada declaração
+	var_mem = 0;
 	//posicao_pilha_local = -1;
 	Lista_decl_var();
 
@@ -266,7 +278,7 @@ void C_Analise_Sintatica::Decl_var()
 	ts.Inserir(svar);
 
 	//MEPA - AMEM com a quantidade de variáveis declaradas
-	mepa.AMEM(to_string(pilha_var_mem.top()));
+	mepa.AMEM(to_string(var_mem));
 
 
 	Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
@@ -576,6 +588,7 @@ void C_Analise_Sintatica::Mode()
 	{
 		Aceitar_Token(REF, ERR_REF);
 		sparams.passby = REF;
+		sparams.ponteiro = true;
 		qtd_param.ref++;
 	}
 	else
@@ -849,7 +862,10 @@ void C_Analise_Sintatica::Comando()
 			int pai = ts.Buscar_Pai(mepa.pilha_ARMZ.top());
 			if (pai != 0)
 				pai = 1;
-			mepa.ARMZ(to_string(pai), to_string(ts.Buscar_Pos_Pilha(mepa.pilha_ARMZ.top())));
+			if (ts.Verificar_Ponteiro(mepa.pilha_ARMZ.top()))
+				mepa.ARMI(to_string(pai), to_string(ts.Buscar_Pos_Pilha(mepa.pilha_ARMZ.top())));
+			else
+				mepa.ARMZ(to_string(pai), to_string(ts.Buscar_Pos_Pilha(mepa.pilha_ARMZ.top())));
 			mepa.pilha_ARMZ.pop();
 		}
 
@@ -1318,50 +1334,56 @@ void C_Analise_Sintatica::Op_relac()
 	if (token == OP_MENOR)
 	{
 		Aceitar_Token(OP_MENOR, ERR_OP_MENOR);
+		//sexpressao = { "CMME", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push("CMME");
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMME", false));
 		else
-			mepa.pilha_EXP.push("CMME");
+			mepa.pilha_EXP.push(sexpressao.make_exp("CMME", false));
 	}
 	else if (token == OP_MENOR_IGUAL)
 	{
 		Aceitar_Token(OP_MENOR_IGUAL, ERR_OP_MENOR_IGUAL);
+		//sexpressao = { "CMEG", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push("CMEG");
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMEG", false));
 		else
-			mepa.pilha_EXP.push("CMEG");
+			mepa.pilha_EXP.push(sexpressao.make_exp("CMEG", false));
 	}
 	else if (token == OP_DIFERENTE)
-	{
+	{ 
 		Aceitar_Token(OP_DIFERENTE, ERR_OP_DIFERENTE);
+		//sexpressao = { "CMDG", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push("CMDG");
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMDG", false));
 		else
-			mepa.pilha_EXP.push("CMDG");
+			mepa.pilha_EXP.push(sexpressao.make_exp("CMDG", false));
 	}
 	else if (token == OP_IGUALDADE)
 	{
 		Aceitar_Token(OP_IGUALDADE, ERR_OP_IGUALDADE);
+		//sexpressao = { "CMIG", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push("CMIG");
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMIG", false));
 		else
-			mepa.pilha_EXP.push("CMIG");
+			mepa.pilha_EXP.push(sexpressao.make_exp("CMIG", false));
 	}
 	else if (token == OP_MAIOR)
 	{
 		Aceitar_Token(OP_MAIOR, ERR_OP_MAIOR);
+		//sexpressao = { "CMMA", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push("CMMA");
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMMA", false));
 		else
-			mepa.pilha_EXP.push("CMMA");
+			mepa.pilha_EXP.push(sexpressao.make_exp("CMMA", false));
 	}
 	else if (token == OP_MAIOR_IGUAL)
 	{
 		Aceitar_Token(OP_MAIOR_IGUAL, ERR_OP_MAIOR_IGUAL);
+		//sexpressao = { "CMAG", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push("CMAG");
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMAG", false));
 		else
-			mepa.pilha_EXP.push("CMAG");
+			mepa.pilha_EXP.push(sexpressao.make_exp("CMAG", false));
 	}
 	else
 		Erro("Esperado operador relacional");
@@ -1421,20 +1443,22 @@ void C_Analise_Sintatica::Op_soma()
 	if (token == OP_SUBTRACAO)
 	{
 		Aceitar_Token(OP_SUBTRACAO, ERR_OP_SUBTRACAO);
+		//sexpressao = { "SUBT", false };
 		//MEPA - SUBT Operador subtração
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push("SUBT");
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("SUBT", false));
 		else
-			mepa.pilha_EXP.push("SUBT");
+			mepa.pilha_EXP.push(sexpressao.make_exp("SUBT", false));
 	}
 	else if (token == OP_ADICAO)
 	{
 		Aceitar_Token(OP_ADICAO, ERR_OP_ADICAO);
+		//sexpressao = { "SOMA", false };
 		//MEPA - SOMA Operador soma
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push("SOMA");
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("SOMA", false));
 		else
-			mepa.pilha_EXP.push("SOMA");
+			mepa.pilha_EXP.push(sexpressao.make_exp("SOMA", false));
 	}
 	else if (token == OP_LOGICO_OU)
 		Aceitar_Token(OP_LOGICO_OU, ERR_OP_LOGICO_OU);
@@ -1497,18 +1521,20 @@ void C_Analise_Sintatica::Op_mult()
 	if (token == OP_MULTIPLICACAO)
 	{
 		Aceitar_Token(OP_MULTIPLICACAO, ERR_OP_MULTIPLICACAO);
+		//sexpressao = { "MULT", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push("MULT");
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("MULT", false));
 		else
-			mepa.pilha_EXP.push("MULT");
+			mepa.pilha_EXP.push(sexpressao.make_exp("MULT", false));
 	}
 	else if (token == OP_DIVISAO)
 	{
 		Aceitar_Token(OP_DIVISAO, ERR_OP_DIVISAO);
+		//sexpressao = { "DIVI", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push("DIVI");
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("DIVI", false));
 		else
-			mepa.pilha_EXP.push("DIVI");
+			mepa.pilha_EXP.push(sexpressao.make_exp("DIVI", false));
 	}
 	else if (token == OP_LOGICO_E)
 		Aceitar_Token(OP_LOGICO_E, ERR_OP_LOGICO_E);
@@ -1532,16 +1558,18 @@ string C_Analise_Sintatica::Exp_simples()
 	else if (token == ABRE_PARENTESES)
 	{
 		Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
+		//sexpressao = { ABRE_PARENTESES, false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(ABRE_PARENTESES);
+			mepa.pilha_EXP_args.push(sexpressao.make_exp(ABRE_PARENTESES, false));
 		else
-			mepa.pilha_EXP.push(ABRE_PARENTESES);
+			mepa.pilha_EXP.push(sexpressao.make_exp(ABRE_PARENTESES, false));
 		tipo_exp = Exp();
 		Aceitar_Token(FECHA_PARENTESES, ERR_FECHA_PARENTESES);
+		//sexpressao = { FECHA_PARENTESES, false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(FECHA_PARENTESES);
+			mepa.pilha_EXP_args.push(sexpressao.make_exp(FECHA_PARENTESES, false));
 		else
-			mepa.pilha_EXP.push(FECHA_PARENTESES);
+			mepa.pilha_EXP.push(sexpressao.make_exp(FECHA_PARENTESES, false));
 	}
 	else if (token == CARACTERE ||
 		token == FALSO ||
@@ -1555,6 +1583,7 @@ string C_Analise_Sintatica::Exp_simples()
 	}
 	else if (token == ENDERECO_ELEMENTO || token == IDENTIFICADOR || token == ID_SEL_IDENTIFICADOR || token == ID_SEL_PONTEIRO)
 	{
+		string temp_token = token;
 		string identificador;
 		string categoria;
 		identificador = Id_Composto();
@@ -1571,15 +1600,19 @@ string C_Analise_Sintatica::Exp_simples()
 				pai = 1;
 			//Sempre carrego o valor na MEPA se for uma variável
 			//mepa.CRVL("1", to_string(ts.Buscar_Pos_Pilha(identificador)));
+			//sexpressao = { identificador, temp_token == ENDERECO_ELEMENTO };
 			if (eh_argumento)
-				mepa.pilha_EXP_args.push(identificador);
+				mepa.pilha_EXP_args.push(sexpressao.make_exp(identificador, temp_token == ENDERECO_ELEMENTO));
 			else
-				mepa.pilha_EXP.push(identificador);
+				mepa.pilha_EXP.push(sexpressao.make_exp(identificador, temp_token == ENDERECO_ELEMENTO));
 
 			//Se tiver algum comando de escrita empilhado, preciso inserir ele na MEPA
 			if (!mepa.pilha_Com_Escrita.empty())
 			{
-				mepa.CRVL(to_string(pai), to_string(ts.Buscar_Pos_Pilha(identificador)));
+				if (ts.Verificar_Ponteiro(identificador))
+					mepa.CRVI(to_string(pai), to_string(ts.Buscar_Pos_Pilha(identificador)));
+				else
+					mepa.CRVL(to_string(pai), to_string(ts.Buscar_Pos_Pilha(identificador)));
 				mepa.IMPR();
 				//MEPA - IMPE Adiciono enter somente se for PRINTLN, PRINT imprime na mesma linha
 				if (mepa.pilha_Com_Escrita.top() == PRINTLN)
@@ -1660,10 +1693,11 @@ string C_Analise_Sintatica::Literal(S_Simbolos& _simbolo)
 		_simbolo.valor = Aceitar_Token(NUM_INT, ERR_NUM);
 		//MEPA - CRCT Carrego o valor da constante
 		//mepa.CRCT(_simbolo.valor);
+		//sexpressao = { _simbolo.valor, false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(_simbolo.valor);
+			mepa.pilha_EXP_args.push(sexpressao.make_exp(_simbolo.valor, false));
 		else
-			mepa.pilha_EXP.push(_simbolo.valor);
+			mepa.pilha_EXP.push(sexpressao.make_exp(_simbolo.valor, false));
 	}
 	else if (token == NUM_REAL)
 	{
@@ -1779,7 +1813,10 @@ void C_Analise_Sintatica::Lista_var()
 	if (ts.Buscar_Categoria(identificador) == VAR)
 	{
 		//MEPA - ARMZ Armazenar o valor da variável na posição correta
-		mepa.ARMZ(to_string(ts.Buscar_Pos_Pilha(identificador)));
+		if (ts.Verificar_Ponteiro(identificador))
+			mepa.ARMI(to_string(ts.Buscar_Pos_Pilha(identificador)));
+		else
+			mepa.ARMZ(to_string(ts.Buscar_Pos_Pilha(identificador)));
 	}
 		
 	Lista_var_1();
@@ -1829,6 +1866,7 @@ void C_Analise_Sintatica::Lista_decl_var()
 	//posicao_pilha_local++;
 	//posicao_pilha_global++;
 	pilha_var_mem.top()++;
+	var_mem++;
 
 	svar.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
 	svar.linha = iter_token_lexema->linha;
@@ -1847,7 +1885,7 @@ void C_Analise_Sintatica::Lista_decl_var_1()
 		//if (svar.pai == 0) //Global
 			//svar.pos_pilha = posicao_pilha_global;
 		//else //Local
-			svar.pos_pilha = pilha_var_mem.top()-1;
+		svar.pos_pilha = pilha_var_mem.top()-1;
 		//Se encontrei virgula, inserir variável na tabela de símbolo
 		ts.Inserir(svar);
 		//Nova variável virá, incremento a chave
@@ -1914,6 +1952,7 @@ void C_Analise_Sintatica::Iniciar_Simbolos(S_Simbolos &_simbolo)
 	_simbolo.categoria = "";
 	_simbolo.identificador = "";
 	_simbolo.tipo = "";
+	_simbolo.ponteiro = false;
 	_simbolo.array = false;
 	_simbolo.valido = false;
 	_simbolo.valor = "";
