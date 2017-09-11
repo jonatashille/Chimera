@@ -37,6 +37,7 @@ public:
 	stack<S_EXP> pilha_EXP_args;
 	vector<string> vetor_EXP;
 	stack<string> pilha_Com_Escrita;
+	string ultimo_comando;
 	C_Mepa();
 	~C_Mepa();
 

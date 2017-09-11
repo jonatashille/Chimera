@@ -862,7 +862,7 @@ void C_Analise_Sintatica::Comando()
 			int pai = ts.Buscar_Pai(mepa.pilha_ARMZ.top());
 			if (pai != 0)
 				pai = 1;
-			if (ts.Verificar_Ponteiro(mepa.pilha_ARMZ.top()))
+			if (ts.Verificar_Ponteiro(mepa.pilha_ARMZ.top()) && mepa.ultimo_comando != "CREN")
 				mepa.ARMI(to_string(pai), to_string(ts.Buscar_Pos_Pilha(mepa.pilha_ARMZ.top())));
 			else
 				mepa.ARMZ(to_string(pai), to_string(ts.Buscar_Pos_Pilha(mepa.pilha_ARMZ.top())));

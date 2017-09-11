@@ -157,6 +157,7 @@ void C_Mepa::CRCT(string _c)
 {
 	linha_mepa++;
 	mepa << "CRCT " << _c << endl;
+	ultimo_comando = "CRCT";
 }
 
 void C_Mepa::CRCT_String(string _c)
@@ -166,6 +167,7 @@ void C_Mepa::CRCT_String(string _c)
 	{
 		linha_mepa++;
 		mepa << "CRCT \'" << string(1, *it) << "\'" << endl;
+		ultimo_comando = "CRCT";
 	}
 }
 
@@ -173,60 +175,70 @@ void C_Mepa::CRVL(string _k, string _n)
 {
 	linha_mepa++;
 	mepa << "CRVL " << _k << "," << _n << endl;
+	ultimo_comando = "CRVL";
 }
 
 void C_Mepa::CRVI(string _k, string _n)
 {
 	linha_mepa++;
 	mepa << "CRVI " << _k << "," << _n << endl;
+	ultimo_comando = "CRVI";
 }
 
 void C_Mepa::CREN(string _k, string _n)
 {
 	linha_mepa++;
 	mepa << "CREN " << _k << "," << _n << endl;
+	ultimo_comando = "CREN";
 }
 
 void C_Mepa::ARMZ(string _k, string _n)
 {
 	linha_mepa++;
 	mepa << "ARMZ " << _k << "," << _n << endl;
+	ultimo_comando = "ARMZ";
 }
 
 void C_Mepa::ARMZ(string _n)
 {
 	linha_mepa++;
 	mepa << "ARMZ " << 1 << "," << _n << endl;
+	ultimo_comando = "ARMZ";
 }
 
 void C_Mepa::ARMI(string _k, string _n)
 {
 	linha_mepa++;
 	mepa << "ARMI " << _k << "," << _n << endl;
+	ultimo_comando = "ARMI";
 }
 
 void C_Mepa::ARMI(string _n)
 {
 	linha_mepa++;
 	mepa << "ARMI " << 1 << "," << _n << endl;
+	ultimo_comando = "ARMI";
 }
 
 void C_Mepa::LEIT()
 {
 	linha_mepa++;
 	mepa << "LEIT" << endl;
+	ultimo_comando = "LEIT";
 }
 
 void C_Mepa::LECH()
 {
 	linha_mepa++;
 	mepa << "LECH" << endl;
+	ultimo_comando = "LECH";
 }
 
 void C_Mepa::IMPR()
 {
 	linha_mepa++;
 	mepa << "IMPR" << endl;
+	ultimo_comando = "IMPR";
 }
 
 void C_Mepa::IMPC(string _c)
@@ -238,6 +250,7 @@ void C_Mepa::IMPC(string _c)
 		mepa << "CRCT \'" << string(1, *it) << "\'" << endl;
 		linha_mepa++;
 		mepa << "IMPC" << endl;
+		ultimo_comando = "IMPC";
 	}
 }
 
@@ -245,102 +258,119 @@ void C_Mepa::IMPE()
 {
 	linha_mepa++;
 	mepa << "IMPE" << endl;
+	ultimo_comando = "IMPE";
 }
 
 void C_Mepa::SOMA()
 {
 	linha_mepa++;
 	mepa << "SOMA" << endl;
+	ultimo_comando = "SOMA";
 }
 
 void C_Mepa::SUBT()
 {
 	linha_mepa++;
 	mepa << "SUBT" << endl;
+	ultimo_comando = "SUBT";
 }
 
 void C_Mepa::MULT()
 {
 	linha_mepa++;
 	mepa << "MULT" << endl;
+	ultimo_comando = "MULT";
 }
 
 void C_Mepa::DIVI()
 {
 	linha_mepa++;
 	mepa << "DIVI" << endl;
+	ultimo_comando = "DIVI";
 }
 
 void C_Mepa::MODI()
 {
 	linha_mepa++;
 	mepa << "MODI" << endl;
+	ultimo_comando = "MODI";
 }
 
 void C_Mepa::CONJ()
 {
 	linha_mepa++;
 	mepa << "CONJ" << endl;
+	ultimo_comando = "CONJ";
 }
 
 void C_Mepa::DISJ()
 {
 	linha_mepa++;
 	mepa << "DISJ" << endl;
+	ultimo_comando = "DISJ";
 }
 
 void C_Mepa::NEGA()
 {
 	linha_mepa++;
 	mepa << "NEGA" << endl;
+	ultimo_comando = "NEGA";
 }
 
 void C_Mepa::CMME()
 {
 	linha_mepa++;
 	mepa << "CMME" << endl;
+	ultimo_comando = "CMME";
 }
 
 void C_Mepa::CMMA()
 {
 	linha_mepa++;
 	mepa << "CMMA" << endl;
+	ultimo_comando = "CMMA";
 }
 
 void C_Mepa::CMIG()
 {
 	linha_mepa++;
 	mepa << "CMIG" << endl;
+	ultimo_comando = "CMIG";
 }
 
 void C_Mepa::CMDG()
 {
 	linha_mepa++;
 	mepa << "CMDG" << endl;
+	ultimo_comando = "CMDG";
 }
 
 void C_Mepa::CMAG()
 {
 	linha_mepa++;
 	mepa << "CMAG" << endl;
+	ultimo_comando = "CMAG";
 }
 
 void C_Mepa::CMEG()
 {
 	linha_mepa++;
 	mepa << "CMEG" << endl;
+	ultimo_comando = "CMEG";
 }
 
 void C_Mepa::INRV()
 {
 	linha_mepa++;
 	mepa << "INRV" << endl;
+	ultimo_comando = "INRV";
 }
 
 string C_Mepa::DSVF()
 {
 	linha_mepa++;
 	mepa << "DSVF DSVF" << linha_mepa  << endl;
+	ultimo_comando = "DSVF";
 	return "DSVF" + to_string(linha_mepa);
 }
 
@@ -348,6 +378,7 @@ string C_Mepa::DSVS()
 {
 	linha_mepa++;
 	mepa << "DSVS DSVS" << linha_mepa << endl;
+	ultimo_comando = "DSVS";
 	return "DSVS" + to_string(linha_mepa);
 }
 
@@ -355,12 +386,14 @@ void C_Mepa::DSVS(string _str)
 {
 	linha_mepa++;
 	mepa << "DSVS " << _str << endl;
+	ultimo_comando = "DSVS";
 }
 
 void C_Mepa::NADA(string _str)
 {
 	linha_mepa++;
 	mepa << _str << ":NADA" << endl;
+	ultimo_comando = "NADA";
 }
 
 string C_Mepa::NADA()
@@ -369,6 +402,7 @@ string C_Mepa::NADA()
 	linha_mepa++;
 	rotulo = "R" + to_string(linha_mepa);
 	mepa << rotulo << ":NADA" << endl;
+	ultimo_comando = "NADA";
 	return rotulo;
 }
 
@@ -376,48 +410,56 @@ void C_Mepa::CHPR(string _p, string _k)
 {
 	linha_mepa++;
 	mepa << "CHPR " << _p  << ","<< _k << endl;
+	ultimo_comando = "CHPR";
 }
 
 void C_Mepa::ENPR(string _k)
 {
 	linha_mepa++;
 	mepa << "ENPR " << _k << endl;
+	ultimo_comando = "ENPR";
 }
 
 void C_Mepa::RTPR(string _k, string _n)
 {
 	linha_mepa++;
 	mepa << "RTPR " << _k << "," << _n << endl;
+	ultimo_comando = "RTPR";
 }
 
 void C_Mepa::INPP()
 {
 	linha_mepa++;
 	mepa << "INPP" << endl;
+	ultimo_comando = "INPP";
 }
 
 void C_Mepa::PARA()
 {
 	linha_mepa++;
 	mepa << "PARA" << endl;
+	ultimo_comando = "PARA";
 }
 
 void C_Mepa::AMEM(string _m)
 {
 	linha_mepa++;
 	mepa << "AMEM " << _m << endl;
+	ultimo_comando = "AMEM";
 }
 
 void C_Mepa::DMEM(string _m)
 {
 	linha_mepa++;
 	mepa << "DMEM " << _m << endl;
+	ultimo_comando = "DMEM";
 }
 
 void C_Mepa::Add_Comando(string _str)
 {
 	linha_mepa++;
 	mepa << _str << endl;
+	ultimo_comando = _str;
 }
 
 void C_Mepa::Avaliar_Expressao(stack<S_EXP>& _p, const C_Tabela_Simbolos& _ts)

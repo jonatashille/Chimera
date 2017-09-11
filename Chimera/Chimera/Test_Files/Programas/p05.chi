@@ -19,6 +19,6 @@ sub main()
 	a=0;
 	b=1;
 	c=3;
-	p1(a,4,b,5,c);
+	p1(&a,4,&b,5,&c);
 	println(a);
 end_sub
