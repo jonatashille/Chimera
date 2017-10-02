@@ -739,6 +739,7 @@ void C_Analise_Lexica::Gravar_Tabela_Token(string _nome_arquivo)
 	stringstream ss;
 	string nome_arquivo_final;
 
+	ss << "sep=;" << endl;
 	ss << "LEXEMA;TOKEN;LINHA" << endl;
 	for (auto it = tabela_token_lexema.begin(); it != tabela_token_lexema.end(); it++)
 	{

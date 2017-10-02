@@ -12,6 +12,19 @@ struct S_Param
 	int ref;
 }; typedef S_Param S_Param;
 
+struct S_Selelecao_ID
+{
+	string idendificador;
+	string passby;
+	S_Selelecao_ID make_pair(string _idendificador, string _passby)
+	{
+		S_Selelecao_ID pair;
+		pair.idendificador = _idendificador;
+		pair.passby = _passby;
+		return pair;
+	}
+}; typedef S_Selelecao_ID S_Selelecao_ID;
+
 class C_Analise_Sintatica
 {
 private:
@@ -43,6 +56,12 @@ private:
 	stack<int> pilha_var_mem; //Contém a quantidade de memória separada para as variáveis. O Topo da pilha é sempre a função/Procedure corrente.
 	int var_mem; //contém a quantidade de variáveis declaradas em uma linha de declaração. Será usada para o AMEM
 	S_EXP sexpressao;
+	S_Id_Pai sidpai;
+	bool escopo_estrutura; //Para verificar se as declarações estão sendo feitas dentra de uma estrutura
+	bool escopo_classe; //Para verificar se as declarações estão sendo feitas dentra de uma classe
+	string escopo;
+	stack<S_Selelecao_ID> pilha_selecao;
+	string val_string;
 public:
 	C_Analise_Sintatica(vector<S_Token_Lexema>);
 	~C_Analise_Sintatica();
@@ -118,6 +137,10 @@ public:
 
 	//Outros métodos
 	void Iniciar_Simbolos(S_Simbolos&);
+	void Inserir_AMEM_MEPA();
+	void Inserir_DMEM_MEPA(int);
+	void Inserir_AMEM_MEPA_STRUCT();
+	bool Verificar_Tipo_Padrao(string);
 	//Métods para a semântica
 	string Retorna_Tipo_Comparado(string, string);
 	void Validar_Atribuicao(string, string);

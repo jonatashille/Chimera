@@ -89,15 +89,16 @@ void C_Mepa::Converter_Pos_Fixa(stack<S_EXP>& _p, C_Tabela_Simbolos _ts)
 			//Se for identificador, preciso inserir o endereço da memória dele
 			if (Validar_Identificador(_p.top().token))
 			{
-				int pai = _ts.Buscar_Pai(_p.top().token);
+				S_Id_Pai sidpai;
+				int pai = _p.top().parente;
 				if (pai != 0)
 					pai = 1;
 				if (_p.top().end_elemento)
-					CREN(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(_p.top().token)));
+					CREN(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(_p.top().token, _p.top().parente))));
 				else if (_ts.Verificar_Ponteiro(_p.top().token))
-					CRVI(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(_p.top().token)));
+					CRVI(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(_p.top().token, _p.top().parente))));
 				else
-					CRVL(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(_p.top().token)));
+					CRVL(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(_p.top().token, _p.top().parente))));
 			}
 			else
 				CRCT(_p.top().token);
@@ -160,13 +161,15 @@ void C_Mepa::CRCT(string _c)
 	ultimo_comando = "CRCT";
 }
 
-void C_Mepa::CRCT_String(string _c)
+void C_Mepa::CRCT_String(string _c, int _pos, int _limite)
 {
 	// +1 e -1 para eliminar o "
-	for (auto it = _c.begin() + 1; it != _c.end() - 1; it++)
+	for (auto it = _c.begin() + 1; it != _c.end() - 1 && _pos < _limite; it++)
 	{
 		linha_mepa++;
 		mepa << "CRCT \'" << string(1, *it) << "\'" << endl;
+		ARMZ(to_string(_pos));
+		_pos++;
 		ultimo_comando = "CRCT";
 	}
 }
@@ -178,11 +181,29 @@ void C_Mepa::CRVL(string _k, string _n)
 	ultimo_comando = "CRVL";
 }
 
+void C_Mepa::CRVL_String(string _k, int _pos_ini, int _tam_str)
+{
+	for (int i = 1; i <= _tam_str; i++)
+	{
+		linha_mepa++;
+		mepa << "CRVL " << _k << "," << _pos_ini << endl;
+		IMPC();
+		_pos_ini++;
+	}
+}
+
 void C_Mepa::CRVI(string _k, string _n)
 {
 	linha_mepa++;
 	mepa << "CRVI " << _k << "," << _n << endl;
 	ultimo_comando = "CRVI";
+}
+
+void C_Mepa::CRVI_String(string _k, int _pos_ini, int _pos_fim)
+{
+	linha_mepa++;
+	mepa << "CRVI " << _k << "," << _pos_ini << endl;
+	IMPC();
 }
 
 void C_Mepa::CREN(string _k, string _n)
@@ -239,6 +260,13 @@ void C_Mepa::IMPR()
 	linha_mepa++;
 	mepa << "IMPR" << endl;
 	ultimo_comando = "IMPR";
+}
+
+void C_Mepa::IMPC()
+{
+	linha_mepa++;
+	mepa << "IMPC" << endl;
+	ultimo_comando = "IMPC";
 }
 
 void C_Mepa::IMPC(string _c)
@@ -448,11 +476,14 @@ void C_Mepa::AMEM(string _m)
 	ultimo_comando = "AMEM";
 }
 
-void C_Mepa::DMEM(string _m)
+void C_Mepa::DMEM(int _m)
 {
-	linha_mepa++;
-	mepa << "DMEM " << _m << endl;
-	ultimo_comando = "DMEM";
+	if (_m > 0)
+	{
+		linha_mepa++;
+		mepa << "DMEM " << to_string(_m) << endl;
+		ultimo_comando = "DMEM";
+	}
 }
 
 void C_Mepa::Add_Comando(string _str)

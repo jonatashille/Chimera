@@ -8,12 +8,14 @@ struct S_EXP
 {
 	string token;
 	bool end_elemento = false;
+	int parente;
 
-	S_EXP make_exp(string _token, bool _end_elemento)
+	S_EXP make_exp(string _token, bool _end_elemento, int _parente)
 	{
 		S_EXP sexpressao;
 		sexpressao.token = _token;
 		sexpressao.end_elemento = _end_elemento;
+		sexpressao.parente = _parente;
 		return sexpressao;
 	}
 
@@ -32,7 +34,7 @@ private:
 	bool Validar_Identificador(string);
 public:
 	//Variáveis
-	stack<string> pilha_ARMZ;
+	stack<S_Id_Pai> pilha_ARMZ; //Identificador e Pai
 	stack<S_EXP> pilha_EXP;
 	stack<S_EXP> pilha_EXP_args;
 	vector<string> vetor_EXP;
@@ -43,9 +45,11 @@ public:
 
 	//Armazenamento e E/S
 	void CRCT(string);
-	void CRCT_String(string);
+	void CRCT_String(string, int, int);
 	void CRVL(string, string);
+	void CRVL_String(string, int, int);
 	void CRVI(string, string);
+	void CRVI_String(string, int, int);
 	void CREN(string, string);
 	void ARMZ(string, string);
 	void ARMZ(string);
@@ -54,6 +58,7 @@ public:
 	void LEIT();
 	void LECH();
 	void IMPR();
+	void IMPC();
 	void IMPC(string);
 	void IMPE();
 
@@ -90,7 +95,7 @@ public:
 	void INPP();
 	void PARA();
 	void AMEM(string);
-	void DMEM(string);
+	void DMEM(int);
 
 	//Genéricos
 	void Add_Comando(string);

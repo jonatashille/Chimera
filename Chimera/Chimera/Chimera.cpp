@@ -22,7 +22,7 @@ void main()
 	Compilar("Test_Files\\Programas\\p08.chi");
 	Compilar("Test_Files\\Programas\\p12.chi");*/
 
-	Compilar("Test_Files\\Programas\\p05.chi");
+	Compilar("Test_Files\\Programas\\S01.chi");
 	//Compilar("Test_Files\\Programas\\Q03.chi");
 
 	//Executar_Testes_Unitatios();
