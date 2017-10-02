@@ -1,0 +1,19 @@
+class filmes_class
+	private:
+		var int id;
+	public:
+		var string nome;
+		var int ano;
+end_class
+
+sub main()
+	var filmes_class f;
+
+	f.id = 1;
+	f.nome = "007-Spectrum";
+	f.ano = 2015;
+
+	println(f.id);
+	println(f.nome);
+	println(f.ano);
+end_sub

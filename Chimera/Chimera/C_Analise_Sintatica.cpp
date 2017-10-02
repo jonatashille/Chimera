@@ -335,13 +335,13 @@ string C_Analise_Sintatica::Espec_tipo()
 		string categoria;
 		identificador = Id_Composto();
 		categoria = ts.Buscar_Categoria(identificador);
-		if (categoria == ESTRUTURA)
+		if (categoria == ESTRUTURA || categoria == CLASSE)
 		{
 			//Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
 			return identificador;
 		}
 		else
-			Erro("Esperado tipo estrutura");
+			Erro("Esperado tipo estrutura/classe");
 	}
 	else
 		Erro("Esperado tipo");
@@ -2086,7 +2086,7 @@ void C_Analise_Sintatica::Inserir_AMEM_MEPA()
 		}
 		else
 		{
-			if (ts.Buscar_Categoria(svar.tipo) == ESTRUTURA)
+			if (ts.Buscar_Categoria(svar.tipo) == ESTRUTURA || ts.Buscar_Categoria(svar.tipo) == CLASSE)
 			{
 				//Insiro a posição da pilha, -1 nesse caso por ser struct
 				svar.pos_pilha = -1;
