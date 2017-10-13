@@ -1,3 +1,4 @@
+sep=;
 LEXEMA;TOKEN;LINHA
 function;FUNCTION;1
 int;TIPO_INT;1

@@ -3,19 +3,31 @@ struct cliente
     var string nome, dob;
  end_struct
 
+ struct filmes
+ 	var int id, ano;
+ 	var string nome;
+ end_struct
+
  sub main()
  	var cliente cli;
  	var cliente cli2;
+ 	var filmes fil;
  	cli.id = 1;
  	cli2.id = 2;
  	cli.nome = "Jose";
  	cli2.nome = "Maria";
  	cli.dob = "31/02/1992";
 	cli2.dob = "05/10/1985";
+	fil.id = 2323;
+	fil.nome = "Jurassic Park";
+	fil.ano = 1994;
  	println(cli.id);
  	println(cli.nome);
  	println(cli.dob);
  	println(cli2.id);
  	println(cli2.nome);
  	println(cli2.dob); 	
+ 	println(fil.id);
+ 	println(fil.nome);
+ 	println(fil.ano);
  end_sub

@@ -1,3 +1,4 @@
+sep=;
 LEXEMA;TOKEN;LINHA
 struct;ESTRUTURA;1
 cliente;IDENTIFICADOR;1

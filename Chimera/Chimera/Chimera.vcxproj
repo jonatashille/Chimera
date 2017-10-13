@@ -118,7 +118,7 @@
     <ClCompile Include="C_Tabela_Simbolos.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="TU_Analise_Lexica.cpp" />
-    <ClCompile Include="TU_Analise_Sintatica.cpp" />
+    <ClCompile Include="TU_Programas.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Compilador.h" />
@@ -130,7 +130,7 @@
     <ClInclude Include="S_Token_Lexema.h" />
     <ClInclude Include="Testes.h" />
     <ClInclude Include="TU_Analise_Lexica.h" />
-    <ClInclude Include="TU_Analise_Sintatica.h" />
+    <ClInclude Include="TU_Programas.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

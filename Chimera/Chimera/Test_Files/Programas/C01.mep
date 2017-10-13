@@ -15,13 +15,18 @@ ASSUME SS : pilha, CS : codigo, DS : dados, ES : dados
 inicio PROC  FAR
 ; ----------Inicio das Instrucoes MEPA
 INPP
+; ---------- Chama Procedimento/Funcao - MAIN
 CHPR MAIN,1
 DSVS FIM
+; ----------Inicio MAIN
 MAIN:NADA
+; ---------- Entrada Procedimento/Funcao
 ENPR 1
+; ---------- Alocacao de Memoria (33)
 AMEM 33
 CRCT 1
 ARMZ 1,0
+; ---------- Inicio Armazenamento String
 CRCT '0'
 ARMZ 1,1
 CRCT '0'
@@ -46,11 +51,13 @@ CRCT 'u'
 ARMZ 1,11
 CRCT 'm'
 ARMZ 1,12
+; ---------- Fim Armazenamento String
 CRCT 2015
 ARMZ 1,32
 CRVL 1,0
 IMPR
 IMPE
+; ---------- Inicio Leitura String
 CRVL 1,1
 IMPC
 CRVL 1,2
@@ -75,13 +82,17 @@ CRVL 1,11
 IMPC
 CRVL 1,12
 IMPC
+; ---------- Fim Leitura String
 IMPE
 CRVL 1,32
 IMPR
 IMPE
+; ---------- Desalocacao de Memoria (33)
 DMEM 33
 RTPR 1,0
+; ---------- Fim/Retorno de Procedimento/Funcao
 FIM:NADA
+; ---------- Desalocacao de Memoria (32)
 DMEM 32
 PARA
 ; ----------Fim das Instrucoes MEPA

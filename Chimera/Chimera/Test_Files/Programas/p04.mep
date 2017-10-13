@@ -15,27 +15,37 @@ ASSUME SS : pilha, CS : codigo, DS : dados, ES : dados
 inicio PROC  FAR
 ; ----------Inicio das Instrucoes MEPA
 INPP
+; ---------- Alocacao de Memoria (1)
 AMEM 1
+; ---------- Chama Procedimento/Funcao - MAIN
 CHPR MAIN,1
 DSVS FIM
 R4:NADA
+; ---------- Entrada Procedimento/Funcao
 ENPR 1
 CRVL 0,0
 CRCT 1
 SOMA
 ARMZ 0,0
 RTPR 1,0
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ----------Inicio MAIN
 MAIN:NADA
+; ---------- Entrada Procedimento/Funcao
 ENPR 1
 CRCT 0
 ARMZ 0,0
+; ---------- Chama Procedimento/Funcao - R4
 CHPR R4,1
+; ---------- Chama Procedimento/Funcao - R4
 CHPR R4,1
 CRVL 0,0
 IMPR
 IMPE
 RTPR 1,0
+; ---------- Fim/Retorno de Procedimento/Funcao
 FIM:NADA
+; ---------- Desalocacao de Memoria (1)
 DMEM 1
 PARA
 ; ----------Fim das Instrucoes MEPA

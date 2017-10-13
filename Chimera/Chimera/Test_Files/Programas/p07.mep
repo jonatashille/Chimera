@@ -15,66 +15,94 @@ ASSUME SS : pilha, CS : codigo, DS : dados, ES : dados
 inicio PROC  FAR
 ; ----------Inicio das Instrucoes MEPA
 INPP
+; ---------- Chama Procedimento/Funcao - MAIN
 CHPR MAIN,1
 DSVS FIM
 R3:NADA
+; ---------- Entrada Procedimento/Funcao
 ENPR 1
+; ---------- Alocacao de Memoria (1)
 AMEM 1
 CRVL 1,-4
 ARMZ 1,0
+; ----------Inicio Comando de Selecao IF
 CRVL 1,0
 CRCT 1
 CMME
-DSVF DSVF11
+DSVF DSVF12
 CRCT 0
 ARMZ 1,-5
+; ---------- Desalocacao de Memoria (1)
 DMEM 1
 RTPR 1,1
-DSVS DSVS16
-DSVF11:NADA
+; ---------- Fim/Retorno de Procedimento/Funcao
+DSVS DSVS17
+DSVF12:NADA
+; ----------Comando de Selecao ELSE
+; ----------Inicio Comando de Selecao IF
 CRVL 1,0
 CRCT 1
 CMIG
-DSVF DSVF21
+DSVF DSVF24
 CRCT 1
 ARMZ 1,-5
+; ---------- Desalocacao de Memoria (1)
 DMEM 1
 RTPR 1,1
-DSVS DSVS26
-DSVF21:NADA
+; ---------- Fim/Retorno de Procedimento/Funcao
+DSVS DSVS29
+DSVF24:NADA
+; ----------Comando de Selecao ELSE
+; ---------- Alocacao de Memoria (1)
 AMEM 1
 CRVL 1,0
 CRCT 1
 SUBT
+; ---------- Chama Procedimento/Funcao - R3
 CHPR R3,1
 CRVL 1,1
+; ---------- Alocacao de Memoria (1)
 AMEM 1
 CRVL 1,0
 CRCT 2
 SUBT
+; ---------- Chama Procedimento/Funcao - R3
 CHPR R3,1
 CRVL 1,2
 SOMA
 ARMZ 1,-5
+; ---------- Desalocacao de Memoria (3)
 DMEM 3
 RTPR 1,1
-DSVS26:NADA
-DSVS16:NADA
+; ---------- Fim/Retorno de Procedimento/Funcao
+DSVS29:NADA
+; ----------FIM Comando de Selecao IF
+DSVS17:NADA
+; ----------FIM Comando de Selecao IF
+; ---------- Desalocacao de Memoria (1)
 DMEM 1
 RTPR 1,1
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ----------Inicio MAIN
 MAIN:NADA
+; ---------- Entrada Procedimento/Funcao
 ENPR 1
+; ---------- Alocacao de Memoria (1)
 AMEM 1
+; ---------- Alocacao de Memoria (1)
 AMEM 1
 CRCT 20
+; ---------- Chama Procedimento/Funcao - R3
 CHPR R3,1
 CRVL 1,1
 ARMZ 1,0
 CRVL 1,0
 IMPR
 IMPE
+; ---------- Desalocacao de Memoria (2)
 DMEM 2
 RTPR 1,0
+; ---------- Fim/Retorno de Procedimento/Funcao
 FIM:NADA
 PARA
 ; ----------Fim das Instrucoes MEPA

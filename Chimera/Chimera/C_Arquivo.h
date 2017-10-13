@@ -17,6 +17,7 @@ private:
 	string linha; // atributo que guardará o conteúde de uma linha do arquivo
 	int numLinha; //Faz o controle do número da linha
 public:
+	C_Arquivo();
 	C_Arquivo(const string&);
 	~C_Arquivo();
 
@@ -24,5 +25,7 @@ public:
 	const string getLinha() const;
 	const int getNumeroLinha() const;
 	const string getConteudoArquivo();
+
+	bool CompararArquivos(const string&, const string&);
 };
 

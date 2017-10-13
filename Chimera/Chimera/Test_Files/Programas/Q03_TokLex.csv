@@ -1,3 +1,4 @@
+sep=;
 LEXEMA;TOKEN;LINHA
 sub;SUB;1
 troca;IDENTIFICADOR;1

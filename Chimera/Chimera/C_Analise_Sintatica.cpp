@@ -362,6 +362,7 @@ void C_Analise_Sintatica::Decl_proc()
 	if (sproc.identificador == "main")
 	{
 		existe_main = true;
+		mepa.Add_Comando("; ----------Inicio MAIN");
 		mepa.NADA("MAIN");
 		sproc.rotulo = "MAIN";
 	}
@@ -998,7 +999,7 @@ void C_Analise_Sintatica::Com_selecao()
 {
 	string tipo_exp;
 	string DSVF, DSVS;
-
+	mepa.Add_Comando("; ----------Inicio Comando de Selecao IF");
 	Aceitar_Token(CONDICAO_IF, ERR_CONDICAO_IF);
 	tipo_exp = Exp();
 	//Avalidar Expressão
@@ -1016,6 +1017,7 @@ void C_Analise_Sintatica::Com_selecao()
 	Com_selecao_1();
 	//MEPA - NADA - Caso o IF tenha sido verdadeiro, cai direto aqui
 	mepa.NADA(DSVS);
+	mepa.Add_Comando("; ----------FIM Comando de Selecao IF");
 }
 
 //CS'
@@ -1023,6 +1025,7 @@ void C_Analise_Sintatica::Com_selecao_1()
 {
 	if (token == CONDICAO_ELSE)
 	{
+		mepa.Add_Comando("; ----------Comando de Selecao ELSE");
 		Aceitar_Token(CONDICAO_ELSE, ERR_CONDICAO_ELSE);
 		Bloco();
 	}
@@ -1049,6 +1052,7 @@ void C_Analise_Sintatica::Com_repeticao()
 	else*/
 	if (token == LACO_FOR)
 	{
+		mepa.Add_Comando("; ----------Inicio Comando repeticao FOR");
 		Aceitar_Token(LACO_FOR, ERR_LACO_FOR);
 		identificador = Id_Composto();
 		int parente = 0;
@@ -1108,9 +1112,11 @@ void C_Analise_Sintatica::Com_repeticao()
 		mepa.DSVS(DSVS);
 		//MEPA - NADA - caso o FOR tenha sido falso cai aqui
 		mepa.NADA(DSVF);
+		mepa.Add_Comando("; ----------FIM Comando repeticao FOR");
 	}
 	else if (token == LACO_REPEAT)
 	{
+		mepa.Add_Comando("; ----------Inicio Comando repeticao REPEAT");
 		Aceitar_Token(LACO_REPEAT, ERR_LACO_REPEAT);
 		//MEPA - NADA -> Desvia sempre pra cá, só não quando a expressão é falsa
 		DSVS = mepa.NADA();
@@ -1128,9 +1134,11 @@ void C_Analise_Sintatica::Com_repeticao()
 		if (!(tipo_exp == TIPO_INT || tipo_exp == TIPO_BOOLEANO))
 			Erro(ERR_SEM_REAPEAT);
 		Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
+		mepa.Add_Comando("; ----------FIM Comando repeticao REPEAT");
 	}
 	else if (token == LACO_WHILE)
 	{
+		mepa.Add_Comando("; ----------Inicio Comando repeticao WHILE");
 		Aceitar_Token(LACO_WHILE, ERR_LACO_WHILE);
 		//MEPA - NADA -> Desvia sempre pra cá, só não quando a expressão é falsa
 		DSVS = mepa.NADA();
@@ -1148,6 +1156,7 @@ void C_Analise_Sintatica::Com_repeticao()
 		//MEPA - NADA - caso o while tenha sido falso cai aqui
 		mepa.NADA(DSVF);
 		Aceitar_Token(LACO_LOOP, ERR_LACO_LOOP);
+		mepa.Add_Comando("; ----------FIM Comando repeticao WHILE");
 	}
 	else
 		Erro("Esperado comando de repeticao");
@@ -1697,6 +1706,7 @@ string C_Analise_Sintatica::Exp_simples()
 				if (mepa.pilha_Com_Escrita.top() == PRINTLN)
 					mepa.IMPE();
 				mepa.pilha_Com_Escrita.pop();
+				mepa.pilha_EXP.pop(); //Retiro a var que foi impressa 
 			}
 		}
 

@@ -1,6 +1,10 @@
 #include "stdafx.cpp"
 #include "C_Arquivo.h"
 
+C_Arquivo::C_Arquivo()
+{
+}
+
 /****************************************************************************************
 Objetivo >> Construir um objeto Arquivo.
 
@@ -94,4 +98,25 @@ const string C_Arquivo::getConteudoArquivo()
 	}
 
 	return conteudoArquivo.str();
+}
+
+bool C_Arquivo::CompararArquivos(const string & _p1, const string & _p2)
+{
+	ifstream f1(_p1, ifstream::binary | ifstream::ate);
+	ifstream f2(_p2, ifstream::binary | ifstream::ate);
+
+	if (f1.fail() || f2.fail()) {
+		return false; //Problema no arquivo
+	}
+
+	if (f1.tellg() != f2.tellg()) {
+		return false; //Tamanhos diferentes
+	}
+
+	//Retorna ao inicio do arquivo e utiliza o std::equal para comparar o conteudo dos arquivos.
+	f1.seekg(0, ifstream::beg);
+	f2.seekg(0, ifstream::beg);
+	return equal(istreambuf_iterator<char>(f1.rdbuf()),
+		istreambuf_iterator<char>(),
+		istreambuf_iterator<char>(f2.rdbuf()));
 }

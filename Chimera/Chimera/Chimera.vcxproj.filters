@@ -30,9 +30,6 @@
     <ClCompile Include="C_Analise_Sintatica.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TU_Analise_Sintatica.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="C_Arquivo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -40,6 +37,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C_Mepa.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TU_Programas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,9 +56,6 @@
     <ClInclude Include="C_Analise_Sintatica.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TU_Analise_Sintatica.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="C_Arquivo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -72,6 +69,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C_Mepa.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TU_Programas.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

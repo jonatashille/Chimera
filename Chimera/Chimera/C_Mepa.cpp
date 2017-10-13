@@ -163,6 +163,7 @@ void C_Mepa::CRCT(string _c)
 
 void C_Mepa::CRCT_String(string _c, int _pos, int _limite)
 {
+	mepa << "; ---------- Inicio Armazenamento String" << endl;
 	// +1 e -1 para eliminar o "
 	for (auto it = _c.begin() + 1; it != _c.end() - 1 && _pos < _limite; it++)
 	{
@@ -172,6 +173,7 @@ void C_Mepa::CRCT_String(string _c, int _pos, int _limite)
 		_pos++;
 		ultimo_comando = "CRCT";
 	}
+	mepa << "; ---------- Fim Armazenamento String" << endl;
 }
 
 void C_Mepa::CRVL(string _k, string _n)
@@ -183,6 +185,7 @@ void C_Mepa::CRVL(string _k, string _n)
 
 void C_Mepa::CRVL_String(string _k, int _pos_ini, int _tam_str)
 {
+	mepa << "; ---------- Inicio Leitura String" << endl;
 	for (int i = 1; i <= _tam_str; i++)
 	{
 		linha_mepa++;
@@ -190,6 +193,7 @@ void C_Mepa::CRVL_String(string _k, int _pos_ini, int _tam_str)
 		IMPC();
 		_pos_ini++;
 	}
+	mepa << "; ---------- Fim Leitura String" << endl;
 }
 
 void C_Mepa::CRVI(string _k, string _n)
@@ -271,6 +275,7 @@ void C_Mepa::IMPC()
 
 void C_Mepa::IMPC(string _c)
 {
+	mepa << "; ----------Inicio Impressao" << endl;
 	// +1 e -1 para eliminar o "
 	for (auto it = _c.begin() + 1; it != _c.end() - 1; it++)
 	{
@@ -280,6 +285,7 @@ void C_Mepa::IMPC(string _c)
 		mepa << "IMPC" << endl;
 		ultimo_comando = "IMPC";
 	}
+	mepa << "; ----------FIM Impressao" << endl;
 }
 
 void C_Mepa::IMPE()
@@ -436,6 +442,7 @@ string C_Mepa::NADA()
 
 void C_Mepa::CHPR(string _p, string _k)
 {
+	mepa << "; ---------- Chama Procedimento/Funcao - " << _p << endl;
 	linha_mepa++;
 	mepa << "CHPR " << _p  << ","<< _k << endl;
 	ultimo_comando = "CHPR";
@@ -444,6 +451,7 @@ void C_Mepa::CHPR(string _p, string _k)
 void C_Mepa::ENPR(string _k)
 {
 	linha_mepa++;
+	mepa << "; ---------- Entrada Procedimento/Funcao" << endl;
 	mepa << "ENPR " << _k << endl;
 	ultimo_comando = "ENPR";
 }
@@ -452,6 +460,7 @@ void C_Mepa::RTPR(string _k, string _n)
 {
 	linha_mepa++;
 	mepa << "RTPR " << _k << "," << _n << endl;
+	mepa << "; ---------- Fim/Retorno de Procedimento/Funcao" << endl;
 	ultimo_comando = "RTPR";
 }
 
@@ -471,6 +480,7 @@ void C_Mepa::PARA()
 
 void C_Mepa::AMEM(string _m)
 {
+	mepa << "; ---------- Alocacao de Memoria (" << _m << ")" << endl;
 	linha_mepa++;
 	mepa << "AMEM " << _m << endl;
 	ultimo_comando = "AMEM";
@@ -480,6 +490,7 @@ void C_Mepa::DMEM(int _m)
 {
 	if (_m > 0)
 	{
+		mepa << "; ---------- Desalocacao de Memoria (" << _m << ")" << endl;
 		linha_mepa++;
 		mepa << "DMEM " << to_string(_m) << endl;
 		ultimo_comando = "DMEM";
