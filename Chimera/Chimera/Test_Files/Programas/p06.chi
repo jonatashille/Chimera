@@ -1,13 +1,13 @@
-var int a;
-var real b;
-
-sub p1()
-end_sub
-
-var char c;
-
-sub p2()
-end_sub
+function int fat(var int n by value)
+	if(n==0) then
+		return 1;
+	else
+		return fat(n-1)*n;
+	end_if
+end_function
 
 sub main()
+	var int x;
+	x = fat(5);
+	println(x);
 end_sub

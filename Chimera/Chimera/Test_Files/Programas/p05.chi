@@ -1,15 +1,3 @@
-/*sub p1(var int _b by value)
-	a=a + _b;
-end_sub
-
-sub main()
-	var int b, c;
-	b=7;
-	a=0;
-	p1(b);
-	println(a);
-end_sub*/
-
 sub p1(var int _a by ref, var int _b by value, var int _c by ref, var int _d by value, var int _e by ref)
 	_a= _b+_c+_d+_e;
 end_sub
