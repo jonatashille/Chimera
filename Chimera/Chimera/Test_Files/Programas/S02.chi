@@ -1,0 +1,24 @@
+ struct A
+ 	var string nome;
+ end_struct
+
+ struct B
+ 	var A a;
+ 	var int numero;
+ end_struct
+
+ struct C
+ 	var B b;
+ 	var int id;
+ end_struct
+
+sub main()
+	var C c;
+	c.b.a.nome = "Joao";
+	c.b.numero = 10;
+	c.id = 2;
+
+	println(c.id);
+	println(b.numero);
+	println(b.a.nome );	
+end_sub

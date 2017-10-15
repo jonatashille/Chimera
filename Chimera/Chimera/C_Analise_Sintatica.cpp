@@ -2104,7 +2104,7 @@ void C_Analise_Sintatica::Inserir_AMEM_MEPA()
 				//Incluo a VAR na TS
 				ts.Inserir(svar, escopo);
 				//Inserir as variáveis de uma Struct na TS e MEPA
-				Inserir_AMEM_MEPA_STRUCT();
+				Inserir_AMEM_MEPA_STRUCT(svar.tipo, svar.chave);
 			}
 				
 		}
@@ -2126,7 +2126,7 @@ void C_Analise_Sintatica::Inserir_DMEM_MEPA(int _mem)
 	mepa.DMEM(_mem);
 }
 
-void C_Analise_Sintatica::Inserir_AMEM_MEPA_STRUCT()
+void C_Analise_Sintatica::Inserir_AMEM_MEPA_STRUCT(string _tipo, int _pai)
 {
 	//int l_pospilha = 0;
 	S_Simbolos l_svar;
@@ -2134,7 +2134,7 @@ void C_Analise_Sintatica::Inserir_AMEM_MEPA_STRUCT()
 	int count_str = 0;
 
 	vector<S_Simbolos> l_simbolos;
-	l_simbolos = ts.Buscar_Var_Estrutura(svar.tipo);
+	l_simbolos = ts.Buscar_Var_Estrutura(_tipo);
 
 	for (auto it = l_simbolos.begin(); it != l_simbolos.end(); it++)
 	{
@@ -2142,7 +2142,7 @@ void C_Analise_Sintatica::Inserir_AMEM_MEPA_STRUCT()
 
 		l_svar.chave = ++chave;
 		l_svar.linha = iter_token_lexema->linha;
-		l_svar.pai = svar.chave;
+		l_svar.pai = _pai;
 		
 		if (l_svar.tipo == TIPO_STRING)
 		{
@@ -2163,6 +2163,10 @@ void C_Analise_Sintatica::Inserir_AMEM_MEPA_STRUCT()
 			l_svar.pos_pilha_ini_str = -1;
 		}
 		ts.Inserir(l_svar, escopo);
+		if (!Verificar_Tipo_Padrao(l_svar.tipo))
+		{
+			Inserir_AMEM_MEPA_STRUCT(l_svar.tipo, l_svar.chave);
+		}
 	}
 	mepa.AMEM(to_string(count + count_str));
 	//mepa.AMEM(to_string(pilha_var_mem.top()));

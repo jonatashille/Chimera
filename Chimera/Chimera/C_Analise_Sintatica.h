@@ -139,7 +139,7 @@ public:
 	void Iniciar_Simbolos(S_Simbolos&);
 	void Inserir_AMEM_MEPA();
 	void Inserir_DMEM_MEPA(int);
-	void Inserir_AMEM_MEPA_STRUCT();
+	void Inserir_AMEM_MEPA_STRUCT(string, int);
 	bool Verificar_Tipo_Padrao(string);
 	//Métods para a semântica
 	string Retorna_Tipo_Comparado(string, string);

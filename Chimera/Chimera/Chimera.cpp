@@ -19,6 +19,7 @@ void main()
 	
 	//Programas com estrutura
 	Compilar("Test_Files\\Programas\\S01.chi");
+	Compilar("Test_Files\\Programas\\S02.chi");
 	//Programas com classes/orientado a objetos
 	Compilar("Test_Files\\Programas\\C01.chi");
 

@@ -26,7 +26,7 @@ bool C_Tabela_Simbolos::Inserir(S_Simbolos _simbolos, string _escopo)
 			_simbolos.valido = true;
 		}
 		else
-			_simbolos.valido = true;
+			_simbolos.valido = false;
 	}
 	
 
@@ -150,7 +150,13 @@ int C_Tabela_Simbolos::Buscar_Pos_Pilha_Ini_Str(S_Id_Pai _sidpai)
 {
 	vector<S_Simbolos>::iterator simbolo;
 	simbolo = Buscar_Simbolo(_sidpai);
-	return simbolo->pos_pilha_ini_str;
+	if (simbolo._Ptr != nullptr)
+		return simbolo->pos_pilha_ini_str;
+	else
+	{
+		cout << "ID: " << _sidpai.identificador << " e PAI: " << _sidpai.parente << " - Nao encontrados na Tabela de Simbolos" << endl;
+		return -5;
+	}
 }
 
 int C_Tabela_Simbolos::Buscar_Pai(string _identificador)
