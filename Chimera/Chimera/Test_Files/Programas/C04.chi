@@ -1,0 +1,47 @@
+/*class filmes_class
+	private:
+		var int id;
+	public:
+		var string nome;
+		var int ano;
+		sub incrementa_id()
+			id = id + 1;
+		end_sub
+end_class
+
+sub main()
+	var filmes_class f;
+
+	//f.id = 1;
+	f.nome = "007-Spectrum";
+	f.ano = 2015;
+
+	//println(f.id);
+	println(f.nome);
+	println(f.ano);
+end_sub*/
+
+ class A
+ 	var string nome;
+ end_class
+
+ class B
+ 	var A a;
+ 	var int numero;
+ end_class
+
+ class C
+ 	var B b;
+ 	var int id;
+ end_class
+
+sub main()
+	var C c;
+	c.b.a.nome = "Joao";
+	c.b.numero = 10;
+	c.id = 2;
+
+	println(c.id);
+	println(b.numero);
+	println(b.a.nome );	
+end_sub

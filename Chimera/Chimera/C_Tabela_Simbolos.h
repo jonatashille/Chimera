@@ -38,6 +38,7 @@ struct S_Simbolos
 	int pos_pilha_ini_str;
 	int tam_str;
 	string rotulo;
+	string escopo;
 	int k; //Endereço Léxico
 	int n; //Endereço de memória (Usado para parâmetros, primeiro inicia com -4, próximos -5,-6...)
 
@@ -63,6 +64,8 @@ public:
 	bool Inserir(S_Simbolos, string);
 	//Retorna se o identificador existe ou não na tabela de símbolos
 	bool Consultar(string);
+	//Retorna se o identificador é acessível
+	bool Consultar_Acesso(string, int);
 	//Utilizado para inativar os símbolos, dado um escopo
 	void Inativar_Simbolos(int);
 	//Verifica se já existe a ID na TS
@@ -87,6 +90,12 @@ public:
 	int Buscar_Pos_Pilha_Ini_Str(S_Id_Pai);
 	//Buscar o escopo pai
 	int Buscar_Pai(string);
+	//Buscar tipo pai
+	string Buscar_Categoria_Pai(int);
+	//Busca a quantidade alocada pelo parametros de uma sub ou functions (Apenas passados por valor)
+	int Buscar_Qtd_Mem_Alocada_Params(int);
+	//Busca a quantidade alocada pelo parametros de uma sub ou functions (Todos os params, Valor e referencia)
+	int Buscar_Qtd_Tot_Params(int);
 	//Busca o rótulo de um identificador / Usado para Funções e Procedimentos
 	string Buscar_Rotulo(string);
 	//Busca dados da TS pela chave

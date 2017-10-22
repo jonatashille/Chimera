@@ -96,9 +96,28 @@ void C_Mepa::Converter_Pos_Fixa(stack<S_EXP>& _p, C_Tabela_Simbolos _ts)
 				if (_p.top().end_elemento)
 					CREN(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(_p.top().token, _p.top().parente))));
 				else if (_ts.Verificar_Ponteiro(_p.top().token))
-					CRVI(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(_p.top().token, _p.top().parente))));
+				{
+					if (_ts.Buscar_Tipo(_p.top().token) != TIPO_STRING)
+						CRVI(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(_p.top().token, _p.top().parente))));
+					else
+					{
+						int pos_pilha_ini_str = _ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(_p.top().token, _p.top().parente));
+						CRVI_String_Param(to_string(pai), pos_pilha_ini_str, _ts.Buscar_Tamanho_String(sidpai.make_Id_Pai(_p.top().token, _p.top().parente)));
+
+					}
+				}
 				else
-					CRVL(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(_p.top().token, _p.top().parente))));
+				{
+					if (_ts.Buscar_Tipo(_p.top().token) != TIPO_STRING)
+					{
+						CRVL(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(_p.top().token, _p.top().parente))));
+					}
+					else
+					{
+						int pos_pilha_ini_str = _ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(_p.top().token, _p.top().parente));
+						CRVL_String_Param(to_string(pai), pos_pilha_ini_str, _ts.Buscar_Tamanho_String(sidpai.make_Id_Pai(_p.top().token, _p.top().parente)));
+					}
+				}
 			}
 			else
 				CRCT(_p.top().token);
@@ -161,19 +180,23 @@ void C_Mepa::CRCT(string _c)
 	ultimo_comando = "CRCT";
 }
 
-void C_Mepa::CRCT_String(string _c, int _pos, int _limite)
+void C_Mepa::CRCT_String(string _c, int _pos)
 {
-	mepa << "; ---------- Inicio Armazenamento String" << endl;
-	// +1 e -1 para eliminar o "
-	for (auto it = _c.begin() + 1; it != _c.end() - 1 && _pos < _limite; it++)
+	if (_c != "")
 	{
-		linha_mepa++;
-		mepa << "CRCT \'" << string(1, *it) << "\'" << endl;
-		ARMZ(to_string(_pos));
-		_pos++;
-		ultimo_comando = "CRCT";
+		int i = 0;
+		mepa << "; ---------- Inicio Armazenamento String" << endl;
+		// +1 e -1 para eliminar o "
+		for (auto it = _c.begin() + 1; it != _c.end() - 1 && i < TAM_STRING; it++, i++)
+		{
+			linha_mepa++;
+			mepa << "CRCT \'" << string(1, *it) << "\'" << endl;
+			ARMZ(to_string(_pos));
+			_pos++;
+			ultimo_comando = "CRCT";
+		}
+		mepa << "; ---------- Fim Armazenamento String" << endl;
 	}
-	mepa << "; ---------- Fim Armazenamento String" << endl;
 }
 
 void C_Mepa::CRVL(string _k, string _n)
@@ -196,6 +219,18 @@ void C_Mepa::CRVL_String(string _k, int _pos_ini, int _tam_str)
 	mepa << "; ---------- Fim Leitura String" << endl;
 }
 
+void C_Mepa::CRVL_String_Param(string _k, int _pos_ini, int _tam_str)
+{
+	mepa << "; ---------- Inicio Carregamento String" << endl;
+	for (int i = 1; i <= _tam_str; i++)
+	{
+		linha_mepa++;
+		mepa << "CRVL " << _k << "," << _pos_ini << endl;
+		_pos_ini++;
+	}
+	mepa << "; ---------- Fim Carregamento String" << endl;
+}
+
 void C_Mepa::CRVI(string _k, string _n)
 {
 	linha_mepa++;
@@ -208,6 +243,12 @@ void C_Mepa::CRVI_String(string _k, int _pos_ini, int _pos_fim)
 	linha_mepa++;
 	mepa << "CRVI " << _k << "," << _pos_ini << endl;
 	IMPC();
+}
+
+void C_Mepa::CRVI_String_Param(string _k, int _pos_ini, int _pos_fim)
+{
+	linha_mepa++;
+	mepa << "CRVI " << _k << "," << _pos_ini << endl;
 }
 
 void C_Mepa::CREN(string _k, string _n)

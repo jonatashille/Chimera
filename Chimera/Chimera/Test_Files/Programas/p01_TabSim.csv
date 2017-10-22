@@ -1,6 +1,6 @@
 sep=;
-#;ID;CATEGORIA;TIPO;Ponteiro;Array;valor;QtdParam;Pass By;Pai;Classe;Acesso;Ativo;Linha;Pilha;Pilha_Ini_Str;Tam Str;Rotulo;
-1;main;SUB;;0;0;;0;;0;0;0;1;2;-1;0;0;MAIN;
-2;x;VAR;TIPO_INT;0;0;;0;;1;0;0;0;3;0;-1;0;;
-3;y;VAR;TIPO_INT;0;0;;0;;1;0;0;0;3;1;-1;0;;
-4;soma;VAR;TIPO_INT;0;0;;0;;1;0;0;0;3;2;-1;0;;
+#;ID;CATEGORIA;TIPO;Ponteiro;Array;valor;QtdParam;Pass By;Pai;Classe;Acesso;Ativo;Linha;Pilha;Pilha_Ini_Str;Tam Str;Rotulo;Escopo;
+1;main;SUB;;0;0;;0;;0;0;0;1;2;-1;0;0;MAIN;;
+2;x;VAR;TIPO_INT;0;0;;0;;1;0;0;0;3;0;-1;0;;;
+3;y;VAR;TIPO_INT;0;0;;0;;1;0;0;0;3;1;-1;0;;;
+4;soma;VAR;TIPO_INT;0;0;;0;;1;0;0;0;3;2;-1;0;;;

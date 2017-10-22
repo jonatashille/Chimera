@@ -263,6 +263,23 @@ void C_Analise_Sintatica::Decl_const()
 	ts.Inserir(sconst, escopo);
 }
 
+void C_Analise_Sintatica::Decl_const_class()
+{
+	sconst.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+
+	sconst.linha = iter_token_lexema->linha;
+
+	Aceitar_Token(OP_ATRIBUICAO, ERR_OP_ATRIBUICAO);
+
+	Literal(sconst);
+
+	Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
+
+	sconst.access = acesso_membro;
+
+	ts.Inserir(sconst, escopo);
+}
+
 //DV
 void C_Analise_Sintatica::Decl_var()
 {
@@ -278,6 +295,44 @@ void C_Analise_Sintatica::Decl_var()
 		svar.ponteiro = true;
 	}
 		
+	svar.tipo = Espec_tipo();
+
+	//Zerar var_mem a cada declaração
+	var_mem = 0;
+	//posicao_pilha_local = -1;
+	Lista_decl_var();
+
+	if (escopo_estrutura)
+	{
+		sstruct.qtd_params += var_mem;
+	}
+	else if (escopo_classe)
+	{
+		sclasse.qtd_params += var_mem;
+	}
+
+	svar.access = acesso_membro;
+
+	//Verifico as condições para reservar memória para a MEPA
+	Inserir_AMEM_MEPA();
+
+	Aceitar_Token(PONTO_VIRGULA, ERR_PONTO_VIRGULA);
+}
+
+void C_Analise_Sintatica::Decl_var_class()
+{
+	Aceitar_Token(VAR, ERR_VAR);
+
+	svar.categoria = VAR;
+
+	if (token == REF)
+		Aceitar_Token(REF, ERR_REF);
+	else if (token == POINTER)
+	{
+		Aceitar_Token(POINTER, ERR_POINTER);
+		svar.ponteiro = true;
+	}
+
 	svar.tipo = Espec_tipo();
 
 	//Zerar var_mem a cada declaração
@@ -383,11 +438,14 @@ void C_Analise_Sintatica::Decl_proc()
 	//MEPA - Inicio a pilha que vai armazenar a quantidade de variáveis alocadas - Inicio com zero
 	pilha_var_mem.push(0);
 
+	int qtd_mem_alocada_param = ts.Buscar_Qtd_Mem_Alocada_Params(sproc.chave);
+	int qtd_tot_params = ts.Buscar_Qtd_Tot_Params(sproc.chave);
+
 	//Se existir parametros por valor, preciso armazenar memória
-	if (qtd_param.val > 0)
+	if (qtd_mem_alocada_param > 0)
 	{
-		mepa.AMEM(to_string(qtd_param.val));
-		pilha_var_mem.top() += qtd_param.val;
+		mepa.AMEM(to_string(qtd_mem_alocada_param));
+		pilha_var_mem.top() += qtd_mem_alocada_param;
 	}
 
 
@@ -425,7 +483,96 @@ void C_Analise_Sintatica::Decl_proc()
 		Inserir_DMEM_MEPA(pilha_var_mem.top());
 	}
 	//MEPA - RTPR Retorno da procedure
-	mepa.RTPR("1", to_string(sproc.qtd_params));
+	mepa.RTPR("1", to_string(qtd_tot_params));
+
+	qtd_param.val = 0;
+	qtd_param.ref = 0;
+	Proc_Func_Atual = "";
+	//Tiro do topo o contador de memoria desta função (Caso não tenha sido desempilhado anterirmente por um retorno)
+	if (!pilha_var_mem.empty())
+		pilha_var_mem.pop();
+}
+
+void C_Analise_Sintatica::Decl_proc_class()
+{
+	Aceitar_Token(SUB, ERR_SUB);
+
+	sproc.linha = iter_token_lexema->linha;
+	sproc.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+
+	Proc_Func_Atual = sproc.identificador;
+
+	//Garanto que exista um Subprograma Main
+	if (sproc.identificador == "main")
+	{
+		existe_main = true;
+		mepa.Add_Comando("; ----------Inicio MAIN");
+		mepa.NADA("MAIN");
+		sproc.rotulo = "MAIN";
+	}
+	else
+	{
+		sproc.rotulo = mepa.NADA();
+	}
+
+	//MEPA - ENPR -Entrada do procedimento
+	mepa.ENPR("1");
+
+	Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
+
+	sproc.qtd_params = Params();
+
+	Aceitar_Token(FECHA_PARENTESES, ERR_FECHA_PARENTESES);
+
+	//MEPA - Inicio a pilha que vai armazenar a quantidade de variáveis alocadas - Inicio com zero
+	pilha_var_mem.push(0);
+
+	int qtd_mem_alocada_param = ts.Buscar_Qtd_Mem_Alocada_Params(sproc.chave);
+	int qtd_tot_params = ts.Buscar_Qtd_Tot_Params(sproc.chave);
+
+	//Se existir parametros por valor, preciso armazenar memória
+	if (qtd_mem_alocada_param > 0)
+	{
+		mepa.AMEM(to_string(qtd_mem_alocada_param));
+		pilha_var_mem.top() += qtd_mem_alocada_param;
+	}
+
+
+	//Atualizar posição da pilha dos parâmetros e envio uma pilha para depois conseguir atribuir os valores para os parâmetros passados por cópia
+	if (sproc.qtd_params > 0)
+	{
+		stack<pair<int, int>> pparamval;
+		ts.Atualizar_Pilha_Param(sproc.chave, sproc.qtd_params, pparamval);
+		//Para os params que foram passador por valor, armazeno os valores localmente 
+		while (!pparamval.empty())
+		{
+			mepa.CRVL("1", to_string(pparamval.top().first));
+			mepa.ARMZ("1", to_string(pparamval.top().second));
+			pparamval.pop();
+		}
+	}
+
+
+	Bloco();
+
+	sproc.access = acesso_membro;
+	ts.Inserir(sproc, escopo);
+
+	Aceitar_Token(END_SUB, ERR_END_SUB);
+
+	//Quando precisar ir para o fim do procedimento
+	//mepa.Add_Comando(sproc.rotulo + "_FIM:NADA");
+
+	//Inativar todas as variáveis que foram declaradas dentro desta procedure/subprograma
+	//int qtd_removida = ts.Remover_Internos(sproc.identificador);
+	ts.Remover_Internos(sproc.identificador);
+	//Preciso desempilhar a variável que controla a posição da pilha, somente se tiver removido
+	if (!pilha_var_mem.empty() && pilha_var_mem.top() > 0)
+	{
+		Inserir_DMEM_MEPA(pilha_var_mem.top());
+	}
+	//MEPA - RTPR Retorno da procedure
+	mepa.RTPR("1", to_string(qtd_tot_params));
 
 	qtd_param.val = 0;
 	qtd_param.ref = 0;
@@ -497,6 +644,84 @@ void C_Analise_Sintatica::Decl_func()
 
 	//Inativar todas as variáveis que foram declaradas dentro desta função
 	int qtd_removida =	ts.Remover_Internos(sfuncao.identificador);
+	//Preciso desempilhar a variável que controla a posição da pilha, somente se tiver removido
+	if (qtd_removida > 0)
+	{
+		Inserir_DMEM_MEPA(qtd_removida);
+	}
+
+	//MEPA - RTPR Retorno da procedure
+	mepa.RTPR("1", to_string(sfuncao.qtd_params));
+
+	qtd_param.val = 0;
+	qtd_param.ref = 0;
+	Proc_Func_Atual = "";
+	//Tiro do topo o contador de memoria desta função (Caso não tenha sido desempilhado anterirmente por um retorno)
+	if (!pilha_var_mem.empty())
+		pilha_var_mem.pop();
+}
+
+void C_Analise_Sintatica::Decl_func_class()
+{
+	Aceitar_Token(FUNCTION, ERR_FUNCTION);
+
+	sfuncao.linha = iter_token_lexema->linha;
+	sfuncao.tipo = Espec_tipo();
+
+	sfuncao.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+
+	Proc_Func_Atual = sfuncao.identificador;
+
+	sfuncao.access = acesso_membro;
+
+	sfuncao.rotulo = mepa.NADA();
+
+	//MEPA - ENPR -Entrada do procedimento
+	mepa.ENPR("1");
+
+	Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
+
+	sfuncao.qtd_params = Params();
+
+	Aceitar_Token(FECHA_PARENTESES, ERR_FECHA_PARENTESES);
+
+	//MEPA - Inicio a pilha que vai armazenar a quantidade de variáveis alocadas - Inicio com zero
+	pilha_var_mem.push(0);
+
+	//Se existir parametros por valor, preciso armazenar memória
+	if (qtd_param.val > 0)
+	{
+		mepa.AMEM(to_string(qtd_param.val));
+		pilha_var_mem.top() += qtd_param.val;
+	}
+
+
+	//Atualizar posição da pilha dos parâmetros e envio uma pilha para depois conseguir atribuir os valores para os parâmetros passados por cópia
+	if (sfuncao.qtd_params > 0)
+	{
+		stack<pair<int, int>> pparamval;
+		ts.Atualizar_Pilha_Param(sfuncao.chave, sfuncao.qtd_params, pparamval);
+		//Para os params que foram passador por valor, armazeno os valores localmente 
+		while (!pparamval.empty())
+		{
+			mepa.CRVL("1", to_string(pparamval.top().first));
+			mepa.ARMZ("1", to_string(pparamval.top().second));
+			pparamval.pop();
+		}
+	}
+
+	//Faço a inserção na TS logo após a declaração, isso precisa ser feito em caso seja uma função recursiva
+	ts.Inserir(sfuncao, escopo);
+
+	Bloco();
+
+	Aceitar_Token(END_FUNCTION, ERR_END_FUNCTION);
+
+	//Quando precisar ir para o fim da função
+	//mepa.Add_Comando(sfuncao.rotulo + "_FIM:NADA");
+
+	//Inativar todas as variáveis que foram declaradas dentro desta função
+	int qtd_removida = ts.Remover_Internos(sfuncao.identificador);
 	//Preciso desempilhar a variável que controla a posição da pilha, somente se tiver removido
 	if (qtd_removida > 0)
 	{
@@ -723,7 +948,7 @@ void C_Analise_Sintatica::Membro_class()
 		sconst.pai = pilha_parente.top();
 		sconst.classe = classe;
 
-		Decl_const();
+		Decl_const_class();
 	}
 	else if (token == FUNCTION)
 	{
@@ -738,7 +963,7 @@ void C_Analise_Sintatica::Membro_class()
 
 		sfuncao.categoria = FUNCTION;
 
-		Decl_func();
+		Decl_func_class();
 
 		//Desempilho a chave, pois não terá mais filhos
 		pilha_parente.pop();
@@ -756,7 +981,7 @@ void C_Analise_Sintatica::Membro_class()
 
 		sproc.categoria = SUB;
 
-		Decl_proc();
+		Decl_proc_class();
 
 		//Desempilho a chave, pois não terá mais filhos
 		pilha_parente.pop();
@@ -770,7 +995,7 @@ void C_Analise_Sintatica::Membro_class()
 		//Gravo a classe que a variavel pertence
 		svar.classe = classe;
 
-		Decl_var();
+		Decl_var_class();
 	}
 	else
 	{
@@ -877,6 +1102,10 @@ void C_Analise_Sintatica::Comando()
 			parente = ts.Buscar_Pai(identificador);
 			
 
+		//Verifico se o acesso ao membro é permitido
+		if (escopo != CLASSE && !ts.Consultar_Acesso(identificador, parente))
+			Erro(identificador, ERR_SEM_NAO_ACESSIVEL_PRIVADO);
+
 		//MEPA - Empilho a variável, irá desempilhar somente depois que inserir a CRCT/CRVL do valor atribuído
 		if (categoria == VAR || categoria == PARAM)
 			//Par para o pilha_armz - Com isso no armz saberei a diferenca
@@ -905,7 +1134,7 @@ void C_Analise_Sintatica::Comando()
 				if (tipo == TIPO_STRING)
 				{
 					int pos_pilha_ini = ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente));
-					mepa.CRCT_String(val_string, pos_pilha_ini, ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente)));
+					mepa.CRCT_String(val_string, pos_pilha_ini);
 					ts.Atualizar_Tamanho_String(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente),val_string);
 				}
 				else
@@ -1065,6 +1294,11 @@ void C_Analise_Sintatica::Com_repeticao()
 		}
 		else
 			parente = ts.Buscar_Pai(identificador);
+
+		//Verifico se o acesso ao membro é permitido
+		if (escopo != CLASSE && !ts.Consultar_Acesso(identificador, parente))
+			Erro(identificador, ERR_SEM_NAO_ACESSIVEL_PRIVADO);
+
 		//Preciso saber o tipo do identificador para verificar se é int
 		tipo_exp = ts.Buscar_Tipo(identificador);
 		if (tipo_exp != TIPO_INT)
@@ -1665,6 +1899,11 @@ string C_Analise_Sintatica::Exp_simples()
 		}
 		else
 			parente = ts.Buscar_Pai(identificador);
+
+		//Verifico se o acesso ao membro é permitido
+		if (escopo != CLASSE && !ts.Consultar_Acesso(identificador, parente))
+			Erro(identificador, ERR_SEM_NAO_ACESSIVEL_PRIVADO);
+
 		//Buscar a categoria do identificador
 		categoria = ts.Buscar_Categoria(identificador);
 		//Buscar o tipo do identificador
@@ -1897,6 +2136,10 @@ void C_Analise_Sintatica::Lista_var()
 		parente = ts.Buscar_Pai(identificador);
 	tipo = ts.Buscar_Tipo(identificador);
 
+	//Verifico se o acesso ao membro é permitido
+	if (escopo != CLASSE && !ts.Consultar_Acesso(identificador, parente))
+		Erro(identificador, ERR_SEM_NAO_ACESSIVEL_PRIVADO);
+
 	if (tipo != CARACTERE || tipo != STRING)
 	{
 		//MEPA - LEIT Leitura de inteiro
@@ -1970,9 +2213,9 @@ void C_Analise_Sintatica::Lista_decl_var()
 	if (svar.tipo == TIPO_STRING)
 	{
 		svar.pos_pilha_ini_str = pilha_var_mem.top();
-		//Por padrão, reservo 30 caracteres para uma String
-		pilha_var_mem.top() += 30;
-		var_mem += 30;
+		//Por padrão, reservo 30 caracteres para uma String, define TAM_STRING
+		pilha_var_mem.top() += TAM_STRING;
+		var_mem += TAM_STRING;
 	}
 	else
 	{
@@ -2077,6 +2320,7 @@ void C_Analise_Sintatica::Iniciar_Simbolos(S_Simbolos &_simbolo)
 	_simbolo.classe = 0;
 	_simbolo.pos_pilha = -1;
 	_simbolo.rotulo = "";
+	_simbolo.escopo = "";
 }
 
 void C_Analise_Sintatica::Inserir_AMEM_MEPA()

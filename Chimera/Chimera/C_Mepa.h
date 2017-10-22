@@ -45,11 +45,13 @@ public:
 
 	//Armazenamento e E/S
 	void CRCT(string);
-	void CRCT_String(string, int, int);
+	void CRCT_String(string, int);
 	void CRVL(string, string);
-	void CRVL_String(string, int, int);
+	void CRVL_String(string, int, int);//Imprime os caracteres
+	void CRVL_String_Param(string, int, int);//Não imprime, apenas carrega os valores da String
 	void CRVI(string, string);
-	void CRVI_String(string, int, int);
+	void CRVI_String(string, int, int);//Imprime os caracteres
+	void CRVI_String_Param(string, int, int);//Não imprime, apenas carrega os valores da String
 	void CREN(string, string);
 	void ARMZ(string, string);
 	void ARMZ(string);

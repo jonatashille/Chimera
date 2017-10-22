@@ -27,6 +27,7 @@ void TU_Programas::Executar()
 	Testar_Programa("p07"); //Programa Fibonacci de 20 - Resultado esperado 6765
 	Testar_Programa("p08"); //Teste de ponteiros - Troca de valores
 	Testar_Programa("p09"); //Teste de ponteiros - Troca de valores chamando uma função para realizar a troca e passando por referencia
+	Testar_Programa("p10"); //Teste com passagem de String por parâmetro
 
 	//Estrutura
 	Testar_Programa("S01");

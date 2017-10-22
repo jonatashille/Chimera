@@ -80,10 +80,14 @@ public:
 	void Lista_decl();
 	void Decl();
 	void Decl_const();
+	void Decl_const_class(); // Classe
 	void Decl_var();
+	void Decl_var_class(); // Classe
 	string Espec_tipo();
 	void Decl_proc();
+	void Decl_proc_class(); // Classe
 	void Decl_func();
+	void Decl_func_class(); //Classe
 	int Params();
 	int Lista_param();
 	void Lista_param_1();
