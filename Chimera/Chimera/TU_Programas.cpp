@@ -34,6 +34,7 @@ void TU_Programas::Executar()
 	Testar_Programa("S02");//Estrutura dentro de estrutura
 	//Classes - Orientação à objetos
 	Testar_Programa("C01");
+	Testar_Programa("C02");
 }
 
 void TU_Programas::Testar_Programa(string _prog)

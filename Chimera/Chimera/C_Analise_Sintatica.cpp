@@ -351,6 +351,8 @@ void C_Analise_Sintatica::Decl_var_class()
 
 	svar.access = acesso_membro;
 
+	//Inserir as variáveis da classe em uma pilha. Após isso, utilizo ela para carregar as variáveis em todas as chamadas de funções 
+
 	//Verifico as condições para reservar memória para a MEPA
 	Inserir_AMEM_MEPA();
 
@@ -530,6 +532,17 @@ void C_Analise_Sintatica::Decl_proc_class()
 	int qtd_mem_alocada_param = ts.Buscar_Qtd_Mem_Alocada_Params(sproc.chave);
 	int qtd_tot_params = ts.Buscar_Qtd_Tot_Params(sproc.chave);
 
+	//Procurar variáveis da classe, para inserir como endereço
+	vector<S_Simbolos> l_simbolos;
+	l_simbolos = ts.Buscar_Var_Pelo_Pai(sclasse.chave);
+	
+	/*for (auto it = l_simbolos.begin(); it != l_simbolos.end(); it++)
+	{
+		mepa.CREN("1", to_string(it->pos_pilha));
+	}*/
+
+
+
 	//Se existir parametros por valor, preciso armazenar memória
 	if (qtd_mem_alocada_param > 0)
 	{
@@ -542,7 +555,7 @@ void C_Analise_Sintatica::Decl_proc_class()
 	if (sproc.qtd_params > 0)
 	{
 		stack<pair<int, int>> pparamval;
-		ts.Atualizar_Pilha_Param(sproc.chave, sproc.qtd_params, pparamval);
+		ts.Atualizar_Pilha_Param_classe(sproc.chave, sproc.qtd_params, pparamval, l_simbolos.size());
 		//Para os params que foram passador por valor, armazeno os valores localmente 
 		while (!pparamval.empty())
 		{
@@ -572,7 +585,7 @@ void C_Analise_Sintatica::Decl_proc_class()
 		Inserir_DMEM_MEPA(pilha_var_mem.top());
 	}
 	//MEPA - RTPR Retorno da procedure
-	mepa.RTPR("1", to_string(qtd_tot_params));
+	mepa.RTPR("1", to_string(qtd_tot_params + l_simbolos.size()));
 
 	qtd_param.val = 0;
 	qtd_param.ref = 0;
@@ -876,13 +889,13 @@ void C_Analise_Sintatica::Decl_class()
 	sclasse.linha = iter_token_lexema->linha;
 
 	sclasse.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
-	
 
 	Bloco_class();
 
 	Aceitar_Token(END_CLASS, ERR_END_CLASS);
 
 	ts.Inserir(sclasse, escopo);
+
 
 	escopo_classe = false; //Volto para false, pois terminou a declaração
 }
@@ -1131,14 +1144,21 @@ void C_Analise_Sintatica::Comando()
 				mepa.ARMI(to_string(pai), to_string(ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente))));
 			else
 			{
-				if (tipo == TIPO_STRING)
+				if (escopo != CLASSE)
 				{
-					int pos_pilha_ini = ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente));
-					mepa.CRCT_String(val_string, pos_pilha_ini);
-					ts.Atualizar_Tamanho_String(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente),val_string);
+					if (tipo == TIPO_STRING)
+					{
+						int pos_pilha_ini = ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente));
+						mepa.CRCT_String(val_string, pos_pilha_ini);
+						ts.Atualizar_Tamanho_String(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente), val_string);
+					}
+					else
+						mepa.ARMZ(to_string(pai), to_string(ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente))));
 				}
 				else
-					mepa.ARMZ(to_string(pai), to_string(ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente))));
+				{
+					mepa.ARMI(to_string(pai), to_string(ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente))-(sproc.qtd_params + 3)));
+				}
 			}
 				
 			mepa.pilha_ARMZ.pop();
@@ -1147,6 +1167,13 @@ void C_Analise_Sintatica::Comando()
 		
 		if (categoria == FUNCTION || categoria == SUB)
 		{
+			vector<S_Simbolos> l_simbolos;
+			l_simbolos = ts.Buscar_Var_Classe_Pai(parente);
+			for (auto it = l_simbolos.begin(); it != l_simbolos.end(); it++)
+			{
+				mepa.CREN("1", to_string(it->pos_pilha));
+			}
+
 			//Validação semântica para verificar a quantidade de parâmetros da chamada 
 			if (qtd_params_decl != qtd_params_chamada)
 				Erro(identificador, ERR_SEM_NUM_PARAMS);

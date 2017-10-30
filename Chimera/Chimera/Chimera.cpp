@@ -17,13 +17,14 @@ void main()
 	Compilar("Test_Files\\Programas\\p08.chi");
 	Compilar("Test_Files\\Programas\\p09.chi");
 	Compilar("Test_Files\\Programas\\P10.chi");
+	Compilar("Test_Files\\Programas\\P11.chi");
 	
 	//Programas com estrutura
 	Compilar("Test_Files\\Programas\\S01.chi");
 	Compilar("Test_Files\\Programas\\S02.chi");
 	//Programas com classes/orientado a objetos
 	Compilar("Test_Files\\Programas\\C01.chi");
-	Compilar("Test_Files\\Programas\\C02.chi"); //Falta Teste
+	Compilar("Test_Files\\Programas\\C02.chi");
 	Compilar("Test_Files\\Programas\\C03.chi"); //Falta Teste
 	Compilar("Test_Files\\Programas\\C04.chi"); //Falta Teste
 

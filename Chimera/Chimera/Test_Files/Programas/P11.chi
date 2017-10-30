@@ -1,0 +1,16 @@
+sub carrega(var int a1 by value, var int b1 by value, var int a2 by ref, var int b2 by ref)
+	a2 = a1;
+	b2= b1;
+end_sub
+
+sub main()
+	var int a, b;
+	a=10;
+	b=20;
+
+	carrega(77, 99, &a, &b);
+
+	println(a);
+	println(b);
+
+end_sub

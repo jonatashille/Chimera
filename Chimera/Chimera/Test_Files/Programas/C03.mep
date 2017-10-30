@@ -24,8 +24,8 @@ ENPR 1
 CRVL 1,0
 CRCT 1
 SOMA
-ARMZ 1,0
-RTPR 1,0
+ARMI 1,-3
+RTPR 1,3
 ; ---------- Fim/Retorno de Procedimento/Funcao
 ; ----------Inicio MAIN
 MAIN:NADA

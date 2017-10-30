@@ -78,8 +78,12 @@ public:
 	int Buscar_Chave(string);
 	//Buscar categogia do identificador
 	string Buscar_Categoria(string);
+	//Buscar categogia pela chave
+	string Buscar_Categoria(int);
 	//Buscar tipo do identificador
 	string Buscar_Tipo(string);
+	//Buscar tipo pela chave
+	string Buscar_Tipo(int);
 	//Verifica se é um ponteiro
 	bool Verificar_Ponteiro(string);
 	//Buscar quantidade de parâmetros de uma função/Procedimento
@@ -106,6 +110,8 @@ public:
 	vector<S_Simbolos>::iterator Buscar_Simbolo(S_Id_Pai);
 	//Atualizar posição da pilha dos parâmetros / Se for ref mantém o valor da pilha da mepa, se for valor atualiza para o valor interno
 	void Atualizar_Pilha_Param(int,int, stack<pair<int, int>>&);
+	//Atualizar posição da pilha dos parâmetros da classe / Se for ref mantém o valor da pilha da mepa, se for valor atualiza para o valor interno
+	void Atualizar_Pilha_Param_classe(int, int, stack<pair<int, int>>&, int);
 	//Atualziar o tamanho da string, quando for deste tipo
 	void Atualizar_Tamanho_String(S_Id_Pai, string);
 	//Buscar o Tamanho da String
@@ -118,8 +124,12 @@ public:
 	void Imprimir_TS(string);
 	//Gravar arquivo csv com a tabela de símbolos
 	void Gravar_TS(string);
-	//Retorna variáveis declaradas em uma estrutura
+	//Retorna variáveis declaradas em uma estrutura/classe
 	vector<S_Simbolos> Buscar_Var_Estrutura(string);
+	//Retorna variáveis declaradas após declarar uma estrutura/classe - Traz as varáveis com o endereço certo da pilha
+	vector<S_Simbolos> Buscar_Var_Classe_Pai(int);
+	//Retorna variáveis declaradas pelo pai delas
+	vector<S_Simbolos> Buscar_Var_Pelo_Pai(int);
 
 	void Erro(string);
 	void Erro(string, S_Simbolos);
