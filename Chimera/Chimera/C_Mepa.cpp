@@ -93,6 +93,7 @@ void C_Mepa::Converter_Pos_Fixa(stack<S_EXP>& _p, C_Tabela_Simbolos _ts)
 				int pai = _p.top().parente;
 				if (pai != 0)
 					pai = 1;
+
 				if (_p.top().end_elemento)
 					CREN(to_string(pai), to_string(_ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(_p.top().token, _p.top().parente))));
 				else if (_ts.Verificar_Ponteiro(_p.top().token))
@@ -103,7 +104,6 @@ void C_Mepa::Converter_Pos_Fixa(stack<S_EXP>& _p, C_Tabela_Simbolos _ts)
 					{
 						int pos_pilha_ini_str = _ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(_p.top().token, _p.top().parente));
 						CRVI_String_Param(to_string(pai), pos_pilha_ini_str, _ts.Buscar_Tamanho_String(sidpai.make_Id_Pai(_p.top().token, _p.top().parente)));
-
 					}
 				}
 				else
@@ -201,7 +201,7 @@ void C_Mepa::CRCT_String(string _c, int _pos)
 
 void C_Mepa::CRVL(string _k, string _n)
 {
-	linha_mepa++;
+ 	linha_mepa++;
 	mepa << "CRVL " << _k << "," << _n << endl;
 	ultimo_comando = "CRVL";
 }
@@ -521,10 +521,13 @@ void C_Mepa::PARA()
 
 void C_Mepa::AMEM(string _m)
 {
-	mepa << "; ---------- Alocacao de Memoria (" << _m << ")" << endl;
-	linha_mepa++;
-	mepa << "AMEM " << _m << endl;
-	ultimo_comando = "AMEM";
+	if (stoi(_m) > 0)
+	{
+		mepa << "; ---------- Alocacao de Memoria (" << _m << ")" << endl;
+		linha_mepa++;
+		mepa << "AMEM " << _m << endl;
+		ultimo_comando = "AMEM";
+	}
 }
 
 void C_Mepa::DMEM(int _m)

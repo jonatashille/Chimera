@@ -35,6 +35,7 @@ void TU_Programas::Executar()
 	//Classes - Orientação à objetos
 	Testar_Programa("C01");
 	Testar_Programa("C02");
+	Testar_Programa("C03");
 }
 
 void TU_Programas::Testar_Programa(string _prog)

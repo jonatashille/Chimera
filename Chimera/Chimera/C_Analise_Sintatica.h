@@ -25,6 +25,19 @@ struct S_Selelecao_ID
 	}
 }; typedef S_Selelecao_ID S_Selelecao_ID;
 
+struct S_Exp_Args
+{
+	stack<S_EXP> pilha_EXP_args;
+	C_Tabela_Simbolos ts_EXP_args;
+	S_Exp_Args make_pair(stack<S_EXP> _pilha_EXP_args, C_Tabela_Simbolos _ts_EXP_args)
+	{
+		S_Exp_Args pair;
+		pair.pilha_EXP_args = _pilha_EXP_args;
+		pair.ts_EXP_args = _ts_EXP_args;
+		return pair;
+	}
+}; typedef S_Exp_Args S_Exp_Args;
+
 class C_Analise_Sintatica
 {
 private:
@@ -62,6 +75,7 @@ private:
 	string escopo;
 	stack<S_Selelecao_ID> pilha_selecao;
 	string val_string;
+	stack<S_Exp_Args> pilha_Exp_args;
 public:
 	C_Analise_Sintatica(vector<S_Token_Lexema>);
 	~C_Analise_Sintatica();
@@ -145,6 +159,7 @@ public:
 	void Inserir_DMEM_MEPA(int);
 	void Inserir_AMEM_MEPA_STRUCT(string, int);
 	bool Verificar_Tipo_Padrao(string);
+	void Remover_Mem_Classe();
 	//Métods para a semântica
 	string Retorna_Tipo_Comparado(string, string);
 	void Validar_Atribuicao(string, string);

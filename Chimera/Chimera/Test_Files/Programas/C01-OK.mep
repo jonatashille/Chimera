@@ -92,8 +92,6 @@ DMEM 33
 RTPR 1,0
 ; ---------- Fim/Retorno de Procedimento/Funcao
 FIM:NADA
-; ---------- Desalocacao de Memoria (32)
-DMEM 32
 PARA
 ; ----------Fim das Instrucoes MEPA
 inicio  ENDP

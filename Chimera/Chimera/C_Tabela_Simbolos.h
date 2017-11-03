@@ -74,8 +74,10 @@ public:
 	string Buscar_ID_Pai(int);
 	//Verificar se Identificador é um Array
 	bool Verificar_Array(string);
-	//Buscar a chave de um identificador
+	//Buscar a chave de um identificador por identificador
 	int Buscar_Chave(string);
+	//Buscar a chave de um identificador por identificador  + pai
+	int Buscar_Chave(S_Id_Pai);
 	//Buscar categogia do identificador
 	string Buscar_Categoria(string);
 	//Buscar categogia pela chave
@@ -130,6 +132,8 @@ public:
 	vector<S_Simbolos> Buscar_Var_Classe_Pai(int);
 	//Retorna variáveis declaradas pelo pai delas
 	vector<S_Simbolos> Buscar_Var_Pelo_Pai(int);
+	//Retorna quantidade de variáveis declaradas em classes e estruturas
+	int Retorna_Tot_Var_Mem_Classe();
 
 	void Erro(string);
 	void Erro(string, S_Simbolos);

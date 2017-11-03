@@ -23,14 +23,14 @@ R3:NADA
 ENPR 1
 ; ---------- Alocacao de Memoria (2)
 AMEM 2
-CRVL 1,-6
-ARMZ 1,1
-CRVL 1,-7
+CRVL 1,-4
 ARMZ 1,0
+CRVL 1,-5
+ARMZ 1,1
 CRVL 1,0
-ARMI 1,-5
+ARMI 1,-6
 CRVL 1,1
-ARMI 1,-4
+ARMI 1,-7
 ; ---------- Desalocacao de Memoria (2)
 DMEM 2
 RTPR 1,4
@@ -45,10 +45,10 @@ CRCT 10
 ARMZ 1,0
 CRCT 20
 ARMZ 1,1
-CRCT 77
-CRCT 99
-CREN 1,0
 CREN 1,1
+CREN 1,0
+CRCT 99
+CRCT 77
 ; ---------- Chama Procedimento/Funcao - R3
 CHPR R3,1
 CRVL 1,0

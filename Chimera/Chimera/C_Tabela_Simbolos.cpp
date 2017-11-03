@@ -117,6 +117,15 @@ int C_Tabela_Simbolos::Buscar_Chave(string _identificador)
 	return 0;
 }
 
+int C_Tabela_Simbolos::Buscar_Chave(S_Id_Pai _sidpai)
+{
+	vector<S_Simbolos>::iterator simbolo;
+	simbolo = Buscar_Simbolo(_sidpai);
+	if (simbolo._Ptr != nullptr)
+		return simbolo->chave;
+	return 0;
+}
+
 string C_Tabela_Simbolos::Buscar_Categoria(string _identificador)
 {
 	vector<S_Simbolos>::iterator simbolo;
@@ -289,14 +298,28 @@ void C_Tabela_Simbolos::Atualizar_Pilha_Param(int _pai, int _qtd_params, stack<p
 		{
 			if (it->pai == _pai && it->categoria == PARAM && it->valido)
 			{
+				if (it->tipo != TIPO_STRING && it->passby == VALUE)
+				{
+					temp_val++;
+				}
+			}
+		}
+		//for (auto it = tabela_simbolos.end()-1; it != tabela_simbolos.begin(); it--)
+		auto it = tabela_simbolos.end();
+		while (it != tabela_simbolos.begin())
+		{
+			it--;
+			if (it->pai == _pai && it->categoria == PARAM && it->valido)
+			{
 				if (it->tipo != TIPO_STRING)
 				{
 					it->pos_pilha = -3 - (_qtd_params - temp_param++);
 					if (it->passby == VALUE)
 					{
+						temp_val--;
 						_pilha.push(make_pair(it->pos_pilha, temp_val));
 						//Preciso alterar o valor da tabela de símbolos, agora é o endereço local, pois foi passado por valor
-						it->pos_pilha = temp_val++;//Inicia com o 0 e vou incrementando
+						it->pos_pilha = temp_val;//Inicia com o 0 e vou incrementando
 					}
 				}
 				/*if (it->tipo != TIPO_STRING)
@@ -343,14 +366,28 @@ void C_Tabela_Simbolos::Atualizar_Pilha_Param_classe(int _pai, int _qtd_params, 
 		{
 			if (it->pai == _pai && it->categoria == PARAM && it->valido)
 			{
+				if (it->tipo != TIPO_STRING && it->passby == VALUE)
+				{
+					temp_val++;
+				}
+			}
+		}
+		//for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+		auto it = tabela_simbolos.end();
+		while (it != tabela_simbolos.begin())
+		{
+			it--;
+			if (it->pai == _pai && it->categoria == PARAM && it->valido)
+			{
 				if (it->tipo != TIPO_STRING)
 				{
 					it->pos_pilha = -(3 + _qtd_var_classe) - (_qtd_params - temp_param++);
 					if (it->passby == VALUE)
 					{
+						temp_val--;
 						_pilha.push(make_pair(it->pos_pilha, temp_val));
 						//Preciso alterar o valor da tabela de símbolos, agora é o endereço local, pois foi passado por valor
-						it->pos_pilha = temp_val++;//Inicia com o 0 e vou incrementando
+						it->pos_pilha = temp_val;//Inicia com o 0 e vou incrementando
 					}
 				}
 				/*if (it->tipo != TIPO_STRING)
@@ -642,6 +679,23 @@ vector<S_Simbolos> C_Tabela_Simbolos::Buscar_Var_Pelo_Pai(int _chave_pai)
 		}
 	}
 	return l_simbolos;
+}
+
+int C_Tabela_Simbolos::Retorna_Tot_Var_Mem_Classe()
+{
+	vector<S_Simbolos> l_simbolos;
+	int l_cont = 0;
+	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+	{
+		if (it->escopo != "")
+		{
+			if (it->tipo == TIPO_STRING)
+				l_cont += TAM_STRING;
+			else
+				l_cont++;
+		}
+	}
+	return l_cont;
 }
 
 void C_Tabela_Simbolos::Erro(string _msg)

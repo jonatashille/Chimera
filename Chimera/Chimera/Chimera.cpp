@@ -25,8 +25,8 @@ void main()
 	//Programas com classes/orientado a objetos
 	Compilar("Test_Files\\Programas\\C01.chi");
 	Compilar("Test_Files\\Programas\\C02.chi");
-	Compilar("Test_Files\\Programas\\C03.chi"); //Falta Teste
-	Compilar("Test_Files\\Programas\\C04.chi"); //Falta Teste
+	Compilar("Test_Files\\Programas\\C03.chi");
+	//Compilar("Test_Files\\Programas\\C04.chi"); //Falta Teste
 
 	//Testas as opçoes da analise léxica e todos os programas acima que já foram testados
 	Executar_Testes_Unitatios();

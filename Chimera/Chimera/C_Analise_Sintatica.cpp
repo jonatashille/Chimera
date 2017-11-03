@@ -92,6 +92,7 @@ void C_Analise_Sintatica::Programa()
 		Erro("Nao existe subprograma main");
 	//MEPA - DSVS Final, desalocar memória atribuídas globalmente
 	mepa.NADA("FIM");
+	Remover_Mem_Classe();
 	Inserir_DMEM_MEPA(pilha_var_mem.top());
 
 	//Se cheguei ao fim do programa, compilação ok
@@ -1157,7 +1158,7 @@ void C_Analise_Sintatica::Comando()
 				}
 				else
 				{
-					mepa.ARMI(to_string(pai), to_string(ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente))-(sproc.qtd_params + 3)));
+					mepa.ARMI(to_string(pai), to_string((ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente))+4)*(-1)));
 				}
 			}
 				
@@ -1169,10 +1170,16 @@ void C_Analise_Sintatica::Comando()
 		{
 			vector<S_Simbolos> l_simbolos;
 			l_simbolos = ts.Buscar_Var_Classe_Pai(parente);
-			for (auto it = l_simbolos.begin(); it != l_simbolos.end(); it++)
+			auto it = l_simbolos.end();
+			while (it != l_simbolos.begin())
 			{
+				it--;
 				mepa.CREN("1", to_string(it->pos_pilha));
 			}
+			/*for (auto it = l_simbolos.begin()-1; it != l_simbolos.end(); it++)
+			{
+				mepa.CREN("1", to_string(it->pos_pilha));
+			}*/
 
 			//Validação semântica para verificar a quantidade de parâmetros da chamada 
 			if (qtd_params_decl != qtd_params_chamada)
@@ -1586,8 +1593,12 @@ int C_Analise_Sintatica::Lista_exp()
 		//MEPA se for argumento, já valido e insiro no vetor
 		if (eh_argumento)
 		{
+			S_Exp_Args s_exp_args;
+			s_exp_args = s_exp_args.make_pair(mepa.pilha_EXP_args, ts);
+			mepa.pilha_EXP_args = stack<S_EXP>();
 			//TODO 06 - Validar Expressão aqui
-			mepa.Avaliar_Expressao(mepa.pilha_EXP_args, ts);
+			//mepa.Avaliar_Expressao(mepa.pilha_EXP_args, ts);
+			pilha_Exp_args.push(s_exp_args);
 		}
 		return Lista_exp_1();
 	}
@@ -1952,20 +1963,28 @@ string C_Analise_Sintatica::Exp_simples()
 			//Se tiver algum comando de escrita empilhado, preciso inserir ele na MEPA
 			if (!mepa.pilha_Com_Escrita.empty())
 			{
-				if (tipo_exp == TIPO_STRING)
+				if (escopo != CLASSE)
 				{
-					int pos_pilha_ini_str = ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(identificador, parente));
-					if (ts.Verificar_Ponteiro(identificador))
-						mepa.CRVI_String(to_string(pai), pos_pilha_ini_str, ts.Buscar_Tamanho_String(sidpai.make_Id_Pai(identificador, parente)));
+					if (tipo_exp == TIPO_STRING)
+					{
+						int pos_pilha_ini_str = ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(identificador, parente));
+						if (ts.Verificar_Ponteiro(identificador))
+							mepa.CRVI_String(to_string(pai), pos_pilha_ini_str, ts.Buscar_Tamanho_String(sidpai.make_Id_Pai(identificador, parente)));
+						else
+							mepa.CRVL_String(to_string(pai), pos_pilha_ini_str, ts.Buscar_Tamanho_String(sidpai.make_Id_Pai(identificador, parente)));
+					}
 					else
-						mepa.CRVL_String(to_string(pai), pos_pilha_ini_str, ts.Buscar_Tamanho_String(sidpai.make_Id_Pai(identificador, parente)));
+					{
+						if (ts.Verificar_Ponteiro(identificador))
+							mepa.CRVI(to_string(pai), to_string(ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(identificador, parente))));
+						else
+							mepa.CRVL(to_string(pai), to_string(ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(identificador, parente))));
+						mepa.IMPR();
+					}
 				}
 				else
 				{
-					if (ts.Verificar_Ponteiro(identificador))
-						mepa.CRVI(to_string(pai), to_string(ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(identificador, parente))));
-					else
-						mepa.CRVL(to_string(pai), to_string(ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(identificador, parente))));
+					mepa.CRVI(to_string(pai), to_string((ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(identificador, parente))+4)*(-1)));
 					mepa.IMPR();
 				}
 				//MEPA - IMPE Adiciono enter somente se for PRINTLN, PRINT imprime na mesma linha
@@ -2136,6 +2155,12 @@ int C_Analise_Sintatica::Args()
 		resultado = Lista_exp() + 1;
 		//Valido as expressões de cada argumento
 		//TODO
+		while (!pilha_Exp_args.empty())
+		{
+			//mepa.Avaliar_Expressao(mepa.pilha_EXP_args, ts);
+			mepa.Avaliar_Expressao(pilha_Exp_args.top().pilha_EXP_args, pilha_Exp_args.top().ts_EXP_args);
+			pilha_Exp_args.pop();
+		}
 		//Fecho a flag para argumentos = false
 		eh_argumento = false;
 		return resultado;
@@ -2272,6 +2297,11 @@ void C_Analise_Sintatica::Lista_decl_var_1()
 			//svar.pos_pilha = posicao_pilha_global;
 		//else //Local
 		svar.pos_pilha = pilha_var_mem.top()-1;
+
+		if (escopo == CLASSE)
+			svar.escopo = sclasse.identificador;
+		else if (escopo == ESTRUTURA)
+			svar.escopo = sstruct.identificador;
 		//Se encontrei virgula, inserir variável na tabela de símbolo
 		ts.Inserir(svar, escopo);
 		//Nova variável virá, incremento a chave
@@ -2385,6 +2415,10 @@ void C_Analise_Sintatica::Inserir_AMEM_MEPA()
 		//Insiro a posição da pilha, -1 nesse caso por ser struct
 		svar.pos_pilha = pilha_var_mem.top() -1;
 		
+		if (escopo == CLASSE)
+			svar.escopo = sclasse.identificador;
+		else if (escopo == ESTRUTURA)
+			svar.escopo = sstruct.identificador;
 		//Incluo a VAR na TS
 		ts.Inserir(svar, escopo);
 
@@ -2400,7 +2434,7 @@ void C_Analise_Sintatica::Inserir_DMEM_MEPA(int _mem)
 void C_Analise_Sintatica::Inserir_AMEM_MEPA_STRUCT(string _tipo, int _pai)
 {
 	//int l_pospilha = 0;
-	S_Simbolos l_svar;
+	S_Simbolos l_simb;
 	int count = 0;
 	int count_str = 0;
 
@@ -2409,34 +2443,48 @@ void C_Analise_Sintatica::Inserir_AMEM_MEPA_STRUCT(string _tipo, int _pai)
 
 	for (auto it = l_simbolos.begin(); it != l_simbolos.end(); it++)
 	{
- 		l_svar = (*it);
+		if (it->categoria == VAR)
+		{
+			l_simb = (*it);
 
-		l_svar.chave = ++chave;
-		l_svar.linha = iter_token_lexema->linha;
-		l_svar.pai = _pai;
-		
-		if (l_svar.tipo == TIPO_STRING)
-		{
-			int diff = (l_svar.pos_pilha - l_svar.pos_pilha_ini_str + 1);
-			count = diff + count;
-			pilha_var_mem.top() = pilha_var_mem.top() + diff;
-			l_svar.pos_pilha = pilha_var_mem.top();
-			//pilha_var_mem.top() = l_svar.pos_pilha + 1;
-			l_svar.pos_pilha_ini_str = pilha_var_mem.top() - diff;
-			pilha_var_mem.top()++;
-			count_str++;
+			l_simb.chave = ++chave;
+			l_simb.linha = iter_token_lexema->linha;
+			l_simb.pai = _pai;
+			l_simb.escopo = "";
+
+			if (l_simb.tipo == TIPO_STRING)
+			{
+				int diff = (l_simb.pos_pilha - l_simb.pos_pilha_ini_str + 1);
+				count = diff + count;
+				pilha_var_mem.top() = pilha_var_mem.top() + diff;
+				l_simb.pos_pilha = pilha_var_mem.top();
+				//pilha_var_mem.top() = l_svar.pos_pilha + 1;
+				l_simb.pos_pilha_ini_str = pilha_var_mem.top() - diff;
+				pilha_var_mem.top()++;
+				count_str++;
+			}
+
+			else
+			{
+				count++;
+				l_simb.pos_pilha = pilha_var_mem.top()++;
+				l_simb.pos_pilha_ini_str = -1;
+			}
+			ts.Inserir(l_simb, escopo);
+			if (!Verificar_Tipo_Padrao(l_simb.tipo))
+			{
+				Inserir_AMEM_MEPA_STRUCT(l_simb.tipo, l_simb.chave);
+			}
 		}
-			
-		else
+		else if (it->categoria == SUB || it->categoria == FUNCTION)
 		{
-			count++;
-			l_svar.pos_pilha = pilha_var_mem.top()++;
-			l_svar.pos_pilha_ini_str = -1;
-		}
-		ts.Inserir(l_svar, escopo);
-		if (!Verificar_Tipo_Padrao(l_svar.tipo))
-		{
-			Inserir_AMEM_MEPA_STRUCT(l_svar.tipo, l_svar.chave);
+			l_simb = (*it);
+
+			l_simb.chave = ++chave;
+			l_simb.linha = iter_token_lexema->linha;
+			l_simb.pai = _pai;
+
+			ts.Inserir(l_simb, escopo);
 		}
 	}
 	mepa.AMEM(to_string(count + count_str));
@@ -2454,6 +2502,16 @@ bool C_Analise_Sintatica::Verificar_Tipo_Padrao(string _tipo)
 		return true;
 	else
 		return false;
+}
+
+void C_Analise_Sintatica::Remover_Mem_Classe()
+{
+	int l_total_class_mem;
+	
+	l_total_class_mem = ts.Retorna_Tot_Var_Mem_Classe();
+
+	for (int i = 0; i < l_total_class_mem; i++)
+		pilha_var_mem.top()--;
 }
 
 string C_Analise_Sintatica::Retorna_Tipo_Comparado(string _tipo1, string _tipo2)
