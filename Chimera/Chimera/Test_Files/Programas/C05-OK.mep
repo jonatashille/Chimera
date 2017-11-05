@@ -1,0 +1,455 @@
+include macros.asm
+pilha SEGMENT PARA STACK 'STACK'
+dw  100  dup(? )
+pilha ENDS
+dados   SEGMENT PARA 'DATA'
+dw  10  dup(0)
+buffer db 5 dup(' ')
+mesg   db  10, ? , 11 dup(0)
+dados   ENDS
+procs   SEGMENT PARA 'DATA'
+dw  32000 dup(0)
+procs   ENDS
+codigo  SEGMENT PARA 'CODE'
+ASSUME SS : pilha, CS : codigo, DS : dados, ES : dados
+inicio PROC  FAR
+; ----------Inicio das Instrucoes MEPA
+INPP
+; ---------- Chama Procedimento/Funcao - MAIN
+CHPR MAIN,1
+DSVS FIM
+; ---------- Entrada Rotulo R3
+R3:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ---------- Alocacao de Memoria (2)
+AMEM 2
+CRVL 1,-4
+ARMZ 1,0
+CRVL 1,-5
+ARMZ 1,1
+CRVL 1,0
+CRVL 1,1
+SOMA
+ARMZ 1,-6
+; ---------- Desalocacao de Memoria (2)
+DMEM 2
+RTPR 1,2
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Desalocacao de Memoria (2)
+DMEM 2
+RTPR 1,2
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R18
+R18:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ---------- Alocacao de Memoria (2)
+AMEM 2
+CRVL 1,-4
+ARMZ 1,0
+CRVL 1,-5
+ARMZ 1,1
+CRVL 1,0
+CRVL 1,1
+SUBT
+ARMZ 1,-6
+; ---------- Desalocacao de Memoria (2)
+DMEM 2
+RTPR 1,2
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Desalocacao de Memoria (2)
+DMEM 2
+RTPR 1,2
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R33
+R33:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ---------- Alocacao de Memoria (2)
+AMEM 2
+CRVL 1,-4
+ARMZ 1,0
+CRVL 1,-5
+ARMZ 1,1
+CRVL 1,0
+CRVL 1,1
+MULT
+ARMZ 1,-6
+; ---------- Desalocacao de Memoria (2)
+DMEM 2
+RTPR 1,2
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Desalocacao de Memoria (2)
+DMEM 2
+RTPR 1,2
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R48
+R48:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ---------- Alocacao de Memoria (2)
+AMEM 2
+CRVL 1,-4
+ARMZ 1,0
+CRVL 1,-5
+ARMZ 1,1
+CRVL 1,0
+CRVL 1,1
+DIVI
+ARMZ 1,-6
+; ---------- Desalocacao de Memoria (2)
+DMEM 2
+RTPR 1,2
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Desalocacao de Memoria (2)
+DMEM 2
+RTPR 1,2
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ----------Inicio MAIN
+MAIN:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ---------- Alocacao de Memoria (3)
+AMEM 3
+; ----------Inicio Impressao
+CRCT 'P'
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'g'
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'm'
+IMPC
+CRCT 'a'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'q'
+IMPC
+CRCT 'u'
+IMPC
+CRCT 'e'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'f'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'z'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'a'
+IMPC
+CRCT 's'
+IMPC
+CRCT ' '
+IMPC
+CRCT '4'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'p'
+IMPC
+CRCT 'e'
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'c'
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'e'
+IMPC
+CRCT 's'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'd'
+IMPC
+CRCT 'e'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'd'
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 's'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'v'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'l'
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'e'
+IMPC
+CRCT 's'
+IMPC
+; ----------FIM Impressao
+IMPE
+; ----------Inicio Impressao
+CRCT 'D'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'g'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 't'
+IMPC
+CRCT 'e'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'o'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'p'
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'm'
+IMPC
+CRCT 'e'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'o'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'v'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'l'
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'r'
+IMPC
+CRCT ':'
+IMPC
+CRCT ' '
+IMPC
+; ----------FIM Impressao
+LEIT
+IMPE
+ARMZ 1,0
+; ----------Inicio Impressao
+CRCT 'D'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'g'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 't'
+IMPC
+CRCT 'e'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'o'
+IMPC
+CRCT ' '
+IMPC
+CRCT 's'
+IMPC
+CRCT 'e'
+IMPC
+CRCT 'g'
+IMPC
+CRCT 'u'
+IMPC
+CRCT 'n'
+IMPC
+CRCT 'd'
+IMPC
+CRCT 'o'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'v'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'l'
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'r'
+IMPC
+CRCT ':'
+IMPC
+CRCT ' '
+IMPC
+; ----------FIM Impressao
+LEIT
+IMPE
+ARMZ 1,1
+; ---------- Alocacao de Memoria (1)
+AMEM 1
+CRVL 1,1
+CRVL 1,0
+; ---------- Chama Procedimento/Funcao - R3
+CHPR R3,1
+CRVL 1,3
+ARMZ 1,2
+; ----------Inicio Impressao
+CRCT 'S'
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'm'
+IMPC
+CRCT 'a'
+IMPC
+CRCT '='
+IMPC
+; ----------FIM Impressao
+CRVL 1,2
+IMPR
+IMPE
+; ---------- Alocacao de Memoria (1)
+AMEM 1
+CRVL 1,1
+CRVL 1,0
+; ---------- Chama Procedimento/Funcao - R18
+CHPR R18,1
+CRVL 1,4
+ARMZ 1,2
+; ----------Inicio Impressao
+CRCT 'S'
+IMPC
+CRCT 'u'
+IMPC
+CRCT 'b'
+IMPC
+CRCT 't'
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'c'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'o'
+IMPC
+CRCT '='
+IMPC
+; ----------FIM Impressao
+CRVL 1,2
+IMPR
+IMPE
+; ---------- Alocacao de Memoria (1)
+AMEM 1
+CRVL 1,1
+CRVL 1,0
+; ---------- Chama Procedimento/Funcao - R33
+CHPR R33,1
+CRVL 1,5
+ARMZ 1,2
+; ----------Inicio Impressao
+CRCT 'M'
+IMPC
+CRCT 'u'
+IMPC
+CRCT 'l'
+IMPC
+CRCT 't'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'p'
+IMPC
+CRCT 'l'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'c'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'c'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'o'
+IMPC
+CRCT '='
+IMPC
+; ----------FIM Impressao
+CRVL 1,2
+IMPR
+IMPE
+; ---------- Alocacao de Memoria (1)
+AMEM 1
+CRVL 1,1
+CRVL 1,0
+; ---------- Chama Procedimento/Funcao - R48
+CHPR R48,1
+CRVL 1,6
+ARMZ 1,2
+; ----------Inicio Impressao
+CRCT 'D'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'v'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 's'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'o'
+IMPC
+CRCT '='
+IMPC
+; ----------FIM Impressao
+CRVL 1,2
+IMPR
+IMPE
+; ---------- Desalocacao de Memoria (7)
+DMEM 7
+RTPR 1,0
+; ---------- Fim/Retorno de Procedimento/Funcao
+FIM:NADA
+PARA
+; ----------Fim das Instrucoes MEPA
+inicio  ENDP
+codigo  ENDS
+END    inicio

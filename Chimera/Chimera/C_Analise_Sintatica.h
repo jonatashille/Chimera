@@ -160,6 +160,7 @@ public:
 	void Inserir_AMEM_MEPA_STRUCT(string, int);
 	bool Verificar_Tipo_Padrao(string);
 	void Remover_Mem_Classe();
+	void Inserir_Membros_Classe_Pai(int, int);
 	//Métods para a semântica
 	string Retorna_Tipo_Comparado(string, string);
 	void Validar_Atribuicao(string, string);

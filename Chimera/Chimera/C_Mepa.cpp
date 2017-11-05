@@ -476,6 +476,7 @@ string C_Mepa::NADA()
 	string rotulo;
 	linha_mepa++;
 	rotulo = "R" + to_string(linha_mepa);
+	mepa << "; ---------- Entrada Rotulo " << rotulo << endl;
 	mepa << rotulo << ":NADA" << endl;
 	ultimo_comando = "NADA";
 	return rotulo;

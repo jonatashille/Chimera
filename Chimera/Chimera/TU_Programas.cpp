@@ -28,14 +28,18 @@ void TU_Programas::Executar()
 	Testar_Programa("p08"); //Teste de ponteiros - Troca de valores
 	Testar_Programa("p09"); //Teste de ponteiros - Troca de valores chamando uma função para realizar a troca e passando por referencia
 	Testar_Programa("p10"); //Teste com passagem de String por parâmetro
+	Testar_Programa("p11"); //Teste com passagem de parâmetro por referência
 
 	//Estrutura
-	Testar_Programa("S01");
-	Testar_Programa("S02");//Estrutura dentro de estrutura
+	Testar_Programa("S01"); //Estrutura simples
+	Testar_Programa("S02"); //Estrutura dentro de estrutura
 	//Classes - Orientação à objetos
-	Testar_Programa("C01");
-	Testar_Programa("C02");
-	Testar_Programa("C03");
+	Testar_Programa("C01"); //Classe simples
+	Testar_Programa("C02"); //Classe com procedure
+	Testar_Programa("C03"); //Classe com procedure 2
+	Testar_Programa("C04"); //Classe dentro de classe
+	Testar_Programa("C05"); //Classe com funções que retornarm as 4 operações básicas entre 2 valores
+	Testar_Programa("C06"); //Herança simples
 }
 
 void TU_Programas::Testar_Programa(string _prog)

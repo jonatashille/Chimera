@@ -624,11 +624,14 @@ void C_Analise_Sintatica::Decl_func()
 	//MEPA - Inicio a pilha que vai armazenar a quantidade de variáveis alocadas - Inicio com zero
 	pilha_var_mem.push(0);
 
+	int qtd_mem_alocada_param = ts.Buscar_Qtd_Mem_Alocada_Params(sfuncao.chave);
+	int qtd_tot_params = ts.Buscar_Qtd_Tot_Params(sfuncao.chave);
+
 	//Se existir parametros por valor, preciso armazenar memória
-	if (qtd_param.val > 0)
+	if (qtd_mem_alocada_param > 0)
 	{
-		mepa.AMEM(to_string(qtd_param.val));
-		pilha_var_mem.top() += qtd_param.val;
+		mepa.AMEM(to_string(qtd_mem_alocada_param));
+		pilha_var_mem.top() += qtd_mem_alocada_param;
 	}
 
 
@@ -658,6 +661,7 @@ void C_Analise_Sintatica::Decl_func()
 
 	//Inativar todas as variáveis que foram declaradas dentro desta função
 	int qtd_removida =	ts.Remover_Internos(sfuncao.identificador);
+
 	//Preciso desempilhar a variável que controla a posição da pilha, somente se tiver removido
 	if (qtd_removida > 0)
 	{
@@ -665,7 +669,7 @@ void C_Analise_Sintatica::Decl_func()
 	}
 
 	//MEPA - RTPR Retorno da procedure
-	mepa.RTPR("1", to_string(sfuncao.qtd_params));
+	mepa.RTPR("1", to_string(qtd_tot_params));
 
 	qtd_param.val = 0;
 	qtd_param.ref = 0;
@@ -702,11 +706,18 @@ void C_Analise_Sintatica::Decl_func_class()
 	//MEPA - Inicio a pilha que vai armazenar a quantidade de variáveis alocadas - Inicio com zero
 	pilha_var_mem.push(0);
 
+	int qtd_mem_alocada_param = ts.Buscar_Qtd_Mem_Alocada_Params(sfuncao.chave);
+	int qtd_tot_params = ts.Buscar_Qtd_Tot_Params(sfuncao.chave);
+
+	//Procurar variáveis da classe, para inserir como endereço
+	vector<S_Simbolos> l_simbolos;
+	l_simbolos = ts.Buscar_Var_Pelo_Pai(sclasse.chave);
+
 	//Se existir parametros por valor, preciso armazenar memória
-	if (qtd_param.val > 0)
+	if (qtd_mem_alocada_param > 0)
 	{
-		mepa.AMEM(to_string(qtd_param.val));
-		pilha_var_mem.top() += qtd_param.val;
+		mepa.AMEM(to_string(qtd_mem_alocada_param));
+		pilha_var_mem.top() += qtd_mem_alocada_param;
 	}
 
 
@@ -714,7 +725,7 @@ void C_Analise_Sintatica::Decl_func_class()
 	if (sfuncao.qtd_params > 0)
 	{
 		stack<pair<int, int>> pparamval;
-		ts.Atualizar_Pilha_Param(sfuncao.chave, sfuncao.qtd_params, pparamval);
+		ts.Atualizar_Pilha_Param_classe(sfuncao.chave, sfuncao.qtd_params, pparamval, l_simbolos.size());
 		//Para os params que foram passador por valor, armazeno os valores localmente 
 		while (!pparamval.empty())
 		{
@@ -743,7 +754,7 @@ void C_Analise_Sintatica::Decl_func_class()
 	}
 
 	//MEPA - RTPR Retorno da procedure
-	mepa.RTPR("1", to_string(sfuncao.qtd_params));
+	mepa.RTPR("1", to_string(qtd_tot_params + l_simbolos.size()));
 
 	qtd_param.val = 0;
 	qtd_param.ref = 0;
@@ -890,6 +901,14 @@ void C_Analise_Sintatica::Decl_class()
 	sclasse.linha = iter_token_lexema->linha;
 
 	sclasse.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+
+	//Caso seja herança
+	if (token == DOIS_PONTOS)
+	{
+		Aceitar_Token(DOIS_PONTOS, ERR_DOIS_PONTOS);
+		sclasse.pai_heranca = ts.Buscar_Chave(Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR));
+		Inserir_Membros_Classe_Pai(sclasse.pai_heranca, sclasse.chave);
+	}
 
 	Bloco_class();
 
@@ -2378,6 +2397,7 @@ void C_Analise_Sintatica::Iniciar_Simbolos(S_Simbolos &_simbolo)
 	_simbolo.pos_pilha = -1;
 	_simbolo.rotulo = "";
 	_simbolo.escopo = "";
+	_simbolo.pai_heranca = -1;
 }
 
 void C_Analise_Sintatica::Inserir_AMEM_MEPA()
@@ -2431,7 +2451,7 @@ void C_Analise_Sintatica::Inserir_DMEM_MEPA(int _mem)
 	mepa.DMEM(_mem);
 }
 
-void C_Analise_Sintatica::Inserir_AMEM_MEPA_STRUCT(string _tipo, int _pai)
+void C_Analise_Sintatica::Inserir_AMEM_MEPA_STRUCT(string _identificador, int _pai)
 {
 	//int l_pospilha = 0;
 	S_Simbolos l_simb;
@@ -2439,7 +2459,7 @@ void C_Analise_Sintatica::Inserir_AMEM_MEPA_STRUCT(string _tipo, int _pai)
 	int count_str = 0;
 
 	vector<S_Simbolos> l_simbolos;
-	l_simbolos = ts.Buscar_Var_Estrutura(_tipo);
+	l_simbolos = ts.Buscar_Membros_Classe(_identificador);
 
 	for (auto it = l_simbolos.begin(); it != l_simbolos.end(); it++)
 	{
@@ -2512,6 +2532,59 @@ void C_Analise_Sintatica::Remover_Mem_Classe()
 
 	for (int i = 0; i < l_total_class_mem; i++)
 		pilha_var_mem.top()--;
+}
+
+void C_Analise_Sintatica::Inserir_Membros_Classe_Pai(int _chave_pai, int _chave_classe)
+{
+	vector<S_Simbolos> l_simbolos;
+	l_simbolos = ts.Buscar_Membros_Classe(_chave_pai);
+
+	S_Simbolos l_simb;
+	//int count = 0;
+	int count_str = 0;
+
+	for (auto it = l_simbolos.begin(); it != l_simbolos.end(); it++)
+	{
+		if (it->categoria == VAR)
+		{
+			l_simb = (*it);
+
+			l_simb.chave = ++chave;
+			l_simb.linha = iter_token_lexema->linha;
+			l_simb.pai = _chave_classe;
+			//l_simb.classe = _chave_classe;
+			l_simb.escopo = "";
+
+			/*if (l_simb.tipo == TIPO_STRING)
+			{
+				int diff = (l_simb.pos_pilha - l_simb.pos_pilha_ini_str + 1);
+				count = diff + count;
+				pilha_var_mem.top() = pilha_var_mem.top() + diff;
+				l_simb.pos_pilha = pilha_var_mem.top();
+				l_simb.pos_pilha_ini_str = pilha_var_mem.top() - diff;
+				pilha_var_mem.top()++;
+				count_str++;
+			}
+
+			else
+			{
+				count++;
+				l_simb.pos_pilha = pilha_var_mem.top()++;
+				l_simb.pos_pilha_ini_str = -1;
+			}*/
+			ts.Inserir(l_simb, escopo);
+		}
+		else if (it->categoria == SUB || it->categoria == FUNCTION)
+		{
+			l_simb = (*it);
+
+			l_simb.chave = ++chave;
+			l_simb.linha = iter_token_lexema->linha;
+			l_simb.pai = _chave_classe;
+
+			ts.Inserir(l_simb, escopo);
+		}
+	}
 }
 
 string C_Analise_Sintatica::Retorna_Tipo_Comparado(string _tipo1, string _tipo2)

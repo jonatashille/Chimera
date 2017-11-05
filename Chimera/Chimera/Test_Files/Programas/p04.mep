@@ -20,6 +20,7 @@ AMEM 1
 ; ---------- Chama Procedimento/Funcao - MAIN
 CHPR MAIN,1
 DSVS FIM
+; ---------- Entrada Rotulo R4
 R4:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1

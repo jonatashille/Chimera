@@ -1,0 +1,36 @@
+class calculadora
+	function int soma(var int v1 by value, var int v2 by value)
+		return v1+v2;
+	end_function
+	function int subt(var int v1 by value, var int v2 by value)
+		return v1-v2;
+	end_function
+	function int mult(var int v1 by value, var int v2 by value)
+		return v1*v2;
+	end_function
+	function int divi(var int v1 by value, var int v2 by value)
+		return v1/v2;
+	end_function
+end_class
+
+sub main()
+	var int x, y, result;
+	var calculadora calc;
+	println("Programa que faz as 4 operacoes de dois valores");
+	print("Digite o primeiro valor: ");
+	scan(x);
+	print("Digite o segundo valor: ");
+	scan(y);
+	result = calc.soma(x,y);
+	print("Soma=");
+	println(result);
+	result = calc.subt(x,y);
+	print("Subtracao=");
+	println(result);
+	result = calc.mult(x,y);
+	print("Multiplicacao=");
+	println(result);
+	result = calc.divi(x,y);
+	print("Divisao=");
+	println(result);
+end_sub

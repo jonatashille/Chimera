@@ -39,6 +39,7 @@ struct S_Simbolos
 	int tam_str;
 	string rotulo;
 	string escopo;
+	int pai_heranca;
 	int k; //Endereço Léxico
 	int n; //Endereço de memória (Usado para parâmetros, primeiro inicia com -4, próximos -5,-6...)
 
@@ -126,8 +127,10 @@ public:
 	void Imprimir_TS(string);
 	//Gravar arquivo csv com a tabela de símbolos
 	void Gravar_TS(string);
-	//Retorna variáveis declaradas em uma estrutura/classe
-	vector<S_Simbolos> Buscar_Var_Estrutura(string);
+	//Retorna os membors declarados em uma estrutura/classe - A Partir do identificador
+	vector<S_Simbolos> Buscar_Membros_Classe(string);
+	//Retorna os membors declarados em uma estrutura/classe - A Partir da chave
+	vector<S_Simbolos> Buscar_Membros_Classe(int);
 	//Retorna variáveis declaradas após declarar uma estrutura/classe - Traz as varáveis com o endereço certo da pilha
 	vector<S_Simbolos> Buscar_Var_Classe_Pai(int);
 	//Retorna variáveis declaradas pelo pai delas

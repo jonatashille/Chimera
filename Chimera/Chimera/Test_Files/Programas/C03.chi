@@ -10,7 +10,7 @@ class filmes_class
 		sub imprime()
 			println(id);
 			println(ano);
-		end_sub
+		end_sub 
 end_class
 
 sub main()

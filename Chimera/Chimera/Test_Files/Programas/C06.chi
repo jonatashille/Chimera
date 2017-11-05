@@ -1,0 +1,19 @@
+class parent
+	var int id_p;
+end_class
+
+class child : parent
+	var int id_c;
+end_class
+
+sub main()
+	var child filho;
+
+	filho.id_p = 9;
+	filho.id_c = 909;
+
+	print("Id do pai e: ");
+	println(filho.id_p);	
+	print("Id do filho e: ");
+	println(filho.id_c);
+end_sub

@@ -18,6 +18,7 @@ INPP
 ; ---------- Chama Procedimento/Funcao - MAIN
 CHPR MAIN,1
 DSVS FIM
+; ---------- Entrada Rotulo R3
 R3:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1

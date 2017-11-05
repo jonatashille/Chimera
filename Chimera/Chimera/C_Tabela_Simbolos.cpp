@@ -520,6 +520,7 @@ void C_Tabela_Simbolos::Imprimir_TS(string _nome_arquivo)
 	ss << setw(10) << left << "Tam Str";
 	ss << setw(20) << left << "Rotulo";
 	ss << setw(20) << left << "Escopo";
+    ss << setw(20) << left << "Pai_Heranca";
 
 	ss << endl;
 	ss << "----------------------------------------------------------------------------------";
@@ -545,6 +546,7 @@ void C_Tabela_Simbolos::Imprimir_TS(string _nome_arquivo)
 		ss << setw(10) << left << it->tam_str;
 		ss << setw(20) << left << it->rotulo;
 		ss << setw(20) << left << it->escopo;
+		ss << setw(20) << left << it->pai_heranca;
 		ss << endl;
 		ss << "----------------------------------------------------------------------------------";
 		ss << "----------------------------------------------------------------------------------" << endl;
@@ -592,6 +594,7 @@ void C_Tabela_Simbolos::Gravar_TS(string _nome_arquivo)
 	ss << "Tam Str;";
 	ss << "Rotulo;";
 	ss << "Escopo;";
+	ss << "Pai_Heranca;";
 	ss << endl;
 
 	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
@@ -615,6 +618,7 @@ void C_Tabela_Simbolos::Gravar_TS(string _nome_arquivo)
 		ss << it->tam_str << ";";
 		ss << it->rotulo << ";";
 		ss << it->escopo << ";";
+		ss << it->pai_heranca << ";";
 		ss << endl;
 	}
 
@@ -631,7 +635,7 @@ void C_Tabela_Simbolos::Gravar_TS(string _nome_arquivo)
 	cout << "Arquivo \"" << nome_arquivo_final << "\" gerado" << endl;
 }
 
-vector<S_Simbolos> C_Tabela_Simbolos::Buscar_Var_Estrutura(string _identificador)
+vector<S_Simbolos> C_Tabela_Simbolos::Buscar_Membros_Classe(string _identificador)
 {
 	vector<S_Simbolos> l_simbolos;
 	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
@@ -645,6 +649,19 @@ vector<S_Simbolos> C_Tabela_Simbolos::Buscar_Var_Estrutura(string _identificador
 					l_simbolos.push_back(*it2);
 				}
 			}
+		}
+	}
+	return l_simbolos;
+}
+
+vector<S_Simbolos> C_Tabela_Simbolos::Buscar_Membros_Classe(int _chave_pai)
+{
+	vector<S_Simbolos> l_simbolos;
+	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+	{
+		if (it->pai == _chave_pai)
+		{
+			l_simbolos.push_back(*it);
 		}
 	}
 	return l_simbolos;

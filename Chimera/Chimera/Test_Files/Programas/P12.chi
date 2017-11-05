@@ -1,0 +1,14 @@
+sub p1(var int _a by ref)
+	_a = 7;
+end_sub
+
+sub p2(var int _b by ref)
+	p1(&_b);
+end_sub
+
+sub main()
+	var int a;
+	a=0;
+	p2(&a);
+	println(a);
+end_sub

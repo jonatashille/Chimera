@@ -168,6 +168,7 @@ DSVS59:NADA
 CRCT 17
 ARMZ 1,0
 ; ----------Inicio Comando repeticao WHILE
+; ---------- Entrada Rotulo R145
 R145:NADA
 CRVL 1,0
 CRCT 20
@@ -186,6 +187,7 @@ DSVF149:NADA
 CRCT 16
 ARMZ 1,0
 ; ----------Inicio Comando repeticao REPEAT
+; ---------- Entrada Rotulo R163
 R163:NADA
 CRVL 1,0
 CRCT 1
@@ -204,6 +206,7 @@ DSVF174:NADA
 ; ----------Inicio Comando repeticao FOR
 CRCT 15
 ARMZ 1,0
+; ---------- Entrada Rotulo R181
 R181:NADA
 CRVL 1,0
 CRCT 20

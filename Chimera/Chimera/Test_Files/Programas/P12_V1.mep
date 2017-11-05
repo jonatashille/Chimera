@@ -18,51 +18,39 @@ INPP
 ; ---------- Chama Procedimento/Funcao - MAIN
 CHPR MAIN,1
 DSVS FIM
+; ---------- Entrada Rotulo R3
 R3:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
-; ---------- Alocacao de Memoria (2)
-AMEM 2
-CRVL 1,-5
-ARMZ 1,1
-CRVL 1,-7
-ARMZ 1,0
-CRVL 1,0
-CRVI 1,-6
-SOMA
-CRVL 1,1
-SOMA
-CRVI 1,-4
-SOMA
-ARMI 1,-8
-; ---------- Desalocacao de Memoria (2)
-DMEM 2
-RTPR 1,5
+CRCT 7
+ARMI 1,-4
+RTPR 1,1
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R8
+R8:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+CREN 1,-4
+; ---------- Chama Procedimento/Funcao - R3
+CHPR R3,1
+RTPR 1,1
 ; ---------- Fim/Retorno de Procedimento/Funcao
 ; ----------Inicio MAIN
 MAIN:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
-; ---------- Alocacao de Memoria (3)
-AMEM 3
+; ---------- Alocacao de Memoria (1)
+AMEM 1
 CRCT 0
 ARMZ 1,0
-CRCT 1
-ARMZ 1,1
-CRCT 3
-ARMZ 1,2
 CREN 1,0
-CRCT 4
-CREN 1,1
-CRCT 5
-CREN 1,2
 ; ---------- Chama Procedimento/Funcao - R3
 CHPR R3,1
 CRVL 1,0
 IMPR
 IMPE
-; ---------- Desalocacao de Memoria (3)
-DMEM 3
+; ---------- Desalocacao de Memoria (1)
+DMEM 1
 RTPR 1,0
 ; ---------- Fim/Retorno de Procedimento/Funcao
 FIM:NADA
