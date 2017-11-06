@@ -585,8 +585,22 @@ void C_Analise_Sintatica::Decl_proc_class()
 	{
 		Inserir_DMEM_MEPA(pilha_var_mem.top());
 	}
+
+	int simb_retorno = 0; //Armazeno o total de memoria para retorno
+	for (auto it = l_simbolos.begin(); it != l_simbolos.end(); it++)
+	{
+		if (it->tipo == TIPO_STRING)
+		{
+			simb_retorno += it->pos_pilha_ini_str + it->pos_pilha + 1;
+		}
+		else
+		{
+			simb_retorno += 1;
+		}
+	}
+
 	//MEPA - RTPR Retorno da procedure
-	mepa.RTPR("1", to_string(qtd_tot_params + l_simbolos.size()));
+	mepa.RTPR("1", to_string(qtd_tot_params + simb_retorno));
 
 	qtd_param.val = 0;
 	qtd_param.ref = 0;
@@ -753,8 +767,21 @@ void C_Analise_Sintatica::Decl_func_class()
 		Inserir_DMEM_MEPA(qtd_removida);
 	}
 
+	int simb_retorno = 0; //Armazeno o total de memoria para retorno
+	for (auto it = l_simbolos.begin(); it != l_simbolos.end(); it++)
+	{
+		if (it->tipo == TIPO_STRING)
+		{
+			simb_retorno += it->pos_pilha_ini_str + it->pos_pilha + 1;
+		}
+		else
+		{
+			simb_retorno += 1;
+		}
+	}
+
 	//MEPA - RTPR Retorno da procedure
-	mepa.RTPR("1", to_string(qtd_tot_params + l_simbolos.size()));
+	mepa.RTPR("1", to_string(qtd_tot_params + simb_retorno));
 
 	qtd_param.val = 0;
 	qtd_param.ref = 0;
@@ -1169,7 +1196,8 @@ void C_Analise_Sintatica::Comando()
 					if (tipo == TIPO_STRING)
 					{
 						int pos_pilha_ini = ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente));
-						mepa.CRCT_String(val_string, pos_pilha_ini);
+						int pos_pilha = ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente));
+						mepa.CRCT_String(val_string, pos_pilha_ini, pos_pilha);
 						ts.Atualizar_Tamanho_String(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente), val_string);
 					}
 					else
@@ -1177,7 +1205,15 @@ void C_Analise_Sintatica::Comando()
 				}
 				else
 				{
-					mepa.ARMI(to_string(pai), to_string((ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente))+4)*(-1)));
+					if (tipo == TIPO_STRING)
+					{
+						int pos_pilha_ini = ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente)) + 4 *(-1);
+						int pos_pilha = ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente));
+						mepa.CRCT_String_ARMI(val_string, pos_pilha_ini - pos_pilha);
+						ts.Atualizar_Tamanho_String(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente), val_string);
+					}
+					else
+						mepa.ARMI(to_string(pai), to_string((ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(mepa.pilha_ARMZ.top().identificador, mepa.pilha_ARMZ.top().parente))+4)*(-1)));
 				}
 			}
 				
@@ -1193,12 +1229,18 @@ void C_Analise_Sintatica::Comando()
 			while (it != l_simbolos.begin())
 			{
 				it--;
-				mepa.CREN("1", to_string(it->pos_pilha));
+				if (it->tipo == TIPO_STRING)
+				{
+					for (int i = it->pos_pilha; i >= it->pos_pilha_ini_str; i--)
+					{
+						mepa.CREN("1", to_string(i));
+					}
+				}
+				else
+				{
+					mepa.CREN("1", to_string(it->pos_pilha));
+				}
 			}
-			/*for (auto it = l_simbolos.begin()-1; it != l_simbolos.end(); it++)
-			{
-				mepa.CREN("1", to_string(it->pos_pilha));
-			}*/
 
 			//Validação semântica para verificar a quantidade de parâmetros da chamada 
 			if (qtd_params_decl != qtd_params_chamada)
@@ -1987,10 +2029,11 @@ string C_Analise_Sintatica::Exp_simples()
 					if (tipo_exp == TIPO_STRING)
 					{
 						int pos_pilha_ini_str = ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(identificador, parente));
+						int pos_pilha = ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(identificador, parente));
 						if (ts.Verificar_Ponteiro(identificador))
-							mepa.CRVI_String(to_string(pai), pos_pilha_ini_str, ts.Buscar_Tamanho_String(sidpai.make_Id_Pai(identificador, parente)));
+							mepa.CRVI_String(to_string(pai), pos_pilha_ini_str, pos_pilha - pos_pilha_ini_str);
 						else
-							mepa.CRVL_String(to_string(pai), pos_pilha_ini_str, ts.Buscar_Tamanho_String(sidpai.make_Id_Pai(identificador, parente)));
+							mepa.CRVL_String(to_string(pai), pos_pilha_ini_str, pos_pilha);
 					}
 					else
 					{
@@ -2003,8 +2046,18 @@ string C_Analise_Sintatica::Exp_simples()
 				}
 				else
 				{
-					mepa.CRVI(to_string(pai), to_string((ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(identificador, parente))+4)*(-1)));
-					mepa.IMPR();
+					if (tipo_exp == TIPO_STRING)
+					{
+						//int pos_pilha_ini_str = ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(identificador, parente));
+						int pos_pilha_ini = ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(identificador, parente)) + 4 * (-1);
+						int pos_pilha = ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(identificador, parente));
+						mepa.CRVI_String(to_string(pai), pos_pilha_ini, pos_pilha_ini - pos_pilha);
+					}
+					else
+					{
+						mepa.CRVI(to_string(pai), to_string((ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(identificador, parente)) + 4)*(-1)));
+						mepa.IMPR();
+					}
 				}
 				//MEPA - IMPE Adiciono enter somente se for PRINTLN, PRINT imprime na mesma linha
 				if (mepa.pilha_Com_Escrita.top() == PRINTLN)
@@ -2106,7 +2159,6 @@ string C_Analise_Sintatica::Literal(S_Simbolos& _simbolo)
 		if (_simbolo.categoria == CONSTANTE)
 		{
 			//MEPA - CRCT Carrego o valor da constante - Neste caso de String, desmembro ela e grava o CRCT
-			//mepa.CRCT_String(_simbolo.valor);
 		}
 		else
 		{
@@ -2121,7 +2173,6 @@ string C_Analise_Sintatica::Literal(S_Simbolos& _simbolo)
 				mepa.pilha_Com_Escrita.pop();
 			}
 			else if (_simbolo.valor != "")
-				//mepa.CRCT_String(_simbolo.valor);
 				val_string = _simbolo.valor;
 		}
 	}
@@ -2474,7 +2525,7 @@ void C_Analise_Sintatica::Inserir_AMEM_MEPA_STRUCT(string _identificador, int _p
 
 			if (l_simb.tipo == TIPO_STRING)
 			{
-				int diff = (l_simb.pos_pilha - l_simb.pos_pilha_ini_str + 1);
+				int diff = (l_simb.pos_pilha - l_simb.pos_pilha_ini_str);
 				count = diff + count;
 				pilha_var_mem.top() = pilha_var_mem.top() + diff;
 				l_simb.pos_pilha = pilha_var_mem.top();

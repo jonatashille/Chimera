@@ -1,6 +1,5 @@
 sub Imprime(var string str by value)//, var int num by value)
 	println(str);
-	//println(num);
 end_sub
 
 sub main()

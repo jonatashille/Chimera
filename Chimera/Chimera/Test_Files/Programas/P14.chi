@@ -1,0 +1,17 @@
+sub Imprime(var string str by value, var int num by value, var string str2 by value, var string str3 by value)
+	println(str);
+	println(num);
+	println(str2);
+	println(str3);
+end_sub
+
+sub main()
+	var string x, z;
+	var int y;
+	var string w;
+	x = "Maria";
+	y = 2017;
+	z = "Joselito";
+	w = "NomeQuinzeCarac";
+	Imprime(x, y, z, w);
+end_sub

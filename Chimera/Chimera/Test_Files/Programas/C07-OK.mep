@@ -1,0 +1,355 @@
+include macros.asm
+pilha SEGMENT PARA STACK 'STACK'
+dw  100  dup(? )
+pilha ENDS
+dados   SEGMENT PARA 'DATA'
+dw  10  dup(0)
+buffer db 5 dup(' ')
+mesg   db  10, ? , 11 dup(0)
+dados   ENDS
+procs   SEGMENT PARA 'DATA'
+dw  32000 dup(0)
+procs   ENDS
+codigo  SEGMENT PARA 'CODE'
+ASSUME SS : pilha, CS : codigo, DS : dados, ES : dados
+inicio PROC  FAR
+; ----------Inicio das Instrucoes MEPA
+INPP
+; ---------- Chama Procedimento/Funcao - MAIN
+CHPR MAIN,1
+DSVS FIM
+; ---------- Entrada Rotulo R3
+R3:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ----------Inicio Impressao
+CRCT 'C'
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'm'
+IMPC
+CRCT 'e'
+IMPC
+CRCT 'n'
+IMPC
+CRCT 'd'
+IMPC
+CRCT 'o'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+; ----------FIM Impressao
+IMPE
+RTPR 1,1
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R27
+R27:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ----------Inicio Impressao
+CRCT 'D'
+IMPC
+CRCT 'o'
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'm'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'n'
+IMPC
+CRCT 'd'
+IMPC
+CRCT 'o'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+; ----------FIM Impressao
+IMPE
+RTPR 1,1
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R53
+R53:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ----------Inicio Impressao
+CRCT 'R'
+IMPC
+CRCT 'e'
+IMPC
+CRCT 's'
+IMPC
+CRCT 'p'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'n'
+IMPC
+CRCT 'd'
+IMPC
+CRCT 'o'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+; ----------FIM Impressao
+IMPE
+RTPR 1,1
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R83
+R83:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ----------Inicio Impressao
+CRCT 'L'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 't'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'n'
+IMPC
+CRCT 'd'
+IMPC
+CRCT 'o'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+; ----------FIM Impressao
+IMPE
+RTPR 1,1
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R107
+R107:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ----------Inicio Impressao
+CRCT 'A'
+IMPC
+CRCT 'b'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'n'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'n'
+IMPC
+CRCT 'd'
+IMPC
+CRCT 'o'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'b'
+IMPC
+CRCT 'o'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+; ----------FIM Impressao
+IMPE
+RTPR 1,1
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R143
+R143:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ---------- Alocacao de Memoria (1)
+AMEM 1
+CRVL 1,-5
+ARMZ 1,0
+CRVL 1,0
+ARMI 1,-4
+; ---------- Desalocacao de Memoria (1)
+DMEM 1
+RTPR 1,2
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R152
+R152:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+CRVI 1,-4
+IMPR
+IMPE
+RTPR 1,1
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R158
+R158:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ----------Inicio Impressao
+CRCT 'M'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'n'
+IMPC
+CRCT 'd'
+IMPC
+CRCT 'o'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+; ----------FIM Impressao
+IMPE
+RTPR 1,1
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R180
+R180:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ----------Inicio Impressao
+CRCT 'A'
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'n'
+IMPC
+CRCT 'h'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'n'
+IMPC
+CRCT 'd'
+IMPC
+CRCT 'o'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+; ----------FIM Impressao
+IMPE
+RTPR 1,1
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R210
+R210:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ---------- Alocacao de Memoria (1)
+AMEM 1
+CRVL 1,-5
+ARMZ 1,0
+CRVL 1,0
+ARMI 1,-4
+; ---------- Desalocacao de Memoria (1)
+DMEM 1
+RTPR 1,2
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R219
+R219:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+CRVI 1,-4
+IMPR
+IMPE
+RTPR 1,1
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ----------Inicio MAIN
+MAIN:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ---------- Alocacao de Memoria (1)
+AMEM 1
+; ---------- Alocacao de Memoria (1)
+AMEM 1
+CRCT 1
+CREN 1,0
+; ---------- Chama Procedimento/Funcao - R143
+CHPR R143,1
+CREN 1,0
+; ---------- Chama Procedimento/Funcao - R152
+CHPR R152,1
+CREN 1,0
+; ---------- Chama Procedimento/Funcao - R3
+CHPR R3,1
+CREN 1,0
+; ---------- Chama Procedimento/Funcao - R27
+CHPR R27,1
+CREN 1,0
+; ---------- Chama Procedimento/Funcao - R53
+CHPR R53,1
+CREN 1,0
+; ---------- Chama Procedimento/Funcao - R83
+CHPR R83,1
+CREN 1,0
+; ---------- Chama Procedimento/Funcao - R107
+CHPR R107,1
+CRCT 2
+CREN 1,1
+; ---------- Chama Procedimento/Funcao - R143
+CHPR R143,1
+CREN 1,1
+; ---------- Chama Procedimento/Funcao - R152
+CHPR R152,1
+CREN 1,1
+; ---------- Chama Procedimento/Funcao - R3
+CHPR R3,1
+CREN 1,1
+; ---------- Chama Procedimento/Funcao - R27
+CHPR R27,1
+CREN 1,1
+; ---------- Chama Procedimento/Funcao - R53
+CHPR R53,1
+CREN 1,1
+; ---------- Chama Procedimento/Funcao - R158
+CHPR R158,1
+CREN 1,1
+; ---------- Chama Procedimento/Funcao - R180
+CHPR R180,1
+; ---------- Desalocacao de Memoria (2)
+DMEM 2
+RTPR 1,0
+; ---------- Fim/Retorno de Procedimento/Funcao
+FIM:NADA
+PARA
+; ----------Fim das Instrucoes MEPA
+inicio  ENDP
+codigo  ENDS
+END    inicio

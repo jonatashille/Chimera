@@ -1,0 +1,15 @@
+class animal
+	var string nome;
+end_class
+
+class cachorro:animal
+	sub set_nome()
+		nome = "Rex";
+		println(nome);
+	end_sub
+end_class
+
+sub main()
+	var cachorro rex;
+	rex.set_nome();
+end_sub

@@ -29,6 +29,8 @@ void TU_Programas::Executar()
 	Testar_Programa("p09"); //Teste de ponteiros - Troca de valores chamando uma função para realizar a troca e passando por referencia
 	Testar_Programa("p10"); //Teste com passagem de String por parâmetro
 	Testar_Programa("p11"); //Teste com passagem de parâmetro por referência
+	Testar_Programa("p13"); //Teste com passagem de String por parâmetro + parametro inteiro
+	Testar_Programa("p14"); //Teste com passagem de diversas Strings por parâmetro e parametros inteiros
 
 	//Estrutura
 	Testar_Programa("S01"); //Estrutura simples
@@ -40,6 +42,8 @@ void TU_Programas::Executar()
 	Testar_Programa("C04"); //Classe dentro de classe
 	Testar_Programa("C05"); //Classe com funções que retornarm as 4 operações básicas entre 2 valores
 	Testar_Programa("C06"); //Herança simples
+	Testar_Programa("C07"); //Exemplo de herança -> Animal
+	Testar_Programa("C08"); //Exemplo de herança -> Animal com string
 }
 
 void TU_Programas::Testar_Programa(string _prog)

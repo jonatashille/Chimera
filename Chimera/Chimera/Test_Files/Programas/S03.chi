@@ -10,8 +10,8 @@ end_class
 
 sub main()
  	var cliente cli;
- 	/*cli.set_cliente("Joao", "12/10/1990");
+ 	cli.set_cliente("Joao", "12/10/1990");
  	println(cli.id);
  	println(cli.nome);
- 	println(cli.dob);*/
+ 	println(cli.dob);
 end_sub

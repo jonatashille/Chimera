@@ -22,8 +22,8 @@ DSVS FIM
 MAIN:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
-; ---------- Alocacao de Memoria (31)
-AMEM 31
+; ---------- Alocacao de Memoria (15)
+AMEM 15
 ; ---------- Alocacao de Memoria (2)
 AMEM 2
 ; ---------- Alocacao de Memoria (2)
@@ -39,13 +39,13 @@ CRCT 'o'
 ARMZ 1,5
 ; ---------- Fim Armazenamento String
 CRCT 10
-ARMZ 1,33
+ARMZ 1,17
 CRCT 2
-ARMZ 1,34
-CRVL 1,34
+ARMZ 1,18
+CRVL 1,18
 IMPR
 IMPE
-CRVL 1,33
+CRVL 1,17
 IMPR
 IMPE
 ; ---------- Inicio Leitura String
@@ -57,10 +57,32 @@ CRVL 1,4
 IMPC
 CRVL 1,5
 IMPC
+CRVL 1,6
+IMPC
+CRVL 1,7
+IMPC
+CRVL 1,8
+IMPC
+CRVL 1,9
+IMPC
+CRVL 1,10
+IMPC
+CRVL 1,11
+IMPC
+CRVL 1,12
+IMPC
+CRVL 1,13
+IMPC
+CRVL 1,14
+IMPC
+CRVL 1,15
+IMPC
+CRVL 1,16
+IMPC
 ; ---------- Fim Leitura String
 IMPE
-; ---------- Desalocacao de Memoria (35)
-DMEM 35
+; ---------- Desalocacao de Memoria (19)
+DMEM 19
 RTPR 1,0
 ; ---------- Fim/Retorno de Procedimento/Funcao
 FIM:NADA

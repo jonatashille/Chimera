@@ -294,13 +294,32 @@ void C_Tabela_Simbolos::Atualizar_Pilha_Param(int _pai, int _qtd_params, stack<p
 	{
 		int temp_param = 0;
 		int temp_val = 0;
+		int temp_end = 0;
 		for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
 		{
 			if (it->pai == _pai && it->categoria == PARAM && it->valido)
 			{
-				if (it->tipo != TIPO_STRING && it->passby == VALUE)
+				if (it->passby == VALUE)
 				{
-					temp_val++;
+					if (it->tipo != TIPO_STRING)
+					{
+						temp_val++;
+					}
+					else
+					{
+						temp_val += TAM_STRING;
+					}
+				}
+				else
+				{
+					if (it->tipo != TIPO_STRING)
+					{
+						temp_end++;
+					}
+					else
+					{
+						temp_end += TAM_STRING;
+					}
 				}
 			}
 		}
@@ -313,44 +332,47 @@ void C_Tabela_Simbolos::Atualizar_Pilha_Param(int _pai, int _qtd_params, stack<p
 			{
 				if (it->tipo != TIPO_STRING)
 				{
-					it->pos_pilha = -3 - (_qtd_params - temp_param++);
 					if (it->passby == VALUE)
 					{
+						it->pos_pilha = (temp_val + temp_end + 3) * -1;
 						temp_val--;
 						_pilha.push(make_pair(it->pos_pilha, temp_val));
 						//Preciso alterar o valor da tabela de símbolos, agora é o endereço local, pois foi passado por valor
 						it->pos_pilha = temp_val;//Inicia com o 0 e vou incrementando
 					}
-				}
-				/*if (it->tipo != TIPO_STRING)
-				{
-					it->pos_pilha = -3 - (_qtd_params - temp_param++);
-					if (it->passby == VALUE)
+					else
 					{
-						temp_val = abs(it->pos_pilha + 4);
-						_pilha.push(make_pair(it->pos_pilha, temp_val));
-						//Preciso alterar o valor da tabela de símbolos, agora é o endereço local, pois foi passado por valor
-						//it->pos_pilha = temp_val++;//Inicia com o 0 e vou incrementando
+						it->pos_pilha = -3 - (_qtd_params - temp_param);
+						temp_end--;
 					}
-					it->pos_pilha = temp_param - 1;
-				}*/
+				}
 				else
-				{
-					it->pos_pilha = -3 - (_qtd_params - temp_param++);
+				{				
 					if (it->passby == VALUE)
 					{
-						for (int i = TAM_STRING - 1; i >= 0; i--)
+						it->pos_pilha = (temp_val + temp_end + 3) * -1;
+						it->pos_pilha_ini_str = it->pos_pilha + 3 + TAM_STRING;
+						int limite = (it->pos_pilha + 4);
+						for (int i = it->pos_pilha_ini_str; i >= limite; i--)
 						{
-							_pilha.push(make_pair(it->pos_pilha, i));
+							_pilha.push(make_pair(it->pos_pilha, (i*-1)));
 							//Preciso alterar o valor da tabela de símbolos, agora é o endereço local, pois foi passado por valor
 							//temp_val++;//Inicia com o 0 e vou incrementando
-							it->pos_pilha -= 1;
+							it->pos_pilha += 1;
 						}
+						temp_val -= TAM_STRING;
+					}
+					else
+					{
+						it->pos_pilha = -3 - (_qtd_params - temp_param);
+						it->pos_pilha_ini_str = it->pos_pilha + 4;
+						temp_end--;
 					}
 					it->tam_str = TAM_STRING;
-					it->pos_pilha = temp_param - 1;
-					it->pos_pilha_ini_str = it->pos_pilha;
+					it->pos_pilha_ini_str *= -1;
+					it->pos_pilha = _pilha.top().second;
 				}
+				temp_param++;
 			}
 		}
 	}
@@ -359,6 +381,92 @@ void C_Tabela_Simbolos::Atualizar_Pilha_Param(int _pai, int _qtd_params, stack<p
 void C_Tabela_Simbolos::Atualizar_Pilha_Param_classe(int _pai, int _qtd_params, stack<pair<int, int>>& _pilha, int _qtd_var_classe)
 {
 	if (_qtd_params > 0)
+	{
+		int temp_param = 0;
+		int temp_val = 0;
+		int temp_end = 0;
+		for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+		{
+			if (it->pai == _pai && it->categoria == PARAM && it->valido)
+			{
+				if (it->passby == VALUE)
+				{
+					if (it->tipo != TIPO_STRING)
+					{
+						temp_val++;
+					}
+					else
+					{
+						temp_val += TAM_STRING;
+					}
+				}
+				else
+				{
+					if (it->tipo != TIPO_STRING)
+					{
+						temp_end++;
+					}
+					else
+					{
+						temp_end += TAM_STRING;
+					}
+				}
+			}
+		}
+		//for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+		auto it = tabela_simbolos.end();
+		while (it != tabela_simbolos.begin())
+		{
+			it--;
+			if (it->pai == _pai && it->categoria == PARAM && it->valido)
+			{
+				if (it->tipo != TIPO_STRING)
+				{
+					if (it->passby == VALUE)
+					{
+						it->pos_pilha = (temp_val + temp_end + 3 + _qtd_var_classe) * -1;
+						temp_val--;
+						_pilha.push(make_pair(it->pos_pilha, temp_val));
+						//Preciso alterar o valor da tabela de símbolos, agora é o endereço local, pois foi passado por valor
+						it->pos_pilha = temp_val;//Inicia com o 0 e vou incrementando
+					}
+					else
+					{
+						it->pos_pilha = -(3 + _qtd_var_classe) - (_qtd_params - temp_param++);
+						temp_end--;
+					}
+				}
+				else
+				{
+					if (it->passby == VALUE)
+					{
+						it->pos_pilha = (temp_val + temp_end + 3 + _qtd_var_classe) * -1;
+						it->pos_pilha_ini_str = it->pos_pilha + 3 + TAM_STRING + _qtd_var_classe;
+						int limite = (it->pos_pilha + 4);
+						for (int i = it->pos_pilha_ini_str; i >= limite; i--)
+						{
+							_pilha.push(make_pair(it->pos_pilha, (i*-1)));
+							//Preciso alterar o valor da tabela de símbolos, agora é o endereço local, pois foi passado por valor
+							//temp_val++;//Inicia com o 0 e vou incrementando
+							it->pos_pilha += 1;
+						}
+						temp_val -= TAM_STRING;
+					}
+					else
+					{
+						it->pos_pilha = -(3 + _qtd_var_classe) - (_qtd_params - temp_param++);
+						it->pos_pilha_ini_str = it->pos_pilha + 4;
+						temp_end--;
+					}
+					it->tam_str = TAM_STRING;
+					it->pos_pilha_ini_str *= -1;
+					it->pos_pilha = _pilha.top().second;
+				}
+				temp_param++;
+			}
+		}
+	}
+/*	if (_qtd_params > 0)
 	{
 		int temp_param = 0;
 		int temp_val = 0;
@@ -390,18 +498,6 @@ void C_Tabela_Simbolos::Atualizar_Pilha_Param_classe(int _pai, int _qtd_params, 
 						it->pos_pilha = temp_val;//Inicia com o 0 e vou incrementando
 					}
 				}
-				/*if (it->tipo != TIPO_STRING)
-				{
-				it->pos_pilha = -3 - (_qtd_params - temp_param++);
-				if (it->passby == VALUE)
-				{
-				temp_val = abs(it->pos_pilha + 4);
-				_pilha.push(make_pair(it->pos_pilha, temp_val));
-				//Preciso alterar o valor da tabela de símbolos, agora é o endereço local, pois foi passado por valor
-				//it->pos_pilha = temp_val++;//Inicia com o 0 e vou incrementando
-				}
-				it->pos_pilha = temp_param - 1;
-				}*/
 				else
 				{
 					it->pos_pilha = -(3 + _qtd_var_classe) - (_qtd_params - temp_param++);
@@ -421,7 +517,7 @@ void C_Tabela_Simbolos::Atualizar_Pilha_Param_classe(int _pai, int _qtd_params, 
 				}
 			}
 		}
-	}
+	}*/
 }
 
 void C_Tabela_Simbolos::Atualizar_Tamanho_String(S_Id_Pai _sidpai, string _str)

@@ -22,68 +22,38 @@ DSVS FIM
 R3:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
-; ---------- Alocacao de Memoria (30)
-AMEM 30
-CRVL 1,-33
-ARMZ 1,0
-CRVL 1,-32
-ARMZ 1,1
-CRVL 1,-31
-ARMZ 1,2
-CRVL 1,-30
-ARMZ 1,3
-CRVL 1,-29
-ARMZ 1,4
-CRVL 1,-28
-ARMZ 1,5
-CRVL 1,-27
-ARMZ 1,6
-CRVL 1,-26
-ARMZ 1,7
-CRVL 1,-25
-ARMZ 1,8
-CRVL 1,-24
-ARMZ 1,9
-CRVL 1,-23
-ARMZ 1,10
-CRVL 1,-22
-ARMZ 1,11
-CRVL 1,-21
-ARMZ 1,12
-CRVL 1,-20
-ARMZ 1,13
-CRVL 1,-19
-ARMZ 1,14
-CRVL 1,-18
-ARMZ 1,15
-CRVL 1,-17
-ARMZ 1,16
-CRVL 1,-16
-ARMZ 1,17
-CRVL 1,-15
-ARMZ 1,18
-CRVL 1,-14
-ARMZ 1,19
-CRVL 1,-13
-ARMZ 1,20
-CRVL 1,-12
-ARMZ 1,21
-CRVL 1,-11
-ARMZ 1,22
-CRVL 1,-10
-ARMZ 1,23
-CRVL 1,-9
-ARMZ 1,24
-CRVL 1,-8
-ARMZ 1,25
-CRVL 1,-7
-ARMZ 1,26
-CRVL 1,-6
-ARMZ 1,27
-CRVL 1,-5
-ARMZ 1,28
+; ---------- Alocacao de Memoria (15)
+AMEM 15
 CRVL 1,-4
-ARMZ 1,29
+ARMZ 1,14
+CRVL 1,-5
+ARMZ 1,13
+CRVL 1,-6
+ARMZ 1,12
+CRVL 1,-7
+ARMZ 1,11
+CRVL 1,-8
+ARMZ 1,10
+CRVL 1,-9
+ARMZ 1,9
+CRVL 1,-10
+ARMZ 1,8
+CRVL 1,-11
+ARMZ 1,7
+CRVL 1,-12
+ARMZ 1,6
+CRVL 1,-13
+ARMZ 1,5
+CRVL 1,-14
+ARMZ 1,4
+CRVL 1,-15
+ARMZ 1,3
+CRVL 1,-16
+ARMZ 1,2
+CRVL 1,-17
+ARMZ 1,1
+CRVL 1,-18
+ARMZ 1,0
 ; ---------- Inicio Leitura String
 CRVL 1,0
 IMPC
@@ -115,48 +85,18 @@ CRVL 1,13
 IMPC
 CRVL 1,14
 IMPC
-CRVL 1,15
-IMPC
-CRVL 1,16
-IMPC
-CRVL 1,17
-IMPC
-CRVL 1,18
-IMPC
-CRVL 1,19
-IMPC
-CRVL 1,20
-IMPC
-CRVL 1,21
-IMPC
-CRVL 1,22
-IMPC
-CRVL 1,23
-IMPC
-CRVL 1,24
-IMPC
-CRVL 1,25
-IMPC
-CRVL 1,26
-IMPC
-CRVL 1,27
-IMPC
-CRVL 1,28
-IMPC
-CRVL 1,29
-IMPC
 ; ---------- Fim Leitura String
 IMPE
-; ---------- Desalocacao de Memoria (30)
-DMEM 30
-RTPR 1,30
+; ---------- Desalocacao de Memoria (15)
+DMEM 15
+RTPR 1,15
 ; ---------- Fim/Retorno de Procedimento/Funcao
 ; ----------Inicio MAIN
 MAIN:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
-; ---------- Alocacao de Memoria (30)
-AMEM 30
+; ---------- Alocacao de Memoria (15)
+AMEM 15
 ; ---------- Inicio Armazenamento String
 CRCT 'M'
 ARMZ 1,0
@@ -175,11 +115,21 @@ CRVL 1,1
 CRVL 1,2
 CRVL 1,3
 CRVL 1,4
+CRVL 1,5
+CRVL 1,6
+CRVL 1,7
+CRVL 1,8
+CRVL 1,9
+CRVL 1,10
+CRVL 1,11
+CRVL 1,12
+CRVL 1,13
+CRVL 1,14
 ; ---------- Fim Carregamento String
 ; ---------- Chama Procedimento/Funcao - R3
 CHPR R3,1
-; ---------- Desalocacao de Memoria (30)
-DMEM 30
+; ---------- Desalocacao de Memoria (15)
+DMEM 15
 RTPR 1,0
 ; ---------- Fim/Retorno de Procedimento/Funcao
 FIM:NADA

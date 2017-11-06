@@ -18,44 +18,64 @@ INPP
 ; ---------- Chama Procedimento/Funcao - MAIN
 CHPR MAIN,1
 DSVS FIM
+; ---------- Entrada Rotulo R3
 R3:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
-; ---------- Alocacao de Memoria (1)
-AMEM 30
-CRVL 1,-8
-ARMZ 1,0
-CRVL 1,-7
-ARMZ 1,1
-CRVL 1,-6
-ARMZ 1,2
-CRVL 1,-5
-ARMZ 1,3
+; ---------- Alocacao de Memoria (16)
+AMEM 16
 CRVL 1,-4
+ARMZ 1,14
+CRVL 1,-5
+ARMZ 1,13
+CRVL 1,-6
+ARMZ 1,12
+CRVL 1,-7
+ARMZ 1,11
+CRVL 1,-8
+ARMZ 1,10
+CRVL 1,-9
+ARMZ 1,9
+CRVL 1,-10
+ARMZ 1,8
+CRVL 1,-11
+ARMZ 1,7
+CRVL 1,-12
+ARMZ 1,6
+CRVL 1,-13
+ARMZ 1,5
+CRVL 1,-14
 ARMZ 1,4
+CRVL 1,-15
+ARMZ 1,3
+CRVL 1,-16
+ARMZ 1,2
+CRVL 1,-17
+ARMZ 1,1
+CRVL 1,-18
+ARMZ 1,0
+CRVL 1,-19
+ARMZ 1,15
 ; ---------- Inicio Leitura String
 CRVL 1,0
 IMPC
-CRVL 1,1
-IMPC
-CRVL 1,2
-IMPC
-CRVL 1,3
-IMPC
-CRVL 1,4
-IMPC
 ; ---------- Fim Leitura String
 IMPE
-; ---------- Desalocacao de Memoria (1)
-DMEM 30
-RTPR 1,5
+CRVL 1,15
+IMPR
+IMPE
+; ---------- Desalocacao de Memoria (16)
+DMEM 16
+RTPR 1,16
 ; ---------- Fim/Retorno de Procedimento/Funcao
 ; ----------Inicio MAIN
 MAIN:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
-; ---------- Alocacao de Memoria (30)
-AMEM 30
+; ---------- Alocacao de Memoria (15)
+AMEM 15
+; ---------- Alocacao de Memoria (1)
+AMEM 1
 ; ---------- Inicio Armazenamento String
 CRCT 'M'
 ARMZ 1,0
@@ -68,15 +88,30 @@ ARMZ 1,3
 CRCT 'a'
 ARMZ 1,4
 ; ---------- Fim Armazenamento String
+CRCT 2017
+ARMZ 1,15
+CRVL 1,15
+; ---------- Inicio Carregamento String
 CRVL 1,0
 CRVL 1,1
 CRVL 1,2
 CRVL 1,3
 CRVL 1,4
+CRVL 1,5
+CRVL 1,6
+CRVL 1,7
+CRVL 1,8
+CRVL 1,9
+CRVL 1,10
+CRVL 1,11
+CRVL 1,12
+CRVL 1,13
+CRVL 1,14
+; ---------- Fim Carregamento String
 ; ---------- Chama Procedimento/Funcao - R3
 CHPR R3,1
-; ---------- Desalocacao de Memoria (30)
-DMEM 30
+; ---------- Desalocacao de Memoria (16)
+DMEM 16
 RTPR 1,0
 ; ---------- Fim/Retorno de Procedimento/Funcao
 FIM:NADA
