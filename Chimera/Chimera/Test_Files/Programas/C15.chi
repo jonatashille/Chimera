@@ -1,0 +1,15 @@
+class cliente
+	public:
+	    var string nome, dob;
+	    sub set_cliente(var string _nome by value, var string _dob by value)
+			nome = _nome;
+			dob = _dob;
+		end_sub
+end_class
+
+sub main()
+ 	var cliente cli;
+ 	cli.set_cliente("Joao", "12/10/1990");
+ 	println(cli.nome);
+ 	println(cli.dob);
+end_sub

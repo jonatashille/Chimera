@@ -1,9 +1,10 @@
 class cliente
-    var int n1, n2;
-    sub set_cliente(var int _n1 by value, var int _n2 by value)
-		n1 = _n1;
-		n2 = _n2;
-	end_sub
+	public:
+	    var int n1, n2;
+	    sub set_cliente(var int _n1 by value, var int _n2 by value)
+			n1 = _n1;
+			n2 = _n2;
+		end_sub
 end_class
 
 sub main()

@@ -1,0 +1,15 @@
+sep=;
+#;ID;CATEGORIA;TIPO;Ponteiro;Array;valor;QtdParam;Pass By;Pai;Classe;Acesso;Ativo;Linha;Pilha;Pilha_Ini_Str;Tam Str;End_Param;Rotulo;Escopo;Pai_Heranca;
+1;animal;CLASSE;;0;0;;15;;0;0;0;1;1;-1;0;0;-1;;;-1;
+2;nome_animal;VAR;TIPO_STRING;0;0;;0;;1;1;0;1;3;14;0;0;-1;;animal;-1;
+3;Imprime_Animal;SUB;;0;0;;0;;1;1;0;1;4;-1;0;0;-1;R3;;-1;
+4;humano;CLASSE;;0;0;;30;;0;0;0;1;9;-1;0;0;-1;;;-1;
+5;nome_humano;VAR;TIPO_STRING;0;0;;0;;4;4;0;1;11;14;0;0;-1;;humano;-1;
+6;Imprime_Humano;SUB;;0;0;;0;;4;4;0;1;12;-1;0;0;-1;R37;;-1;
+7;main;SUB;;0;0;;0;;0;0;0;1;17;-1;0;0;-1;MAIN;;-1;
+8;dog;VAR;animal;0;0;;0;;7;0;0;0;18;-1;-1;0;-1;;;-1;
+9;nome_animal;VAR;TIPO_STRING;0;0;;0;;8;1;0;1;18;14;0;3;-1;;;-1;
+10;Imprime_Animal;SUB;;0;0;;0;;8;1;0;1;18;-1;0;0;-1;R3;;-1;
+11;pessoa;VAR;humano;0;0;;0;;7;0;0;0;19;-1;-1;0;-1;;;-1;
+12;nome_humano;VAR;TIPO_STRING;0;0;;0;;11;4;0;1;19;29;15;4;-1;;;-1;
+13;Imprime_Humano;SUB;;0;0;;0;;11;4;0;1;19;-1;0;0;-1;R37;;-1;

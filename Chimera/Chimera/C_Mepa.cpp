@@ -59,7 +59,7 @@ void C_Mepa::Converter_Pos_Fixa(stack<S_EXP>& _p, C_Tabela_Simbolos _ts)
 	{
 		if (E_Operador(_p.top().token))
 		{
-			// TODO 04 - Verificar caso 1==1 + 3 * 5 tem ques er igual a 0 e é igual a 16
+			//Verificar peso operador
 			while (!p_temp.empty() && p_temp.top().token != ABRE_PARENTESES && Get_Peso_Operador(p_temp.top().token) >= Get_Peso_Operador(_p.top().token))
 			{
 				Add_Comando(p_temp.top().token);
@@ -114,14 +114,34 @@ void C_Mepa::Converter_Pos_Fixa(stack<S_EXP>& _p, C_Tabela_Simbolos _ts)
 					}
 					else
 					{
-						int pos_pilha_ini_str = _ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(_p.top().token, _p.top().parente));
-						int pos_pilha = _ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(_p.top().token, _p.top().parente));
-						CRVL_String_Param(to_string(pai), pos_pilha_ini_str, pos_pilha);
+						if (_p.top().escopo == CLASSE && _p.top().categoria == PARAM)
+						{
+							int pos_pilha_ini_str = _ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(_p.top().token, _p.top().parente));
+							int pos_pilha = _ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(_p.top().token, _p.top().parente));
+							int end_param = _ts.Buscar_End_Param(_p.top().token, _p.top().parente);
+							CRVL_String_Param_Classe(to_string(pai), pos_pilha_ini_str, pos_pilha, end_param);
+						}
+						else
+						{
+							int pos_pilha_ini_str = _ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(_p.top().token, _p.top().parente));
+							int pos_pilha = _ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(_p.top().token, _p.top().parente));
+							CRVL_String_Param(to_string(pai), pos_pilha_ini_str, pos_pilha);
+						}
+
 					}
 				}
 			}
 			else
-				CRCT(_p.top().token);
+			{
+				if (_p.top().tipo == TIPO_STRING)
+				{
+					CRCT_String_Param(_p.top().token);
+				}
+				else
+				{
+					CRCT(_p.top().token);
+				}
+			}
 			_p.pop();
 		}
 	}
@@ -200,6 +220,29 @@ void C_Mepa::CRCT_String(string _c, int _pos_ini, int _pos_fim)
 	}
 }
 
+void C_Mepa::CRCT_String_Param(string _c)
+{
+	int i = 0;
+	mepa << "; ---------- Inicio Carrega String" << endl;
+	if (_c != "")
+	{
+		// +1 e -1 para eliminar o "
+		for (auto it = _c.begin() + 1; it != _c.end() - 1 && i < TAM_STRING; it++, i++)
+		{
+			linha_mepa++;
+			mepa << "CRCT \'" << string(1, *it) << "\'" << endl;
+		}
+	}
+	//Complemento o restante com espaço vazio
+	while (i < TAM_STRING)
+	{
+		mepa << "CRCT \' \'" << endl;
+		i++;
+	}
+	mepa << "; ---------- Fim Carrega String" << endl;
+	ultimo_comando = "CRCT";
+}
+
 void C_Mepa::CRCT_String_ARMI(string _c, int _pos)
 {
 	if (_c != "")
@@ -249,6 +292,20 @@ void C_Mepa::CRVL_String_Param(string _k, int _pos_ini, int _pos_fim)
 	mepa << "; ---------- Fim Carregamento String" << endl;
 }
 
+void C_Mepa::CRVL_String_Param_Classe(string _k, int _pos_ini, int _pos_fim, int _end_param)
+{
+	_end_param *= -1;
+	mepa << "; ---------- Inicio Carregamento String" << endl;
+	for (int i = _pos_ini; i <= _pos_fim; i++)
+	{
+		linha_mepa++;
+		mepa << "CRVL " << _k << "," << i << endl;
+		mepa << "ARMI " << _k << "," << _end_param << endl;
+		_end_param++;
+	}
+	mepa << "; ---------- Fim Carregamento String" << endl;
+}
+
 void C_Mepa::CRVI(string _k, string _n)
 {
 	linha_mepa++;
@@ -278,6 +335,18 @@ void C_Mepa::CREN(string _k, string _n)
 {
 	linha_mepa++;
 	mepa << "CREN " << _k << "," << _n << endl;
+	ultimo_comando = "CREN";
+}
+
+void C_Mepa::CREN_String(string _k, int _pos_ini, int _pos_fim)
+{
+	mepa << "; ---------- Inicio Leitura Endereço String" << endl;
+	for (int i = _pos_ini; i <= _pos_fim; i++)
+	{
+		linha_mepa++;
+		mepa << "CREN " << _k << "," << i << endl;
+	}
+	mepa << "; ---------- Fim Leitura Endereço String" << endl;
 	ultimo_comando = "CREN";
 }
 

@@ -1,0 +1,18 @@
+class animal
+	public:
+		var string nome;
+		sub Imprime_Nome()
+			println(nome);
+		end_sub
+end_class
+
+sub main()
+	var animal dog;
+	var animal cat;
+
+	dog.nome = "Bella";
+	cat.nome = "Murano";
+
+	dog.Imprime_Nome();
+	cat.Imprime_Nome();
+end_sub

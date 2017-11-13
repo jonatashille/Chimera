@@ -9,13 +9,19 @@ struct S_EXP
 	string token;
 	bool end_elemento = false;
 	int parente;
+	string tipo;
+	string escopo;
+	string categoria;
 
-	S_EXP make_exp(string _token, bool _end_elemento, int _parente)
+	S_EXP make_exp(string _token, bool _end_elemento, int _parente, string _tipo, string _escopo, string _categoria)
 	{
 		S_EXP sexpressao;
 		sexpressao.token = _token;
 		sexpressao.end_elemento = _end_elemento;
 		sexpressao.parente = _parente;
+		sexpressao.tipo = _tipo;
+		sexpressao.escopo = _escopo;
+		sexpressao.categoria = _categoria;
 		return sexpressao;
 	}
 
@@ -46,14 +52,17 @@ public:
 	//Armazenamento e E/S
 	void CRCT(string);
 	void CRCT_String(string, int, int);
+	void CRCT_String_Param(string);
 	void CRCT_String_ARMI(string, int);
 	void CRVL(string, string);
-	void CRVL_String(string, int, int);//Imprime os caracteres
+	void CRVL_String(string, int, int);//Carrega os caracteres de uma string
 	void CRVL_String_Param(string, int, int);//Não imprime, apenas carrega os valores da String
+	void CRVL_String_Param_Classe(string, int, int, int);//Utiliza ARMI, utilizado para atribuição de strings
 	void CRVI(string, string);
 	void CRVI_String(string, int, int);//Imprime os caracteres
 	void CRVI_String_Param(string, int, int);//Não imprime, apenas carrega os valores da String
 	void CREN(string, string);
+	void CREN_String(string, int, int); //Carrega endereço de strings
 	void ARMZ(string, string);
 	void ARMZ(string);
 	void ARMI(string, string);

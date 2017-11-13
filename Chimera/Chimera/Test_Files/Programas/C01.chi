@@ -1,4 +1,5 @@
 class filmes_class
+	public:
 		var int id;
 		var string nome;
 		var int ano;

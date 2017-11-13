@@ -37,6 +37,7 @@ struct S_Simbolos
 	int pos_pilha;
 	int pos_pilha_ini_str;
 	int tam_str;
+	int end_param;
 	string rotulo;
 	string escopo;
 	int pai_heranca;
@@ -101,6 +102,8 @@ public:
 	string Buscar_Categoria_Pai(int);
 	//Busca a quantidade alocada pelo parametros de uma sub ou functions (Apenas passados por valor)
 	int Buscar_Qtd_Mem_Alocada_Params(int);
+	//Buscar o endereço limite do parâmetro (Utilizado para Strings)
+	int Buscar_End_Param(string, int);
 	//Busca a quantidade alocada pelo parametros de uma sub ou functions (Todos os params, Valor e referencia)
 	int Buscar_Qtd_Tot_Params(int);
 	//Busca o rótulo de um identificador / Usado para Funções e Procedimentos
@@ -137,6 +140,8 @@ public:
 	vector<S_Simbolos> Buscar_Var_Pelo_Pai(int);
 	//Retorna quantidade de variáveis declaradas em classes e estruturas
 	int Retorna_Tot_Var_Mem_Classe();
+	//Verifica se a propriedade é um membro de uma classe
+	bool Verifica_Propriedade_Membro_Classe(string, int);
 
 	void Erro(string);
 	void Erro(string, S_Simbolos);

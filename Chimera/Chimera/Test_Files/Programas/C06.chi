@@ -1,9 +1,11 @@
 class parent
-	var int id_p;
+	public:
+		var int id_p;
 end_class
 
 class child : parent
-	var int id_c;
+	public:
+		var int id_c;
 end_class
 
 sub main()

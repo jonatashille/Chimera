@@ -93,7 +93,8 @@ void C_Analise_Sintatica::Programa()
 	//MEPA - DSVS Final, desalocar memória atribuídas globalmente
 	mepa.NADA("FIM");
 	Remover_Mem_Classe();
-	Inserir_DMEM_MEPA(pilha_var_mem.top());
+	if (!pilha_var_mem.empty())
+		Inserir_DMEM_MEPA(pilha_var_mem.top());
 
 	//Se cheguei ao fim do programa, compilação ok
 	if (token == FIM_PROGRAMA)
@@ -223,7 +224,7 @@ void C_Analise_Sintatica::Decl()
 		//Empilho a chave atual
 		pilha_parente.push(sclasse.chave);
 		//Publico por padrão
-		acesso_membro = PUBLIC;
+		acesso_membro = PRIVATE;
 
 		sclasse.categoria = CLASSE;
 		sclasse.pai = 0;
@@ -537,12 +538,6 @@ void C_Analise_Sintatica::Decl_proc_class()
 	vector<S_Simbolos> l_simbolos;
 	l_simbolos = ts.Buscar_Var_Pelo_Pai(sclasse.chave);
 	
-	/*for (auto it = l_simbolos.begin(); it != l_simbolos.end(); it++)
-	{
-		mepa.CREN("1", to_string(it->pos_pilha));
-	}*/
-
-
 
 	//Se existir parametros por valor, preciso armazenar memória
 	if (qtd_mem_alocada_param > 0)
@@ -551,12 +546,25 @@ void C_Analise_Sintatica::Decl_proc_class()
 		pilha_var_mem.top() += qtd_mem_alocada_param;
 	}
 
+	int simb_retorno = 0; //Armazeno o total de memoria para retorno
+	for (auto it = l_simbolos.begin(); it != l_simbolos.end(); it++)
+	{
+		if (it->tipo == TIPO_STRING)
+		{
+			simb_retorno += TAM_STRING;
+		}
+		else
+		{
+			simb_retorno += 1;
+		}
+	}
 
 	//Atualizar posição da pilha dos parâmetros e envio uma pilha para depois conseguir atribuir os valores para os parâmetros passados por cópia
 	if (sproc.qtd_params > 0)
 	{
 		stack<pair<int, int>> pparamval;
-		ts.Atualizar_Pilha_Param_classe(sproc.chave, sproc.qtd_params, pparamval, l_simbolos.size());
+		//ts.Atualizar_Pilha_Param_classe(sproc.chave, sproc.qtd_params, pparamval, l_simbolos.size());
+		ts.Atualizar_Pilha_Param_classe(sproc.chave, sproc.qtd_params, pparamval, simb_retorno);
 		//Para os params que foram passador por valor, armazeno os valores localmente 
 		while (!pparamval.empty())
 		{
@@ -584,19 +592,6 @@ void C_Analise_Sintatica::Decl_proc_class()
 	if (!pilha_var_mem.empty() && pilha_var_mem.top() > 0)
 	{
 		Inserir_DMEM_MEPA(pilha_var_mem.top());
-	}
-
-	int simb_retorno = 0; //Armazeno o total de memoria para retorno
-	for (auto it = l_simbolos.begin(); it != l_simbolos.end(); it++)
-	{
-		if (it->tipo == TIPO_STRING)
-		{
-			simb_retorno += it->pos_pilha_ini_str + it->pos_pilha + 1;
-		}
-		else
-		{
-			simb_retorno += 1;
-		}
 	}
 
 	//MEPA - RTPR Retorno da procedure
@@ -727,6 +722,19 @@ void C_Analise_Sintatica::Decl_func_class()
 	vector<S_Simbolos> l_simbolos;
 	l_simbolos = ts.Buscar_Var_Pelo_Pai(sclasse.chave);
 
+	int simb_retorno = 0; //Armazeno o total de memoria para retorno
+	for (auto it = l_simbolos.begin(); it != l_simbolos.end(); it++)
+	{
+		if (it->tipo == TIPO_STRING)
+		{
+			simb_retorno += it->pos_pilha_ini_str + it->pos_pilha + 1;
+		}
+		else
+		{
+			simb_retorno += 1;
+		}
+	}
+
 	//Se existir parametros por valor, preciso armazenar memória
 	if (qtd_mem_alocada_param > 0)
 	{
@@ -739,7 +747,7 @@ void C_Analise_Sintatica::Decl_func_class()
 	if (sfuncao.qtd_params > 0)
 	{
 		stack<pair<int, int>> pparamval;
-		ts.Atualizar_Pilha_Param_classe(sfuncao.chave, sfuncao.qtd_params, pparamval, l_simbolos.size());
+		ts.Atualizar_Pilha_Param_classe(sfuncao.chave, sfuncao.qtd_params, pparamval, simb_retorno);
 		//Para os params que foram passador por valor, armazeno os valores localmente 
 		while (!pparamval.empty())
 		{
@@ -765,19 +773,6 @@ void C_Analise_Sintatica::Decl_func_class()
 	if (qtd_removida > 0)
 	{
 		Inserir_DMEM_MEPA(qtd_removida);
-	}
-
-	int simb_retorno = 0; //Armazeno o total de memoria para retorno
-	for (auto it = l_simbolos.begin(); it != l_simbolos.end(); it++)
-	{
-		if (it->tipo == TIPO_STRING)
-		{
-			simb_retorno += it->pos_pilha_ini_str + it->pos_pilha + 1;
-		}
-		else
-		{
-			simb_retorno += 1;
-		}
 	}
 
 	//MEPA - RTPR Retorno da procedure
@@ -943,6 +938,9 @@ void C_Analise_Sintatica::Decl_class()
 
 	ts.Inserir(sclasse, escopo);
 
+	//Tiro do topo o contador de memoria desta classe (Caso não tenha tido uma declaração de variável)
+	if (!pilha_var_mem.empty())
+		pilha_var_mem.pop();
 
 	escopo_classe = false; //Volto para false, pois terminou a declaração
 }
@@ -951,7 +949,8 @@ void C_Analise_Sintatica::Decl_class()
 void C_Analise_Sintatica::Bloco_class()
 {
 	if (token == ACESS_PRIVATE ||
-		token == ACESS_PUBLIC)
+		token == ACESS_PUBLIC ||
+		token == ACESS_PROTECTED)
 	{
 		Espec_acesso();
 		Aceitar_Token(DOIS_PONTOS, ERR_DOIS_PONTOS);
@@ -979,6 +978,11 @@ void C_Analise_Sintatica::Espec_acesso()
 	{
 		Aceitar_Token(ACESS_PUBLIC, ERR_ACESS_PUBLIC);
 		acesso_membro = PUBLIC;
+	}
+	else if (token == ACESS_PROTECTED)
+	{
+		Aceitar_Token(ACESS_PROTECTED, ACESS_PROTECTED);
+		acesso_membro = PROTECTED;
 	}
 	else
 		Erro("Esperado especificacao de acesso private ou public");
@@ -1231,10 +1235,11 @@ void C_Analise_Sintatica::Comando()
 				it--;
 				if (it->tipo == TIPO_STRING)
 				{
-					for (int i = it->pos_pilha; i >= it->pos_pilha_ini_str; i--)
+					mepa.CREN_String("1", it->pos_pilha_ini_str, it->pos_pilha);
+					/*for (int i = it->pos_pilha; i >= it->pos_pilha_ini_str; i--)
 					{
 						mepa.CREN("1", to_string(i));
-					}
+					}*/
 				}
 				else
 				{
@@ -1308,9 +1313,7 @@ int C_Analise_Sintatica::Comando_1(string _tipo_esquerda)
 	{
 		Aceitar_Token(OP_ATRIBUICAO, ERR_OP_ATRIBUICAO);
 		tipo_direita = Exp();
-		//TODO 03 - Validar Expressão aqui
-		if (tipo_direita != TIPO_STRING)
-			mepa.Avaliar_Expressao(mepa.pilha_EXP, ts);
+		mepa.Avaliar_Expressao(mepa.pilha_EXP, ts);
 		
 		//Validar se a atribuição tem os tipos compatíveis 
 		Validar_Atribuicao(_tipo_esquerda, tipo_direita);
@@ -1737,54 +1740,54 @@ void C_Analise_Sintatica::Op_relac()
 		Aceitar_Token(OP_MENOR, ERR_OP_MENOR);
 		//sexpressao = { "CMME", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMME", false, 0));
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMME", false, 0, "", escopo, ""));
 		else
-			mepa.pilha_EXP.push(sexpressao.make_exp("CMME", false, 0));
+			mepa.pilha_EXP.push(sexpressao.make_exp("CMME", false, 0, "", escopo, ""));
 	}
 	else if (token == OP_MENOR_IGUAL)
 	{
 		Aceitar_Token(OP_MENOR_IGUAL, ERR_OP_MENOR_IGUAL);
 		//sexpressao = { "CMEG", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMEG", false, 0));
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMEG", false, 0, "", escopo, ""));
 		else
-			mepa.pilha_EXP.push(sexpressao.make_exp("CMEG", false, 0));
+			mepa.pilha_EXP.push(sexpressao.make_exp("CMEG", false, 0, "", escopo, ""));
 	}
 	else if (token == OP_DIFERENTE)
 	{ 
 		Aceitar_Token(OP_DIFERENTE, ERR_OP_DIFERENTE);
 		//sexpressao = { "CMDG", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMDG", false, 0));
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMDG", false, 0, "", escopo, ""));
 		else
-			mepa.pilha_EXP.push(sexpressao.make_exp("CMDG", false, 0));
+			mepa.pilha_EXP.push(sexpressao.make_exp("CMDG", false, 0, "", escopo, ""));
 	}
 	else if (token == OP_IGUALDADE)
 	{
 		Aceitar_Token(OP_IGUALDADE, ERR_OP_IGUALDADE);
 		//sexpressao = { "CMIG", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMIG", false, 0));
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMIG", false, 0, "", escopo, ""));
 		else
-			mepa.pilha_EXP.push(sexpressao.make_exp("CMIG", false, 0));
+			mepa.pilha_EXP.push(sexpressao.make_exp("CMIG", false, 0, "", escopo, ""));
 	}
 	else if (token == OP_MAIOR)
 	{
 		Aceitar_Token(OP_MAIOR, ERR_OP_MAIOR);
 		//sexpressao = { "CMMA", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMMA", false, 0));
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMMA", false, 0, "", escopo, ""));
 		else
-			mepa.pilha_EXP.push(sexpressao.make_exp("CMMA", false, 0));
+			mepa.pilha_EXP.push(sexpressao.make_exp("CMMA", false, 0, "", escopo, ""));
 	}
 	else if (token == OP_MAIOR_IGUAL)
 	{
 		Aceitar_Token(OP_MAIOR_IGUAL, ERR_OP_MAIOR_IGUAL);
 		//sexpressao = { "CMAG", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMAG", false, 0));
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("CMAG", false, 0, "", escopo, ""));
 		else
-			mepa.pilha_EXP.push(sexpressao.make_exp("CMAG", false, 0));
+			mepa.pilha_EXP.push(sexpressao.make_exp("CMAG", false, 0, "", escopo, ""));
 	}
 	else
 		Erro("Esperado operador relacional");
@@ -1847,9 +1850,9 @@ void C_Analise_Sintatica::Op_soma()
 		//sexpressao = { "SUBT", false };
 		//MEPA - SUBT Operador subtração
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(sexpressao.make_exp("SUBT", false, 0));
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("SUBT", false, 0, "", escopo, ""));
 		else
-			mepa.pilha_EXP.push(sexpressao.make_exp("SUBT", false, 0));
+			mepa.pilha_EXP.push(sexpressao.make_exp("SUBT", false, 0, "", escopo, ""));
 	}
 	else if (token == OP_ADICAO)
 	{
@@ -1857,9 +1860,9 @@ void C_Analise_Sintatica::Op_soma()
 		//sexpressao = { "SOMA", false };
 		//MEPA - SOMA Operador soma
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(sexpressao.make_exp("SOMA", false, 0));
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("SOMA", false, 0, "", escopo, ""));
 		else
-			mepa.pilha_EXP.push(sexpressao.make_exp("SOMA", false, 0));
+			mepa.pilha_EXP.push(sexpressao.make_exp("SOMA", false, 0, "", escopo, ""));
 	}
 	else if (token == OP_LOGICO_OU)
 		Aceitar_Token(OP_LOGICO_OU, ERR_OP_LOGICO_OU);
@@ -1924,18 +1927,18 @@ void C_Analise_Sintatica::Op_mult()
 		Aceitar_Token(OP_MULTIPLICACAO, ERR_OP_MULTIPLICACAO);
 		//sexpressao = { "MULT", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(sexpressao.make_exp("MULT", false, 0));
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("MULT", false, 0, "", escopo, ""));
 		else
-			mepa.pilha_EXP.push(sexpressao.make_exp("MULT", false, 0));
+			mepa.pilha_EXP.push(sexpressao.make_exp("MULT", false, 0, "", escopo, ""));
 	}
 	else if (token == OP_DIVISAO)
 	{
 		Aceitar_Token(OP_DIVISAO, ERR_OP_DIVISAO);
 		//sexpressao = { "DIVI", false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(sexpressao.make_exp("DIVI", false, 0));
+			mepa.pilha_EXP_args.push(sexpressao.make_exp("DIVI", false, 0, "", escopo, ""));
 		else
-			mepa.pilha_EXP.push(sexpressao.make_exp("DIVI", false, 0));
+			mepa.pilha_EXP.push(sexpressao.make_exp("DIVI", false, 0, "", escopo, ""));
 	}
 	else if (token == OP_LOGICO_E)
 		Aceitar_Token(OP_LOGICO_E, ERR_OP_LOGICO_E);
@@ -1961,16 +1964,16 @@ string C_Analise_Sintatica::Exp_simples()
 		Aceitar_Token(ABRE_PARENTESES, ERR_ABRE_PARENTESES);
 		//sexpressao = { ABRE_PARENTESES, false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(sexpressao.make_exp(ABRE_PARENTESES, false, 0));
+			mepa.pilha_EXP_args.push(sexpressao.make_exp(ABRE_PARENTESES, false, 0, "", escopo, ""));
 		else
-			mepa.pilha_EXP.push(sexpressao.make_exp(ABRE_PARENTESES, false, 0));
+			mepa.pilha_EXP.push(sexpressao.make_exp(ABRE_PARENTESES, false, 0, "", escopo, ""));
 		tipo_exp = Exp();
 		Aceitar_Token(FECHA_PARENTESES, ERR_FECHA_PARENTESES);
 		//sexpressao = { FECHA_PARENTESES, false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(sexpressao.make_exp(FECHA_PARENTESES, false, 0));
+			mepa.pilha_EXP_args.push(sexpressao.make_exp(FECHA_PARENTESES, false, 0, "", escopo, ""));
 		else
-			mepa.pilha_EXP.push(sexpressao.make_exp(FECHA_PARENTESES, false, 0));
+			mepa.pilha_EXP.push(sexpressao.make_exp(FECHA_PARENTESES, false, 0, "", escopo, ""));
 	}
 	else if (token == CARACTERE ||
 		token == FALSO ||
@@ -2017,9 +2020,9 @@ string C_Analise_Sintatica::Exp_simples()
 			if (pai != 0)
 				pai = 1;
 			if (eh_argumento)
-				mepa.pilha_EXP_args.push(sexpressao.make_exp(identificador, temp_token == ENDERECO_ELEMENTO, parente));
+				mepa.pilha_EXP_args.push(sexpressao.make_exp(identificador, temp_token == ENDERECO_ELEMENTO, parente, tipo_exp, escopo, categoria));
 			else
-				mepa.pilha_EXP.push(sexpressao.make_exp(identificador, temp_token == ENDERECO_ELEMENTO, parente));
+				mepa.pilha_EXP.push(sexpressao.make_exp(identificador, temp_token == ENDERECO_ELEMENTO, parente, tipo_exp, escopo, categoria));
 
 			//Se tiver algum comando de escrita empilhado, preciso inserir ele na MEPA
 			if (!mepa.pilha_Com_Escrita.empty())
@@ -2048,8 +2051,7 @@ string C_Analise_Sintatica::Exp_simples()
 				{
 					if (tipo_exp == TIPO_STRING)
 					{
-						//int pos_pilha_ini_str = ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(identificador, parente));
-						int pos_pilha_ini = ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(identificador, parente)) + 4 * (-1);
+						int pos_pilha_ini = (ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(identificador, parente)) + 4) * (-1);
 						int pos_pilha = ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(identificador, parente));
 						mepa.CRVI_String(to_string(pai), pos_pilha_ini, pos_pilha_ini - pos_pilha);
 					}
@@ -2064,6 +2066,13 @@ string C_Analise_Sintatica::Exp_simples()
 					mepa.IMPE();
 				mepa.pilha_Com_Escrita.pop();
 				mepa.pilha_EXP.pop(); //Retiro a var que foi impressa 
+			}
+			else
+			{
+				if (tipo_exp == TIPO_STRING && !mepa.pilha_EXP.empty())
+				{
+
+				}
 			}
 		}
 
@@ -2141,9 +2150,9 @@ string C_Analise_Sintatica::Literal(S_Simbolos& _simbolo)
 		//mepa.CRCT(_simbolo.valor);
 		//sexpressao = { _simbolo.valor, false };
 		if (eh_argumento)
-			mepa.pilha_EXP_args.push(sexpressao.make_exp(_simbolo.valor, false, 0));
+			mepa.pilha_EXP_args.push(sexpressao.make_exp(_simbolo.valor, false, 0, _simbolo.tipo, escopo, _simbolo.categoria));
 		else
-			mepa.pilha_EXP.push(sexpressao.make_exp(_simbolo.valor, false, 0));
+			mepa.pilha_EXP.push(sexpressao.make_exp(_simbolo.valor, false, 0, _simbolo.tipo, escopo, _simbolo.categoria));
 	}
 	else if (token == NUM_REAL)
 	{
@@ -2174,6 +2183,9 @@ string C_Analise_Sintatica::Literal(S_Simbolos& _simbolo)
 			}
 			else if (_simbolo.valor != "")
 				val_string = _simbolo.valor;
+
+			if (eh_argumento)
+				mepa.pilha_EXP_args.push(sexpressao.make_exp(_simbolo.valor, false, 0, _simbolo.tipo, escopo, _simbolo.categoria));
 		}
 	}
 	else
@@ -2329,9 +2341,8 @@ void C_Analise_Sintatica::Lista_var_2()
 
 void C_Analise_Sintatica::Lista_decl_var()
 {
-	//svar.pos_pilha++;
-	//posicao_pilha_local++;
-	//posicao_pilha_global++;
+	if (pilha_var_mem.empty())
+		pilha_var_mem.push(0);
 	if (svar.tipo == TIPO_STRING)
 	{
 		svar.pos_pilha_ini_str = pilha_var_mem.top();
@@ -2345,9 +2356,6 @@ void C_Analise_Sintatica::Lista_decl_var()
 		var_mem++; 
 		svar.pos_pilha_ini_str = -1; //Quando não é String
 	}
-
-
-
 
 	svar.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
 	svar.linha = iter_token_lexema->linha;
@@ -2446,6 +2454,7 @@ void C_Analise_Sintatica::Iniciar_Simbolos(S_Simbolos &_simbolo)
 	_simbolo.passby = "";
 	_simbolo.classe = 0;
 	_simbolo.pos_pilha = -1;
+	_simbolo.end_param = -1;
 	_simbolo.rotulo = "";
 	_simbolo.escopo = "";
 	_simbolo.pai_heranca = -1;
@@ -2504,7 +2513,6 @@ void C_Analise_Sintatica::Inserir_DMEM_MEPA(int _mem)
 
 void C_Analise_Sintatica::Inserir_AMEM_MEPA_STRUCT(string _identificador, int _pai)
 {
-	//int l_pospilha = 0;
 	S_Simbolos l_simb;
 	int count = 0;
 	int count_str = 0;
@@ -2529,7 +2537,6 @@ void C_Analise_Sintatica::Inserir_AMEM_MEPA_STRUCT(string _identificador, int _p
 				count = diff + count;
 				pilha_var_mem.top() = pilha_var_mem.top() + diff;
 				l_simb.pos_pilha = pilha_var_mem.top();
-				//pilha_var_mem.top() = l_svar.pos_pilha + 1;
 				l_simb.pos_pilha_ini_str = pilha_var_mem.top() - diff;
 				pilha_var_mem.top()++;
 				count_str++;
@@ -2559,7 +2566,6 @@ void C_Analise_Sintatica::Inserir_AMEM_MEPA_STRUCT(string _identificador, int _p
 		}
 	}
 	mepa.AMEM(to_string(count + count_str));
-	//mepa.AMEM(to_string(pilha_var_mem.top()));
 }
 
 bool C_Analise_Sintatica::Verificar_Tipo_Padrao(string _tipo)
@@ -2582,7 +2588,10 @@ void C_Analise_Sintatica::Remover_Mem_Classe()
 	l_total_class_mem = ts.Retorna_Tot_Var_Mem_Classe();
 
 	for (int i = 0; i < l_total_class_mem; i++)
-		pilha_var_mem.top()--;
+	{
+		if (!pilha_var_mem.empty())
+			pilha_var_mem.top()--;
+	}
 }
 
 void C_Analise_Sintatica::Inserir_Membros_Classe_Pai(int _chave_pai, int _chave_classe)
@@ -2591,7 +2600,6 @@ void C_Analise_Sintatica::Inserir_Membros_Classe_Pai(int _chave_pai, int _chave_
 	l_simbolos = ts.Buscar_Membros_Classe(_chave_pai);
 
 	S_Simbolos l_simb;
-	//int count = 0;
 	int count_str = 0;
 
 	for (auto it = l_simbolos.begin(); it != l_simbolos.end(); it++)
@@ -2603,26 +2611,8 @@ void C_Analise_Sintatica::Inserir_Membros_Classe_Pai(int _chave_pai, int _chave_
 			l_simb.chave = ++chave;
 			l_simb.linha = iter_token_lexema->linha;
 			l_simb.pai = _chave_classe;
-			//l_simb.classe = _chave_classe;
 			l_simb.escopo = "";
 
-			/*if (l_simb.tipo == TIPO_STRING)
-			{
-				int diff = (l_simb.pos_pilha - l_simb.pos_pilha_ini_str + 1);
-				count = diff + count;
-				pilha_var_mem.top() = pilha_var_mem.top() + diff;
-				l_simb.pos_pilha = pilha_var_mem.top();
-				l_simb.pos_pilha_ini_str = pilha_var_mem.top() - diff;
-				pilha_var_mem.top()++;
-				count_str++;
-			}
-
-			else
-			{
-				count++;
-				l_simb.pos_pilha = pilha_var_mem.top()++;
-				l_simb.pos_pilha_ini_str = -1;
-			}*/
 			ts.Inserir(l_simb, escopo);
 		}
 		else if (it->categoria == SUB || it->categoria == FUNCTION)

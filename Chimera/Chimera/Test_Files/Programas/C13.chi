@@ -1,0 +1,24 @@
+class cliente
+	public:
+	    var int id, id2;
+	    var string nome, dob, s1;
+	    sub set_cliente(var int _id2 by value, var string _nome by value, var string _dob by value, var string _s1 by value)
+			id = 1;
+			s1 = _s1;
+			nome = _nome;
+			dob = _dob;
+			id2 = _id2;
+		end_sub
+end_class
+
+sub main()
+ 	var cliente cli;
+ 	var string temp;
+ 	temp = "StringDeVar";
+ 	cli.set_cliente(2,"Joao", "12/10/1990", temp);
+ 	println(cli.id);
+ 	println(cli.nome);
+ 	println(cli.dob);
+ 	println(cli.id2);
+ 	println(cli.s1);
+end_sub

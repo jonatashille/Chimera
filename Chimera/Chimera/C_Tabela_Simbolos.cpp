@@ -55,10 +55,11 @@ bool C_Tabela_Simbolos::Consultar(string _identificador)
 
 bool C_Tabela_Simbolos::Consultar_Acesso(string _identificador, int _pai)
 {
+	string categ_pai = Buscar_Categoria_Pai(_pai);
 	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
 	{
 		if (it->identificador == _identificador && it->pai == _pai)
-			if (it->valido && !(Buscar_Categoria_Pai(_pai) != CLASSE && it->access))
+			if (it->valido && !(categ_pai != CLASSE && it->access == PRIVATE))
 				return true;
 	}
 	return false;
@@ -228,6 +229,16 @@ int C_Tabela_Simbolos::Buscar_Qtd_Mem_Alocada_Params(int _pai)
 		}
 	}
 	return count;
+}
+
+int C_Tabela_Simbolos::Buscar_End_Param(string _identificador, int _pai)
+{
+	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+	{
+		if (it->identificador == _identificador && it->pai == _pai)
+			return it->end_param;
+	}
+	return -1;
 }
 
 int C_Tabela_Simbolos::Buscar_Qtd_Tot_Params(int _pai)
@@ -442,8 +453,8 @@ void C_Tabela_Simbolos::Atualizar_Pilha_Param_classe(int _pai, int _qtd_params, 
 					{
 						it->pos_pilha = (temp_val + temp_end + 3 + _qtd_var_classe) * -1;
 						it->pos_pilha_ini_str = it->pos_pilha + 3 + TAM_STRING + _qtd_var_classe;
-						int limite = (it->pos_pilha + 4);
-						for (int i = it->pos_pilha_ini_str; i >= limite; i--)
+						int i, j;
+						for (i = it->pos_pilha_ini_str, j = 0; j < TAM_STRING; i--, j++)
 						{
 							_pilha.push(make_pair(it->pos_pilha, (i*-1)));
 							//Preciso alterar o valor da tabela de símbolos, agora é o endereço local, pois foi passado por valor
@@ -461,63 +472,15 @@ void C_Tabela_Simbolos::Atualizar_Pilha_Param_classe(int _pai, int _qtd_params, 
 					it->tam_str = TAM_STRING;
 					it->pos_pilha_ini_str *= -1;
 					it->pos_pilha = _pilha.top().second;
+					int resto = _qtd_var_classe % TAM_STRING;
+					if (resto != 0)
+						resto = 1;
+					it->end_param = it->pos_pilha_ini_str + TAM_STRING + 3 + resto;
 				}
 				temp_param++;
 			}
 		}
 	}
-/*	if (_qtd_params > 0)
-	{
-		int temp_param = 0;
-		int temp_val = 0;
-		for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
-		{
-			if (it->pai == _pai && it->categoria == PARAM && it->valido)
-			{
-				if (it->tipo != TIPO_STRING && it->passby == VALUE)
-				{
-					temp_val++;
-				}
-			}
-		}
-		//for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
-		auto it = tabela_simbolos.end();
-		while (it != tabela_simbolos.begin())
-		{
-			it--;
-			if (it->pai == _pai && it->categoria == PARAM && it->valido)
-			{
-				if (it->tipo != TIPO_STRING)
-				{
-					it->pos_pilha = -(3 + _qtd_var_classe) - (_qtd_params - temp_param++);
-					if (it->passby == VALUE)
-					{
-						temp_val--;
-						_pilha.push(make_pair(it->pos_pilha, temp_val));
-						//Preciso alterar o valor da tabela de símbolos, agora é o endereço local, pois foi passado por valor
-						it->pos_pilha = temp_val;//Inicia com o 0 e vou incrementando
-					}
-				}
-				else
-				{
-					it->pos_pilha = -(3 + _qtd_var_classe) - (_qtd_params - temp_param++);
-					if (it->passby == VALUE)
-					{
-						for (int i = TAM_STRING - 1; i >= 0; i--)
-						{
-							_pilha.push(make_pair(it->pos_pilha, i));
-							//Preciso alterar o valor da tabela de símbolos, agora é o endereço local, pois foi passado por valor
-							//temp_val++;//Inicia com o 0 e vou incrementando
-							it->pos_pilha -= 1;
-						}
-					}
-					it->tam_str = TAM_STRING;
-					it->pos_pilha = temp_param - 1;
-					it->pos_pilha_ini_str = it->pos_pilha;
-				}
-			}
-		}
-	}*/
 }
 
 void C_Tabela_Simbolos::Atualizar_Tamanho_String(S_Id_Pai _sidpai, string _str)
@@ -567,8 +530,6 @@ int C_Tabela_Simbolos::Remover_Internos(string _identificador)
 
 		}
 	}
-	//TODO 02 - Desativar ou não?
-	//simbolo->valido = false;
 	return cont;
 }
 
@@ -614,6 +575,7 @@ void C_Tabela_Simbolos::Imprimir_TS(string _nome_arquivo)
 	ss << setw(10) << left << "Pilha"; 
 	ss << setw(15) << left << "Pilha_Ini_Str";
 	ss << setw(10) << left << "Tam Str";
+	ss << setw(10) << left << "End_Param";
 	ss << setw(20) << left << "Rotulo";
 	ss << setw(20) << left << "Escopo";
     ss << setw(20) << left << "Pai_Heranca";
@@ -640,6 +602,7 @@ void C_Tabela_Simbolos::Imprimir_TS(string _nome_arquivo)
 		ss << setw(10) << left << it->pos_pilha;
 		ss << setw(15) << left << it->pos_pilha_ini_str;
 		ss << setw(10) << left << it->tam_str;
+		ss << setw(10) << left << it->end_param;
 		ss << setw(20) << left << it->rotulo;
 		ss << setw(20) << left << it->escopo;
 		ss << setw(20) << left << it->pai_heranca;
@@ -688,6 +651,7 @@ void C_Tabela_Simbolos::Gravar_TS(string _nome_arquivo)
 	ss << "Pilha;";
 	ss << "Pilha_Ini_Str;";
 	ss << "Tam Str;";
+	ss << "End_Param;";
 	ss << "Rotulo;";
 	ss << "Escopo;";
 	ss << "Pai_Heranca;";
@@ -712,6 +676,7 @@ void C_Tabela_Simbolos::Gravar_TS(string _nome_arquivo)
 		ss << it->pos_pilha << ";";
 		ss << it->pos_pilha_ini_str << ";";
 		ss << it->tam_str << ";";
+		ss << it->end_param << ";";
 		ss << it->rotulo << ";";
 		ss << it->escopo << ";";
 		ss << it->pai_heranca << ";";
@@ -809,6 +774,17 @@ int C_Tabela_Simbolos::Retorna_Tot_Var_Mem_Classe()
 		}
 	}
 	return l_cont;
+}
+
+bool C_Tabela_Simbolos::Verifica_Propriedade_Membro_Classe(string _identificador, int _pai)
+{
+	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+	{
+		if (it->identificador == _identificador && it->pai == _pai)
+			if (it->valido && Buscar_Categoria_Pai(_pai) == CLASSE)
+				return true;
+	}
+	return false;
 }
 
 void C_Tabela_Simbolos::Erro(string _msg)

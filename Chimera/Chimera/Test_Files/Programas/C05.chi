@@ -1,16 +1,17 @@
 class calculadora
-	function int soma(var int v1 by value, var int v2 by value)
-		return v1+v2;
-	end_function
-	function int subt(var int v1 by value, var int v2 by value)
-		return v1-v2;
-	end_function
-	function int mult(var int v1 by value, var int v2 by value)
-		return v1*v2;
-	end_function
-	function int divi(var int v1 by value, var int v2 by value)
-		return v1/v2;
-	end_function
+	public:
+		function int soma(var int v1 by value, var int v2 by value)
+			return v1+v2;
+		end_function
+		function int subt(var int v1 by value, var int v2 by value)
+			return v1-v2;
+		end_function
+		function int mult(var int v1 by value, var int v2 by value)
+			return v1*v2;
+		end_function
+		function int divi(var int v1 by value, var int v2 by value)
+			return v1/v2;
+		end_function
 end_class
 
 sub main()

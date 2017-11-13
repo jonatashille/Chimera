@@ -1,15 +1,18 @@
  class A
- 	var string nome;
+ 	public:
+ 		var string nome;
  end_class
 
  class B
- 	var A a;
- 	var int numero;
+ 	public:
+ 		var A a;
+ 		var int numero;
  end_class
 
  class C
- 	var B b;
- 	var int id;
+ 	public:
+ 		var B b;
+ 		var int id;
  end_class
 
 sub main()

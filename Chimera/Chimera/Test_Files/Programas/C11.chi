@@ -1,0 +1,27 @@
+class animal
+	private:
+		var int id;
+	public:
+		var string nome;
+		sub Set_Id(var int _id by value)
+			id = _id;
+		end_sub
+		sub Imprime()
+			print(id);
+			print(" - ");
+			println(nome);
+		end_sub
+end_class
+
+sub main()
+	var animal dog;
+	var animal cat;
+
+	dog.Set_Id(1);
+	dog.nome = "Bella";
+	cat.Set_Id(2);
+	cat.nome = "Murano";
+
+	dog.Imprime();
+	cat.Imprime();
+end_sub

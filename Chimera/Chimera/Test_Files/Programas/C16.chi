@@ -1,0 +1,29 @@
+class animal
+	protected:
+		var string nome;
+end_class
+
+class cachorro:animal
+	//Por padrão, os membros já são privados
+	private:
+		var int id;
+	public:
+		sub set_id(var int _id by value)
+			id = _id;
+		end_sub	
+		sub set_nome(var string _nome by value)
+			nome = _nome;
+		end_sub
+		sub imprime()
+			print(id);
+			print(" - ");
+			println(nome);
+		end_sub
+end_class
+
+sub main()
+	var cachorro bella;
+	bella.set_id(1);
+	bella.set_nome("Bella");
+	bella.imprime();
+end_sub

@@ -22,37 +22,104 @@ DSVS FIM
 R3:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
-; ---------- Inicio Armazenamento String
-CRCT 'R'
-ARMI 1,-6
-CRCT 'e'
-ARMI 1,-5
-CRCT 'x'
-ARMI 1,-4
-; ---------- Fim Armazenamento String
+; ---------- Alocacao de Memoria (16)
+AMEM 16
+CRVL 1,-4
+ARMZ 1,14
+CRVL 1,-5
+ARMZ 1,13
+CRVL 1,-6
+ARMZ 1,12
+CRVL 1,-7
+ARMZ 1,11
+CRVL 1,-8
+ARMZ 1,10
+CRVL 1,-9
+ARMZ 1,9
+CRVL 1,-10
+ARMZ 1,8
+CRVL 1,-11
+ARMZ 1,7
+CRVL 1,-12
+ARMZ 1,6
+CRVL 1,-13
+ARMZ 1,5
+CRVL 1,-14
+ARMZ 1,4
+CRVL 1,-15
+ARMZ 1,3
+CRVL 1,-16
+ARMZ 1,2
+CRVL 1,-17
+ARMZ 1,1
+CRVL 1,-18
+ARMZ 1,0
+CRVL 1,-19
+ARMZ 1,15
 ; ---------- Inicio Leitura String
-CRVI 1,-6
+CRVL 1,0
 IMPC
-CRVI 1,-5
+CRVL 1,1
 IMPC
-CRVI 1,-4
+CRVL 1,2
 IMPC
+CRVL 1,3
+IMPC
+CRVL 1,4
+IMPC
+CRVL 1,5
+IMPC
+CRVL 1,6
+IMPC
+CRVL 1,7
+IMPC
+CRVL 1,8
+IMPC
+CRVL 1,9
+IMPC
+CRVL 1,10
+IMPC
+CRVL 1,11
+IMPC
+CRVL 1,12
+IMPC
+CRVL 1,13
+IMPC
+CRVL 1,14
+IMPC
+; ---------- Fim Leitura String
 IMPE
-RTPR 1,3
+CRVL 1,15
+IMPR
+IMPE
+; ---------- Desalocacao de Memoria (16)
+DMEM 16
+RTPR 1,16
 ; ---------- Fim/Retorno de Procedimento/Funcao
 ; ----------Inicio MAIN
 MAIN:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
-; ---------- Alocacao de Memoria (3)
-AMEM 3
-CREN 1,2
-CREN 1,1
-CREN 1,0
+CRCT 2017
+; ---------- Inicio Carrega String
+CRCT 'M'
+CRCT 'a'
+CRCT 'r'
+CRCT 'i'
+CRCT 'a'
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+; ---------- Fim Carrega String
 ; ---------- Chama Procedimento/Funcao - R3
 CHPR R3,1
-; ---------- Desalocacao de Memoria (3)
-DMEM 3
 RTPR 1,0
 ; ---------- Fim/Retorno de Procedimento/Funcao
 FIM:NADA

@@ -31,6 +31,7 @@ void TU_Programas::Executar()
 	Testar_Programa("p11"); //Teste com passagem de parâmetro por referência
 	Testar_Programa("p13"); //Teste com passagem de String por parâmetro + parametro inteiro
 	Testar_Programa("p14"); //Teste com passagem de diversas Strings por parâmetro e parametros inteiros
+	Testar_Programa("p15"); //Passagem de valor direto no parâmetro
 
 	//Estrutura
 	Testar_Programa("S01"); //Estrutura simples
@@ -44,6 +45,13 @@ void TU_Programas::Executar()
 	Testar_Programa("C06"); //Herança simples
 	Testar_Programa("C07"); //Exemplo de herança -> Animal
 	Testar_Programa("C08"); //Exemplo de herança -> Animal com string
+	Testar_Programa("C09"); //Exemplo de classes com Strings - Classes separadas
+	Testar_Programa("C10"); //Exemplo de classe com Strings - Mesma Classe
+	Testar_Programa("C11"); //Exemplo encapsulamento
+	Testar_Programa("C12"); //Passagem de valor direto no parâmetro para um método
+	Testar_Programa("C13"); //Passagem de valor direto e por variável no parâmetro para um método
+	Testar_Programa("C14"); //Programa com herança e encapsulamento
+	Testar_Programa("C15"); //Passagem de valor direto no parâmetro para um método - Diversificado
 }
 
 void TU_Programas::Testar_Programa(string _prog)

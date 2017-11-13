@@ -1,0 +1,202 @@
+include macros.asm
+pilha SEGMENT PARA STACK 'STACK'
+dw  100  dup(? )
+pilha ENDS
+dados   SEGMENT PARA 'DATA'
+dw  10  dup(0)
+buffer db 5 dup(' ')
+mesg   db  10, ? , 11 dup(0)
+dados   ENDS
+procs   SEGMENT PARA 'DATA'
+dw  32000 dup(0)
+procs   ENDS
+codigo  SEGMENT PARA 'CODE'
+ASSUME SS : pilha, CS : codigo, DS : dados, ES : dados
+inicio PROC  FAR
+; ----------Inicio das Instrucoes MEPA
+INPP
+; ---------- Chama Procedimento/Funcao - MAIN
+CHPR MAIN,1
+DSVS FIM
+; ---------- Entrada Rotulo R3
+R3:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ---------- Inicio Leitura String - Valor Indireto
+CRVI 1,-18
+IMPC
+CRVI 1,-17
+IMPC
+CRVI 1,-16
+IMPC
+CRVI 1,-15
+IMPC
+CRVI 1,-14
+IMPC
+CRVI 1,-13
+IMPC
+CRVI 1,-12
+IMPC
+CRVI 1,-11
+IMPC
+CRVI 1,-10
+IMPC
+CRVI 1,-9
+IMPC
+CRVI 1,-8
+IMPC
+CRVI 1,-7
+IMPC
+CRVI 1,-6
+IMPC
+CRVI 1,-5
+IMPC
+CRVI 1,-4
+IMPC
+; ---------- Fim Leitura String - Valor Indireto
+IMPE
+RTPR 1,15
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R37
+R37:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ---------- Alocacao de Memoria (15)
+AMEM 15
+CRVL 1,-19
+ARMZ 1,14
+CRVL 1,-20
+ARMZ 1,13
+CRVL 1,-21
+ARMZ 1,12
+CRVL 1,-22
+ARMZ 1,11
+CRVL 1,-23
+ARMZ 1,10
+CRVL 1,-24
+ARMZ 1,9
+CRVL 1,-25
+ARMZ 1,8
+CRVL 1,-26
+ARMZ 1,7
+CRVL 1,-27
+ARMZ 1,6
+CRVL 1,-28
+ARMZ 1,5
+CRVL 1,-29
+ARMZ 1,4
+CRVL 1,-30
+ARMZ 1,3
+CRVL 1,-31
+ARMZ 1,2
+CRVL 1,-32
+ARMZ 1,1
+CRVL 1,-33
+ARMZ 1,0
+; ---------- Inicio Carregamento String
+CRVL 1,0
+ARMI 1,-18
+CRVL 1,1
+ARMI 1,-17
+CRVL 1,2
+ARMI 1,-16
+CRVL 1,3
+ARMI 1,-15
+CRVL 1,4
+ARMI 1,-14
+CRVL 1,5
+ARMI 1,-13
+CRVL 1,6
+ARMI 1,-12
+CRVL 1,7
+ARMI 1,-11
+CRVL 1,8
+ARMI 1,-10
+CRVL 1,9
+ARMI 1,-9
+CRVL 1,10
+ARMI 1,-8
+CRVL 1,11
+ARMI 1,-7
+CRVL 1,12
+ARMI 1,-6
+CRVL 1,13
+ARMI 1,-5
+CRVL 1,14
+ARMI 1,-4
+; ---------- Fim Carregamento String
+; ---------- Desalocacao de Memoria (15)
+DMEM 15
+RTPR 1,30
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ----------Inicio MAIN
+MAIN:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ---------- Alocacao de Memoria (15)
+AMEM 15
+; ---------- Inicio Carrega String
+CRCT 'B'
+CRCT 'e'
+CRCT 'l'
+CRCT 'l'
+CRCT 'a'
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+; ---------- Fim Carrega String
+; ---------- Inicio Leitura Endereço String
+CREN 1,0
+CREN 1,1
+CREN 1,2
+CREN 1,3
+CREN 1,4
+CREN 1,5
+CREN 1,6
+CREN 1,7
+CREN 1,8
+CREN 1,9
+CREN 1,10
+CREN 1,11
+CREN 1,12
+CREN 1,13
+CREN 1,14
+; ---------- Fim Leitura Endereço String
+; ---------- Chama Procedimento/Funcao - R37
+CHPR R37,1
+; ---------- Inicio Leitura Endereço String
+CREN 1,0
+CREN 1,1
+CREN 1,2
+CREN 1,3
+CREN 1,4
+CREN 1,5
+CREN 1,6
+CREN 1,7
+CREN 1,8
+CREN 1,9
+CREN 1,10
+CREN 1,11
+CREN 1,12
+CREN 1,13
+CREN 1,14
+; ---------- Fim Leitura Endereço String
+; ---------- Chama Procedimento/Funcao - R3
+CHPR R3,1
+; ---------- Desalocacao de Memoria (15)
+DMEM 15
+RTPR 1,0
+; ---------- Fim/Retorno de Procedimento/Funcao
+FIM:NADA
+PARA
+; ----------Fim das Instrucoes MEPA
+inicio  ENDP
+codigo  ENDS
+END    inicio

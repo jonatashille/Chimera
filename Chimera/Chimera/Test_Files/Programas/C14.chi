@@ -1,0 +1,20 @@
+class animal
+	protected:
+		var string nome;
+		sub imprime()
+			println(nome);
+		end_sub
+end_class
+
+class cachorro:animal
+	public:
+		sub set_nome(var string _nome by value)
+			nome = _nome;
+		end_sub
+end_class
+
+sub main()
+	var cachorro bella;
+	bella.set_nome("Bella");
+	bella.imprime();
+end_sub

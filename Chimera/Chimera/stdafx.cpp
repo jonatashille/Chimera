@@ -88,6 +88,7 @@ enum Acesso { PUBLIC, PRIVATE, PROTECTED };
 
 #define ACESS_PRIVATE "ACESS_PRIVATE" 
 #define ACESS_PUBLIC "ACESS_PUBLIC" 
+#define ACESS_PROTECTED "ACESS_PROTECTED" 
 
 //OPERADORES
 #define OP_ADICAO "OP_ADICAO"
@@ -203,6 +204,7 @@ enum Acesso { PUBLIC, PRIVATE, PROTECTED };
 #define ERR_DOIS_PONTOS "Esperado :"
 #define ERR_ACESS_PRIVATE "Esperado private"
 #define ERR_ACESS_PUBLIC "Esperado public"
+#define ERR_ACESS_PROTECTED "Esperado protected"
 
 #define ERR_OP_SELECAO_IDENTIFICADOR "Esperado ."
 #define ERR_OP_SELECAO_PONTEIRO "Esperado ->"

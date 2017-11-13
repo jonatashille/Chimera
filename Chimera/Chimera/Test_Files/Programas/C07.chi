@@ -1,44 +1,47 @@
 class animal
-	var int id;
-	sub Comer()
-		println("Comendo...");
-	end_sub
-	sub Dormir()
-		println("Dormindo...");
-	end_sub
-	sub Respirar()
-		println("Respirando...");
-	end_sub
+	public:
+		var int id;
+		sub Comer()
+			println("Comendo...");
+		end_sub
+		sub Dormir()
+			println("Dormindo...");
+		end_sub
+		sub Respirar()
+			println("Respirando...");
+		end_sub
 end_class
 
 class cachorro:animal
-	sub Latir()
-		println("Latindo...");
-	end_sub
-	sub Abanar_rabo()
-		println("Abanando rabo...");
-	end_sub
-	sub set_id(var int _id by value)
-		id = _id;
-	end_sub
-	sub Imprime_id()
-		println(id);
-	end_sub
+	public:
+		sub Latir()
+			println("Latindo...");
+		end_sub
+		sub Abanar_rabo()
+			println("Abanando rabo...");
+		end_sub
+		sub set_id(var int _id by value)
+			id = _id;
+		end_sub
+		sub Imprime_id()
+			println(id);
+		end_sub
 end_class
 
 class gato:animal
-	sub Miar()
-		println("Miando...");
-	end_sub
-	sub Arranhar()
-		println("Arranhando...");
-	end_sub
-	sub set_id(var int _id by value)
-		id = _id;
-	end_sub
-	sub Imprime_id()
-		println(id);
-	end_sub
+	public:
+		sub Miar()
+			println("Miando...");
+		end_sub
+		sub Arranhar()
+			println("Arranhando...");
+		end_sub
+		sub set_id(var int _id by value)
+			id = _id;
+		end_sub
+		sub Imprime_id()
+			println(id);
+		end_sub
 end_class
 
 sub main()

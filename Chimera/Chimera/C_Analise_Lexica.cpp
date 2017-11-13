@@ -91,6 +91,7 @@ void C_Analise_Lexica::Montar_Tabela_Palavras_Reservadas()
 	palavras_reservadas.push_back(make_pair("end_class", END_CLASS));
 	palavras_reservadas.push_back(make_pair("private", ACESS_PRIVATE));
 	palavras_reservadas.push_back(make_pair("public", ACESS_PUBLIC));
+	palavras_reservadas.push_back(make_pair("protected", ACESS_PROTECTED));
 }
 
 void C_Analise_Lexica::Realizar_Analise_Lexica()
