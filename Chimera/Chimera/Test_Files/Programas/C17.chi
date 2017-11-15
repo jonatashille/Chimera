@@ -1,0 +1,40 @@
+class cliente
+	public:
+		var string nome;
+		var string nome4;
+	    var string nome1;
+	    var int id, id2;
+	    var string nome2;
+	    var int id3;
+		var int id4;
+		var string nome3;
+		var int id5;
+		
+	    sub set_cliente(var int _id by value, var string _nome by value, var int _id2 by value, var string _nome1 by value, var int _id3 by value, var string _nome2 by value, var int _id4 by value, var string _nome3 by value, var int _id5 by value, var string _nome4 by value)
+			id5 = _id5;
+			nome = _nome;
+			id3 = _id3;
+			nome4 = _nome4;
+			nome1 = _nome1;
+			nome2 = _nome2;
+			id2 = _id2;
+			nome3 = _nome3;
+			id = _id;
+			id4 = _id4;
+		end_sub
+end_class
+
+sub main()
+ 	var cliente cli;
+ 	cli.set_cliente(1,"NOME",2,"NOME2",3,"NOME3",4,"NOME4",5,"NOME5");
+ 	println(cli.id);
+ 	println(cli.nome);
+ 	println(cli.id2);
+ 	println(cli.nome1);
+ 	println(cli.id3);
+ 	println(cli.nome2);
+ 	println(cli.id4);
+ 	println(cli.nome3);
+ 	println(cli.id5);
+ 	println(cli.nome4);
+end_sub

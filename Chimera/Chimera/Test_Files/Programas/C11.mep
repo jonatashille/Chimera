@@ -24,13 +24,13 @@ R3:NADA
 ENPR 1
 ; ---------- Alocacao de Memoria (1)
 AMEM 1
-CRVL 1,-20
+CRVL 1,-35
 ARMZ 1,0
 CRVL 1,0
 ARMI 1,-4
 ; ---------- Desalocacao de Memoria (1)
 DMEM 1
-RTPR 1,17
+RTPR 1,32
 ; ---------- Fim/Retorno de Procedimento/Funcao
 ; ---------- Entrada Rotulo R12
 R12:NADA
@@ -47,6 +47,36 @@ CRCT ' '
 IMPC
 ; ----------FIM Impressao
 ; ---------- Inicio Leitura String - Valor Indireto
+CRVI 1,-35
+IMPC
+CRVI 1,-34
+IMPC
+CRVI 1,-33
+IMPC
+CRVI 1,-32
+IMPC
+CRVI 1,-31
+IMPC
+CRVI 1,-30
+IMPC
+CRVI 1,-29
+IMPC
+CRVI 1,-28
+IMPC
+CRVI 1,-27
+IMPC
+CRVI 1,-26
+IMPC
+CRVI 1,-25
+IMPC
+CRVI 1,-24
+IMPC
+CRVI 1,-23
+IMPC
+CRVI 1,-22
+IMPC
+CRVI 1,-21
+IMPC
 CRVI 1,-20
 IMPC
 CRVI 1,-19
@@ -81,16 +111,16 @@ CRVI 1,-5
 IMPC
 ; ---------- Fim Leitura String - Valor Indireto
 IMPE
-RTPR 1,16
+RTPR 1,31
 ; ---------- Fim/Retorno de Procedimento/Funcao
 ; ----------Inicio MAIN
 MAIN:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
-; ---------- Alocacao de Memoria (16)
-AMEM 16
-; ---------- Alocacao de Memoria (16)
-AMEM 16
+; ---------- Alocacao de Memoria (31)
+AMEM 31
+; ---------- Alocacao de Memoria (31)
+AMEM 31
 CRCT 1
 ; ---------- Inicio Leitura Endereço String
 CREN 1,1
@@ -108,6 +138,21 @@ CREN 1,12
 CREN 1,13
 CREN 1,14
 CREN 1,15
+CREN 1,16
+CREN 1,17
+CREN 1,18
+CREN 1,19
+CREN 1,20
+CREN 1,21
+CREN 1,22
+CREN 1,23
+CREN 1,24
+CREN 1,25
+CREN 1,26
+CREN 1,27
+CREN 1,28
+CREN 1,29
+CREN 1,30
 ; ---------- Fim Leitura Endereço String
 CREN 1,0
 ; ---------- Chama Procedimento/Funcao - R3
@@ -126,38 +171,53 @@ ARMZ 1,5
 ; ---------- Fim Armazenamento String
 CRCT 2
 ; ---------- Inicio Leitura Endereço String
-CREN 1,17
-CREN 1,18
-CREN 1,19
-CREN 1,20
-CREN 1,21
-CREN 1,22
-CREN 1,23
-CREN 1,24
-CREN 1,25
-CREN 1,26
-CREN 1,27
-CREN 1,28
-CREN 1,29
-CREN 1,30
-CREN 1,31
+CREN 1,32
+CREN 1,33
+CREN 1,34
+CREN 1,35
+CREN 1,36
+CREN 1,37
+CREN 1,38
+CREN 1,39
+CREN 1,40
+CREN 1,41
+CREN 1,42
+CREN 1,43
+CREN 1,44
+CREN 1,45
+CREN 1,46
+CREN 1,47
+CREN 1,48
+CREN 1,49
+CREN 1,50
+CREN 1,51
+CREN 1,52
+CREN 1,53
+CREN 1,54
+CREN 1,55
+CREN 1,56
+CREN 1,57
+CREN 1,58
+CREN 1,59
+CREN 1,60
+CREN 1,61
 ; ---------- Fim Leitura Endereço String
-CREN 1,16
+CREN 1,31
 ; ---------- Chama Procedimento/Funcao - R3
 CHPR R3,1
 ; ---------- Inicio Armazenamento String
 CRCT 'M'
-ARMZ 1,17
+ARMZ 1,32
 CRCT 'u'
-ARMZ 1,18
+ARMZ 1,33
 CRCT 'r'
-ARMZ 1,19
+ARMZ 1,34
 CRCT 'a'
-ARMZ 1,20
+ARMZ 1,35
 CRCT 'n'
-ARMZ 1,21
+ARMZ 1,36
 CRCT 'o'
-ARMZ 1,22
+ARMZ 1,37
 ; ---------- Fim Armazenamento String
 ; ---------- Inicio Leitura Endereço String
 CREN 1,1
@@ -175,11 +235,7 @@ CREN 1,12
 CREN 1,13
 CREN 1,14
 CREN 1,15
-; ---------- Fim Leitura Endereço String
-CREN 1,0
-; ---------- Chama Procedimento/Funcao - R12
-CHPR R12,1
-; ---------- Inicio Leitura Endereço String
+CREN 1,16
 CREN 1,17
 CREN 1,18
 CREN 1,19
@@ -194,13 +250,47 @@ CREN 1,27
 CREN 1,28
 CREN 1,29
 CREN 1,30
-CREN 1,31
 ; ---------- Fim Leitura Endereço String
-CREN 1,16
+CREN 1,0
 ; ---------- Chama Procedimento/Funcao - R12
 CHPR R12,1
-; ---------- Desalocacao de Memoria (32)
-DMEM 32
+; ---------- Inicio Leitura Endereço String
+CREN 1,32
+CREN 1,33
+CREN 1,34
+CREN 1,35
+CREN 1,36
+CREN 1,37
+CREN 1,38
+CREN 1,39
+CREN 1,40
+CREN 1,41
+CREN 1,42
+CREN 1,43
+CREN 1,44
+CREN 1,45
+CREN 1,46
+CREN 1,47
+CREN 1,48
+CREN 1,49
+CREN 1,50
+CREN 1,51
+CREN 1,52
+CREN 1,53
+CREN 1,54
+CREN 1,55
+CREN 1,56
+CREN 1,57
+CREN 1,58
+CREN 1,59
+CREN 1,60
+CREN 1,61
+; ---------- Fim Leitura Endereço String
+CREN 1,31
+; ---------- Chama Procedimento/Funcao - R12
+CHPR R12,1
+; ---------- Desalocacao de Memoria (62)
+DMEM 62
 RTPR 1,0
 ; ---------- Fim/Retorno de Procedimento/Funcao
 FIM:NADA

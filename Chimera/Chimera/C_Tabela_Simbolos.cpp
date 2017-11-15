@@ -206,6 +206,24 @@ int C_Tabela_Simbolos::Buscar_Pai(string _identificador)
 	return simbolo->pai;
 }
 
+int C_Tabela_Simbolos::Buscar_Pai(int _chave)
+{
+	vector<S_Simbolos>::iterator simbolo;
+	simbolo = Buscar_Simbolo(_chave);
+	return simbolo->pai;
+}
+
+int C_Tabela_Simbolos::Buscar_Pai_Pai(int _pai)
+{
+	vector<S_Simbolos>::iterator simbolo;
+	simbolo = Buscar_Simbolo(_pai);
+	if (simbolo._Ptr != nullptr)
+	{
+		return simbolo->pai;
+	}
+	return -1;
+}
+
 string C_Tabela_Simbolos::Buscar_Categoria_Pai(int _pai)
 {
 	vector<S_Simbolos>::iterator simbolo;
@@ -472,10 +490,8 @@ void C_Tabela_Simbolos::Atualizar_Pilha_Param_classe(int _pai, int _qtd_params, 
 					it->tam_str = TAM_STRING;
 					it->pos_pilha_ini_str *= -1;
 					it->pos_pilha = _pilha.top().second;
-					int resto = _qtd_var_classe % TAM_STRING;
-					if (resto != 0)
-						resto = 1;
-					it->end_param = it->pos_pilha_ini_str + TAM_STRING + 3 + resto;
+
+					//it->end_param = it->pos_pilha_ini_str + TAM_STRING + 4;
 				}
 				temp_param++;
 			}

@@ -1,0 +1,17 @@
+struct DiaMesAno
+	var int dia;
+ 	var int mes;
+ 	var int ano;
+end_struct
+
+sub main()
+	var DiaMesAno dma;
+	dma.dia = 20;
+	dma.mes = 11;
+	dma.ano = 2017;
+	print(dma.dia);
+	print("/");
+	print(dma.mes);
+	print("/");
+	println(dma.ano);
+end_sub

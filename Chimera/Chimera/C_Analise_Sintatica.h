@@ -76,6 +76,7 @@ private:
 	stack<S_Selelecao_ID> pilha_selecao;
 	string val_string;
 	stack<S_Exp_Args> pilha_Exp_args;
+	int chave_atribuido; //Armazena a chave da variável que está sendo atribuída
 public:
 	C_Analise_Sintatica(vector<S_Token_Lexema>);
 	~C_Analise_Sintatica();

@@ -22,16 +22,16 @@ DSVS FIM
 MAIN:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
-; ---------- Alocacao de Memoria (31)
-AMEM 31
-; ---------- Alocacao de Memoria (31)
-AMEM 31
-; ---------- Alocacao de Memoria (17)
-AMEM 17
+; ---------- Alocacao de Memoria (61)
+AMEM 61
+; ---------- Alocacao de Memoria (61)
+AMEM 61
+; ---------- Alocacao de Memoria (32)
+AMEM 32
 CRCT 1
 ARMZ 1,0
 CRCT 2
-ARMZ 1,31
+ARMZ 1,61
 ; ---------- Inicio Armazenamento String
 CRCT 'J'
 ARMZ 1,1
@@ -44,92 +44,92 @@ ARMZ 1,4
 ; ---------- Fim Armazenamento String
 ; ---------- Inicio Armazenamento String
 CRCT 'M'
-ARMZ 1,32
+ARMZ 1,62
 CRCT 'a'
-ARMZ 1,33
+ARMZ 1,63
 CRCT 'r'
-ARMZ 1,34
+ARMZ 1,64
 CRCT 'i'
-ARMZ 1,35
+ARMZ 1,65
 CRCT 'a'
-ARMZ 1,36
+ARMZ 1,66
 ; ---------- Fim Armazenamento String
 ; ---------- Inicio Armazenamento String
 CRCT '3'
-ARMZ 1,16
+ARMZ 1,31
 CRCT '1'
-ARMZ 1,17
+ARMZ 1,32
 CRCT '/'
-ARMZ 1,18
+ARMZ 1,33
 CRCT '0'
-ARMZ 1,19
+ARMZ 1,34
 CRCT '2'
-ARMZ 1,20
+ARMZ 1,35
 CRCT '/'
-ARMZ 1,21
+ARMZ 1,36
 CRCT '1'
-ARMZ 1,22
+ARMZ 1,37
 CRCT '9'
-ARMZ 1,23
+ARMZ 1,38
 CRCT '9'
-ARMZ 1,24
+ARMZ 1,39
 CRCT '2'
-ARMZ 1,25
+ARMZ 1,40
 ; ---------- Fim Armazenamento String
 ; ---------- Inicio Armazenamento String
 CRCT '0'
-ARMZ 1,47
+ARMZ 1,92
 CRCT '5'
-ARMZ 1,48
+ARMZ 1,93
 CRCT '/'
-ARMZ 1,49
+ARMZ 1,94
 CRCT '1'
-ARMZ 1,50
+ARMZ 1,95
 CRCT '0'
-ARMZ 1,51
+ARMZ 1,96
 CRCT '/'
-ARMZ 1,52
+ARMZ 1,97
 CRCT '1'
-ARMZ 1,53
+ARMZ 1,98
 CRCT '9'
-ARMZ 1,54
+ARMZ 1,99
 CRCT '8'
-ARMZ 1,55
+ARMZ 1,100
 CRCT '5'
-ARMZ 1,56
+ARMZ 1,101
 ; ---------- Fim Armazenamento String
 CRCT 2323
-ARMZ 1,62
+ARMZ 1,122
 ; ---------- Inicio Armazenamento String
 CRCT 'J'
-ARMZ 1,64
+ARMZ 1,124
 CRCT 'u'
-ARMZ 1,65
+ARMZ 1,125
 CRCT 'r'
-ARMZ 1,66
+ARMZ 1,126
 CRCT 'a'
-ARMZ 1,67
+ARMZ 1,127
 CRCT 's'
-ARMZ 1,68
+ARMZ 1,128
 CRCT 's'
-ARMZ 1,69
+ARMZ 1,129
 CRCT 'i'
-ARMZ 1,70
+ARMZ 1,130
 CRCT 'c'
-ARMZ 1,71
+ARMZ 1,131
 CRCT ' '
-ARMZ 1,72
+ARMZ 1,132
 CRCT 'P'
-ARMZ 1,73
+ARMZ 1,133
 CRCT 'a'
-ARMZ 1,74
+ARMZ 1,134
 CRCT 'r'
-ARMZ 1,75
+ARMZ 1,135
 CRCT 'k'
-ARMZ 1,76
+ARMZ 1,136
 ; ---------- Fim Armazenamento String
 CRCT 1994
-ARMZ 1,63
+ARMZ 1,123
 CRVL 1,0
 IMPR
 IMPE
@@ -164,9 +164,6 @@ CRVL 1,14
 IMPC
 CRVL 1,15
 IMPC
-; ---------- Fim Leitura String
-IMPE
-; ---------- Inicio Leitura String
 CRVL 1,16
 IMPC
 CRVL 1,17
@@ -199,10 +196,9 @@ CRVL 1,30
 IMPC
 ; ---------- Fim Leitura String
 IMPE
-CRVL 1,31
-IMPR
-IMPE
 ; ---------- Inicio Leitura String
+CRVL 1,31
+IMPC
 CRVL 1,32
 IMPC
 CRVL 1,33
@@ -233,9 +229,6 @@ CRVL 1,45
 IMPC
 CRVL 1,46
 IMPC
-; ---------- Fim Leitura String
-IMPE
-; ---------- Inicio Leitura String
 CRVL 1,47
 IMPC
 CRVL 1,48
@@ -264,14 +257,16 @@ CRVL 1,59
 IMPC
 CRVL 1,60
 IMPC
-CRVL 1,61
-IMPC
 ; ---------- Fim Leitura String
 IMPE
-CRVL 1,62
+CRVL 1,61
 IMPR
 IMPE
 ; ---------- Inicio Leitura String
+CRVL 1,62
+IMPC
+CRVL 1,63
+IMPC
 CRVL 1,64
 IMPC
 CRVL 1,65
@@ -302,13 +297,168 @@ CRVL 1,77
 IMPC
 CRVL 1,78
 IMPC
+CRVL 1,79
+IMPC
+CRVL 1,80
+IMPC
+CRVL 1,81
+IMPC
+CRVL 1,82
+IMPC
+CRVL 1,83
+IMPC
+CRVL 1,84
+IMPC
+CRVL 1,85
+IMPC
+CRVL 1,86
+IMPC
+CRVL 1,87
+IMPC
+CRVL 1,88
+IMPC
+CRVL 1,89
+IMPC
+CRVL 1,90
+IMPC
+CRVL 1,91
+IMPC
 ; ---------- Fim Leitura String
 IMPE
-CRVL 1,63
+; ---------- Inicio Leitura String
+CRVL 1,92
+IMPC
+CRVL 1,93
+IMPC
+CRVL 1,94
+IMPC
+CRVL 1,95
+IMPC
+CRVL 1,96
+IMPC
+CRVL 1,97
+IMPC
+CRVL 1,98
+IMPC
+CRVL 1,99
+IMPC
+CRVL 1,100
+IMPC
+CRVL 1,101
+IMPC
+CRVL 1,102
+IMPC
+CRVL 1,103
+IMPC
+CRVL 1,104
+IMPC
+CRVL 1,105
+IMPC
+CRVL 1,106
+IMPC
+CRVL 1,107
+IMPC
+CRVL 1,108
+IMPC
+CRVL 1,109
+IMPC
+CRVL 1,110
+IMPC
+CRVL 1,111
+IMPC
+CRVL 1,112
+IMPC
+CRVL 1,113
+IMPC
+CRVL 1,114
+IMPC
+CRVL 1,115
+IMPC
+CRVL 1,116
+IMPC
+CRVL 1,117
+IMPC
+CRVL 1,118
+IMPC
+CRVL 1,119
+IMPC
+CRVL 1,120
+IMPC
+CRVL 1,121
+IMPC
+; ---------- Fim Leitura String
+IMPE
+CRVL 1,122
 IMPR
 IMPE
-; ---------- Desalocacao de Memoria (79)
-DMEM 79
+; ---------- Inicio Leitura String
+CRVL 1,124
+IMPC
+CRVL 1,125
+IMPC
+CRVL 1,126
+IMPC
+CRVL 1,127
+IMPC
+CRVL 1,128
+IMPC
+CRVL 1,129
+IMPC
+CRVL 1,130
+IMPC
+CRVL 1,131
+IMPC
+CRVL 1,132
+IMPC
+CRVL 1,133
+IMPC
+CRVL 1,134
+IMPC
+CRVL 1,135
+IMPC
+CRVL 1,136
+IMPC
+CRVL 1,137
+IMPC
+CRVL 1,138
+IMPC
+CRVL 1,139
+IMPC
+CRVL 1,140
+IMPC
+CRVL 1,141
+IMPC
+CRVL 1,142
+IMPC
+CRVL 1,143
+IMPC
+CRVL 1,144
+IMPC
+CRVL 1,145
+IMPC
+CRVL 1,146
+IMPC
+CRVL 1,147
+IMPC
+CRVL 1,148
+IMPC
+CRVL 1,149
+IMPC
+CRVL 1,150
+IMPC
+CRVL 1,151
+IMPC
+CRVL 1,152
+IMPC
+CRVL 1,153
+IMPC
+; ---------- Fim Leitura String
+IMPE
+CRVL 1,123
+IMPR
+IMPE
+; ---------- Desalocacao de Memoria (154)
+DMEM 154
 RTPR 1,0
 ; ---------- Fim/Retorno de Procedimento/Funcao
 FIM:NADA

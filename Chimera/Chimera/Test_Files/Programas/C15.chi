@@ -1,5 +1,6 @@
 class cliente
 	public:
+		//var int id;
 	    var string nome, dob;
 	    sub set_cliente(var string _nome by value, var string _dob by value)
 			nome = _nome;

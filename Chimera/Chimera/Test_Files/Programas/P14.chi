@@ -12,6 +12,6 @@ sub main()
 	x = "Maria";
 	y = 2017;
 	z = "Joselito";
-	w = "NomeQuinzeCarac";
+	w = "NomeTrintaCaracteresParaTeste9";
 	Imprime(x, y, z, w);
 end_sub

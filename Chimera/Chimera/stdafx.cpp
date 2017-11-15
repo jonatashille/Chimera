@@ -17,7 +17,7 @@
 enum Acesso { PUBLIC, PRIVATE, PROTECTED };
 
 //TAM String
-#define TAM_STRING 15 
+#define TAM_STRING 30 
 
 //TOKENS
 #define FIM "FIM"

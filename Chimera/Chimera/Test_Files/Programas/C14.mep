@@ -23,6 +23,36 @@ R3:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
 ; ---------- Inicio Leitura String - Valor Indireto
+CRVI 1,-33
+IMPC
+CRVI 1,-32
+IMPC
+CRVI 1,-31
+IMPC
+CRVI 1,-30
+IMPC
+CRVI 1,-29
+IMPC
+CRVI 1,-28
+IMPC
+CRVI 1,-27
+IMPC
+CRVI 1,-26
+IMPC
+CRVI 1,-25
+IMPC
+CRVI 1,-24
+IMPC
+CRVI 1,-23
+IMPC
+CRVI 1,-22
+IMPC
+CRVI 1,-21
+IMPC
+CRVI 1,-20
+IMPC
+CRVI 1,-19
+IMPC
 CRVI 1,-18
 IMPC
 CRVI 1,-17
@@ -55,92 +85,167 @@ CRVI 1,-4
 IMPC
 ; ---------- Fim Leitura String - Valor Indireto
 IMPE
-RTPR 1,15
+RTPR 1,30
 ; ---------- Fim/Retorno de Procedimento/Funcao
-; ---------- Entrada Rotulo R37
-R37:NADA
+; ---------- Entrada Rotulo R67
+R67:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
-; ---------- Alocacao de Memoria (15)
-AMEM 15
-CRVL 1,-19
+; ---------- Alocacao de Memoria (30)
+AMEM 30
+CRVL 1,-34
+ARMZ 1,29
+CRVL 1,-35
+ARMZ 1,28
+CRVL 1,-36
+ARMZ 1,27
+CRVL 1,-37
+ARMZ 1,26
+CRVL 1,-38
+ARMZ 1,25
+CRVL 1,-39
+ARMZ 1,24
+CRVL 1,-40
+ARMZ 1,23
+CRVL 1,-41
+ARMZ 1,22
+CRVL 1,-42
+ARMZ 1,21
+CRVL 1,-43
+ARMZ 1,20
+CRVL 1,-44
+ARMZ 1,19
+CRVL 1,-45
+ARMZ 1,18
+CRVL 1,-46
+ARMZ 1,17
+CRVL 1,-47
+ARMZ 1,16
+CRVL 1,-48
+ARMZ 1,15
+CRVL 1,-49
 ARMZ 1,14
-CRVL 1,-20
+CRVL 1,-50
 ARMZ 1,13
-CRVL 1,-21
+CRVL 1,-51
 ARMZ 1,12
-CRVL 1,-22
+CRVL 1,-52
 ARMZ 1,11
-CRVL 1,-23
+CRVL 1,-53
 ARMZ 1,10
-CRVL 1,-24
+CRVL 1,-54
 ARMZ 1,9
-CRVL 1,-25
+CRVL 1,-55
 ARMZ 1,8
-CRVL 1,-26
+CRVL 1,-56
 ARMZ 1,7
-CRVL 1,-27
+CRVL 1,-57
 ARMZ 1,6
-CRVL 1,-28
+CRVL 1,-58
 ARMZ 1,5
-CRVL 1,-29
+CRVL 1,-59
 ARMZ 1,4
-CRVL 1,-30
+CRVL 1,-60
 ARMZ 1,3
-CRVL 1,-31
+CRVL 1,-61
 ARMZ 1,2
-CRVL 1,-32
+CRVL 1,-62
 ARMZ 1,1
-CRVL 1,-33
+CRVL 1,-63
 ARMZ 1,0
 ; ---------- Inicio Carregamento String
 CRVL 1,0
-ARMI 1,-18
+ARMI 1,-33
 CRVL 1,1
-ARMI 1,-17
+ARMI 1,-32
 CRVL 1,2
-ARMI 1,-16
+ARMI 1,-31
 CRVL 1,3
-ARMI 1,-15
+ARMI 1,-30
 CRVL 1,4
-ARMI 1,-14
+ARMI 1,-29
 CRVL 1,5
-ARMI 1,-13
+ARMI 1,-28
 CRVL 1,6
-ARMI 1,-12
+ARMI 1,-27
 CRVL 1,7
-ARMI 1,-11
+ARMI 1,-26
 CRVL 1,8
-ARMI 1,-10
+ARMI 1,-25
 CRVL 1,9
-ARMI 1,-9
+ARMI 1,-24
 CRVL 1,10
-ARMI 1,-8
+ARMI 1,-23
 CRVL 1,11
-ARMI 1,-7
+ARMI 1,-22
 CRVL 1,12
-ARMI 1,-6
+ARMI 1,-21
 CRVL 1,13
-ARMI 1,-5
+ARMI 1,-20
 CRVL 1,14
+ARMI 1,-19
+CRVL 1,15
+ARMI 1,-18
+CRVL 1,16
+ARMI 1,-17
+CRVL 1,17
+ARMI 1,-16
+CRVL 1,18
+ARMI 1,-15
+CRVL 1,19
+ARMI 1,-14
+CRVL 1,20
+ARMI 1,-13
+CRVL 1,21
+ARMI 1,-12
+CRVL 1,22
+ARMI 1,-11
+CRVL 1,23
+ARMI 1,-10
+CRVL 1,24
+ARMI 1,-9
+CRVL 1,25
+ARMI 1,-8
+CRVL 1,26
+ARMI 1,-7
+CRVL 1,27
+ARMI 1,-6
+CRVL 1,28
+ARMI 1,-5
+CRVL 1,29
 ARMI 1,-4
 ; ---------- Fim Carregamento String
-; ---------- Desalocacao de Memoria (15)
-DMEM 15
-RTPR 1,30
+; ---------- Desalocacao de Memoria (30)
+DMEM 30
+RTPR 1,60
 ; ---------- Fim/Retorno de Procedimento/Funcao
 ; ----------Inicio MAIN
 MAIN:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
-; ---------- Alocacao de Memoria (15)
-AMEM 15
+; ---------- Alocacao de Memoria (30)
+AMEM 30
 ; ---------- Inicio Carrega String
 CRCT 'B'
 CRCT 'e'
 CRCT 'l'
 CRCT 'l'
 CRCT 'a'
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
+CRCT ' '
 CRCT ' '
 CRCT ' '
 CRCT ' '
@@ -168,9 +273,24 @@ CREN 1,11
 CREN 1,12
 CREN 1,13
 CREN 1,14
+CREN 1,15
+CREN 1,16
+CREN 1,17
+CREN 1,18
+CREN 1,19
+CREN 1,20
+CREN 1,21
+CREN 1,22
+CREN 1,23
+CREN 1,24
+CREN 1,25
+CREN 1,26
+CREN 1,27
+CREN 1,28
+CREN 1,29
 ; ---------- Fim Leitura Endereço String
-; ---------- Chama Procedimento/Funcao - R37
-CHPR R37,1
+; ---------- Chama Procedimento/Funcao - R67
+CHPR R67,1
 ; ---------- Inicio Leitura Endereço String
 CREN 1,0
 CREN 1,1
@@ -187,11 +307,26 @@ CREN 1,11
 CREN 1,12
 CREN 1,13
 CREN 1,14
+CREN 1,15
+CREN 1,16
+CREN 1,17
+CREN 1,18
+CREN 1,19
+CREN 1,20
+CREN 1,21
+CREN 1,22
+CREN 1,23
+CREN 1,24
+CREN 1,25
+CREN 1,26
+CREN 1,27
+CREN 1,28
+CREN 1,29
 ; ---------- Fim Leitura Endereço String
 ; ---------- Chama Procedimento/Funcao - R3
 CHPR R3,1
-; ---------- Desalocacao de Memoria (15)
-DMEM 15
+; ---------- Desalocacao de Memoria (30)
+DMEM 30
 RTPR 1,0
 ; ---------- Fim/Retorno de Procedimento/Funcao
 FIM:NADA

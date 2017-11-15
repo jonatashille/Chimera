@@ -10,9 +10,6 @@ void main()
 {
 	Executar_Testes();
 
-	//Compilar("Test_Files\\Programas\\C15.chi");
-	//Compilar("Test_Files\\Programas\\C14.chi");
-
 	system("pause");
 }
 
@@ -38,6 +35,7 @@ void Executar_Testes()
 	//Programas com estrutura
 	Compilar("Test_Files\\Programas\\S01.chi");
 	Compilar("Test_Files\\Programas\\S02.chi");
+	Compilar("Test_Files\\Programas\\S03.chi");
 	
 	//Programas com classes/orientado a objetos
 	Compilar("Test_Files\\Programas\\C01.chi");
@@ -56,6 +54,15 @@ void Executar_Testes()
 	Compilar("Test_Files\\Programas\\C14.chi");
 	Compilar("Test_Files\\Programas\\C15.chi");
 	Compilar("Test_Files\\Programas\\C16.chi");
+	Compilar("Test_Files\\Programas\\C17.chi");
+
+	//Programas com Strings
+	/*Compilar("Test_Files\\Programas\\T01.chi");
+	Compilar("Test_Files\\Programas\\T02.chi");
+	Compilar("Test_Files\\Programas\\T03.chi");
+	Compilar("Test_Files\\Programas\\T04.chi");
+	Compilar("Test_Files\\Programas\\T05.chi");
+	Compilar("Test_Files\\Programas\\T06.chi");*/
 
 	//Testas as opçoes da analise léxica e todos os programas acima que já foram testados
 	Executar_Testes_Unitatios();

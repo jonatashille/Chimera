@@ -12,8 +12,9 @@ struct S_EXP
 	string tipo;
 	string escopo;
 	string categoria;
+	int chave_atribuido;
 
-	S_EXP make_exp(string _token, bool _end_elemento, int _parente, string _tipo, string _escopo, string _categoria)
+	S_EXP make_exp(string _token, bool _end_elemento, int _parente, string _tipo, string _escopo, string _categoria, int _chave_atribuido)
 	{
 		S_EXP sexpressao;
 		sexpressao.token = _token;
@@ -22,6 +23,7 @@ struct S_EXP
 		sexpressao.tipo = _tipo;
 		sexpressao.escopo = _escopo;
 		sexpressao.categoria = _categoria;
+		sexpressao.chave_atribuido = _chave_atribuido;
 		return sexpressao;
 	}
 

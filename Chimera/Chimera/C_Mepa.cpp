@@ -118,8 +118,24 @@ void C_Mepa::Converter_Pos_Fixa(stack<S_EXP>& _p, C_Tabela_Simbolos _ts)
 						{
 							int pos_pilha_ini_str = _ts.Buscar_Pos_Pilha_Ini_Str(sidpai.make_Id_Pai(_p.top().token, _p.top().parente));
 							int pos_pilha = _ts.Buscar_Pos_Pilha(sidpai.make_Id_Pai(_p.top().token, _p.top().parente));
-							int end_param = _ts.Buscar_End_Param(_p.top().token, _p.top().parente);
-							CRVL_String_Param_Classe(to_string(pai), pos_pilha_ini_str, pos_pilha, end_param);
+							int pai_classe = _ts.Buscar_Pai(_p.top().chave_atribuido);
+
+							vector<S_Simbolos> l_simbolos;
+							l_simbolos = _ts.Buscar_Var_Pelo_Pai(pai_classe);
+
+							int tot_param_acima = -3;
+							for (auto it = l_simbolos.begin(); it != l_simbolos.end() && it->chave < _p.top().chave_atribuido; it++)
+							{
+								if (it->tipo == TIPO_STRING)
+								{
+									tot_param_acima -= TAM_STRING;
+								}
+								else if (it->tipo == TIPO_INT)
+								{
+									tot_param_acima -= 1;
+								}
+							}
+							CRVL_String_Param_Classe(to_string(pai), pos_pilha_ini_str, pos_pilha, tot_param_acima);
 						}
 						else
 						{
@@ -294,7 +310,7 @@ void C_Mepa::CRVL_String_Param(string _k, int _pos_ini, int _pos_fim)
 
 void C_Mepa::CRVL_String_Param_Classe(string _k, int _pos_ini, int _pos_fim, int _end_param)
 {
-	_end_param *= -1;
+	_end_param -= TAM_STRING;
 	mepa << "; ---------- Inicio Carregamento String" << endl;
 	for (int i = _pos_ini; i <= _pos_fim; i++)
 	{

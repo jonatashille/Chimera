@@ -98,6 +98,10 @@ public:
 	int Buscar_Pos_Pilha_Ini_Str(S_Id_Pai);
 	//Buscar o escopo pai
 	int Buscar_Pai(string);
+	//Buscar o escopo pai
+	int Buscar_Pai(int);
+	//Buscar pai do pai - Útil para descobrir o escopo de uma função através do param
+	int Buscar_Pai_Pai(int);
 	//Buscar tipo pai
 	string Buscar_Categoria_Pai(int);
 	//Busca a quantidade alocada pelo parametros de uma sub ou functions (Apenas passados por valor)

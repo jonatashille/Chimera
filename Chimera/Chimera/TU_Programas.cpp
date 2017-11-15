@@ -52,6 +52,9 @@ void TU_Programas::Executar()
 	Testar_Programa("C13"); //Passagem de valor direto e por variável no parâmetro para um método
 	Testar_Programa("C14"); //Programa com herança e encapsulamento
 	Testar_Programa("C15"); //Passagem de valor direto no parâmetro para um método - Diversificado
+	Testar_Programa("C16"); //Teste herança e encapsulamento
+	Testar_Programa("C17"); //Teste múltiplas atribuições em método
+
 }
 
 void TU_Programas::Testar_Programa(string _prog)
