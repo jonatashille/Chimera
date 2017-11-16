@@ -265,4 +265,4 @@ enum Acesso { PUBLIC, PRIVATE, PROTECTED };
 #define ERR_SEM_ATRIB_INTEIRO "Atribuicao a um tipo incompativel - INTEIRO aceita INTEIRO ou CHAR"
 #define ERR_SEM_ATRIB_STRING "Atribuicao a um tipo incompativel - STRING aceita apenas STRING"
 
-#define ERR_SEM_NAO_ACESSIVEL_PRIVADO "Identificador nao acessivel: Membro PRIVADO"
+#define ERR_SEM_NAO_ACESSIVEL_PRIVADO "Identificador nao acessivel: Membro PRIVADO ou PROTEGIDO"

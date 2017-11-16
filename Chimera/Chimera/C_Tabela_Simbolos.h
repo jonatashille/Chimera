@@ -20,29 +20,26 @@ struct S_Id_Pai
 
 struct S_Simbolos
 {
-	int chave;
-	string identificador;
-	string categoria;
-	string tipo;
-	bool ponteiro = false;
-	bool array = false;
-	string valor;
-	int qtd_params;
-	string passby;
-	int pai;
-	int classe;
-	Acesso access;
-	bool valido;
-	int linha;
-	int pos_pilha;
-	int pos_pilha_ini_str;
-	int tam_str;
-	int end_param;
-	string rotulo;
-	string escopo;
-	int pai_heranca;
-	int k; //Endereço Léxico
-	int n; //Endereço de memória (Usado para parâmetros, primeiro inicia com -4, próximos -5,-6...)
+	int chave; //Chave do registro
+	string identificador; //Identificador
+	string categoria; //Categoria do identificador
+	string tipo; //Tipo de dados
+	bool ponteiro; //Identifica se é um ponteiro
+	bool array; //Identifica se é um array[]
+	string valor; //Armazena o valor de uma constante
+	int qtd_params; //Indica a quantidade de parâmetros de uma função/Procedimento
+	string passby; //Passagem do parâmetro. VALUE | REF
+	int pai; //Indica a chave que o registro pertence;
+	int classe; //Indica a classe que o registro pertence
+	Acesso access; //Indica o tipo de acesso ao membro. PRIVATE | PROTECTED | PUBLIC
+	bool valido; //Indica se o registro ainda está ativo
+	int linha; //Linha da declaração
+	int pos_pilha; //Posição da pilha - Utilizado para a MEPA
+	int pos_pilha_ini_str; //Posição inicial de uma String - MEPA
+	int tam_str; //Tamanho da String
+	string rotulo; //Armazena o rótulo a ser utilizado na MEPA
+	string escopo; //A qual escopo o registro pertence. Utilizado em classes
+	int pai_heranca; //Indica a classe pai
 
 	//Sobrecarga do operador < para ordenar a TS pela chave
 	bool operator < (const S_Simbolos& ts)
@@ -106,8 +103,6 @@ public:
 	string Buscar_Categoria_Pai(int);
 	//Busca a quantidade alocada pelo parametros de uma sub ou functions (Apenas passados por valor)
 	int Buscar_Qtd_Mem_Alocada_Params(int);
-	//Buscar o endereço limite do parâmetro (Utilizado para Strings)
-	int Buscar_End_Param(string, int);
 	//Busca a quantidade alocada pelo parametros de uma sub ou functions (Todos os params, Valor e referencia)
 	int Buscar_Qtd_Tot_Params(int);
 	//Busca o rótulo de um identificador / Usado para Funções e Procedimentos
@@ -146,6 +141,10 @@ public:
 	int Retorna_Tot_Var_Mem_Classe();
 	//Verifica se a propriedade é um membro de uma classe
 	bool Verifica_Propriedade_Membro_Classe(string, int);
+	//Retorna a classe pai de uma classe
+	int Buscar_Classe_pai(int);
+	//Retorna a classe do identificador
+	int Buscar_Classe(string, int);
 
 	void Erro(string);
 	void Erro(string, S_Simbolos);

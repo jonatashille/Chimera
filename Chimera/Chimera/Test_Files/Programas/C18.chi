@@ -1,0 +1,18 @@
+class A
+	private:
+		var int id;
+	public:
+		sub Set_Id(var int _id by value)
+			id = _id;
+		end_sub
+		sub Imprime_Id()
+			println(id);
+		end_sub 
+end_class
+
+sub main()
+	var A a;
+	
+	a.Set_Id(1);
+	a.Imprime_Id();
+end_sub

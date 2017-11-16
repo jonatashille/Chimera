@@ -55,13 +55,43 @@ bool C_Tabela_Simbolos::Consultar(string _identificador)
 
 bool C_Tabela_Simbolos::Consultar_Acesso(string _identificador, int _pai)
 {
+	//Busco a categoria do pai (nível do escopo)
 	string categ_pai = Buscar_Categoria_Pai(_pai);
+	//Buscar classe
+	//Utilizado para verificar acesso PRIVATE
+	int classe = Buscar_Classe(_identificador, _pai);
+	//Busco a classe pai, de quem é herdado o atributo? 
+	//Utilizado para verificar acesso PROTECTED
+	int classe_pai = Buscar_Classe_pai(_pai);
+
+	//Faço a varredura na tabela de símbolos
 	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
 	{
+		//Identificador + pai é encontrado na tabela de símbolos
 		if (it->identificador == _identificador && it->pai == _pai)
-			if (it->valido && !(categ_pai != CLASSE && it->access == PRIVATE))
+		{
+			//1-Se o acesso é privado
+			if (it->access == PRIVATE)
+			{
+				//2-Se é diferente de declaração dentro da classe, ou
+				//3-Se o registro está inválido, Retorno false
+				if (_pai != classe || !it->valido)
+					return false;
+			}
+
+			//1-Se for PROTECTED, precisa ser a classe filha para utilizar
+			if (it->access == PROTECTED && classe_pai == it->classe)
 				return true;
+
+			//1-Caso seja PUBLIC, sem restrições
+			if (it->access == PUBLIC)
+				return true;
+		}
 	}
+	//Se a categoria for vazia, é o escopo de declaração e indifere o acesso
+	if (categ_pai == "")
+		return true;
+
 	return false;
 }
 
@@ -247,16 +277,6 @@ int C_Tabela_Simbolos::Buscar_Qtd_Mem_Alocada_Params(int _pai)
 		}
 	}
 	return count;
-}
-
-int C_Tabela_Simbolos::Buscar_End_Param(string _identificador, int _pai)
-{
-	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
-	{
-		if (it->identificador == _identificador && it->pai == _pai)
-			return it->end_param;
-	}
-	return -1;
 }
 
 int C_Tabela_Simbolos::Buscar_Qtd_Tot_Params(int _pai)
@@ -591,7 +611,6 @@ void C_Tabela_Simbolos::Imprimir_TS(string _nome_arquivo)
 	ss << setw(10) << left << "Pilha"; 
 	ss << setw(15) << left << "Pilha_Ini_Str";
 	ss << setw(10) << left << "Tam Str";
-	ss << setw(10) << left << "End_Param";
 	ss << setw(20) << left << "Rotulo";
 	ss << setw(20) << left << "Escopo";
     ss << setw(20) << left << "Pai_Heranca";
@@ -618,7 +637,6 @@ void C_Tabela_Simbolos::Imprimir_TS(string _nome_arquivo)
 		ss << setw(10) << left << it->pos_pilha;
 		ss << setw(15) << left << it->pos_pilha_ini_str;
 		ss << setw(10) << left << it->tam_str;
-		ss << setw(10) << left << it->end_param;
 		ss << setw(20) << left << it->rotulo;
 		ss << setw(20) << left << it->escopo;
 		ss << setw(20) << left << it->pai_heranca;
@@ -667,7 +685,6 @@ void C_Tabela_Simbolos::Gravar_TS(string _nome_arquivo)
 	ss << "Pilha;";
 	ss << "Pilha_Ini_Str;";
 	ss << "Tam Str;";
-	ss << "End_Param;";
 	ss << "Rotulo;";
 	ss << "Escopo;";
 	ss << "Pai_Heranca;";
@@ -692,7 +709,6 @@ void C_Tabela_Simbolos::Gravar_TS(string _nome_arquivo)
 		ss << it->pos_pilha << ";";
 		ss << it->pos_pilha_ini_str << ";";
 		ss << it->tam_str << ";";
-		ss << it->end_param << ";";
 		ss << it->rotulo << ";";
 		ss << it->escopo << ";";
 		ss << it->pai_heranca << ";";
@@ -801,6 +817,26 @@ bool C_Tabela_Simbolos::Verifica_Propriedade_Membro_Classe(string _identificador
 				return true;
 	}
 	return false;
+}
+
+int C_Tabela_Simbolos::Buscar_Classe_pai(int _chave)
+{
+	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+	{
+		if (it->chave == _chave)
+				return it->pai_heranca;
+	}
+	return -1;
+}
+
+int C_Tabela_Simbolos::Buscar_Classe(string _identificador, int _pai)
+{
+	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
+	{
+		if (it->identificador == _identificador && it->pai == _pai)
+			return it->classe;
+	}
+	return -1;
 }
 
 void C_Tabela_Simbolos::Erro(string _msg)

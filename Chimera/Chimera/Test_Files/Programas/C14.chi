@@ -1,6 +1,7 @@
 class animal
 	protected:
 		var string nome;
+	public:
 		sub imprime()
 			println(nome);
 		end_sub

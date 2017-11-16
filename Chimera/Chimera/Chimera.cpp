@@ -55,6 +55,7 @@ void Executar_Testes()
 	Compilar("Test_Files\\Programas\\C15.chi");
 	Compilar("Test_Files\\Programas\\C16.chi");
 	Compilar("Test_Files\\Programas\\C17.chi");
+	Compilar("Test_Files\\Programas\\C18.chi");
 
 	//Programas com Strings
 	/*Compilar("Test_Files\\Programas\\T01.chi");

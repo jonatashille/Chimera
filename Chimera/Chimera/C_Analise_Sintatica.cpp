@@ -1,8 +1,5 @@
 #include "C_Analise_Sintatica.h"
 
-
-
-
 C_Analise_Sintatica::C_Analise_Sintatica(vector<S_Token_Lexema> _tabela_token_lexema)
 {
 	chave = 0;
@@ -923,6 +920,7 @@ void C_Analise_Sintatica::Decl_class()
 	sclasse.linha = iter_token_lexema->linha;
 
 	sclasse.identificador = Aceitar_Token(IDENTIFICADOR, ERR_IDENTIFICADOR);
+
 	//Caso seja herança
 	if (token == DOIS_PONTOS)
 	{
@@ -1166,7 +1164,7 @@ void C_Analise_Sintatica::Comando()
 			
 
 		//Verifico se o acesso ao membro é permitido
-		if (escopo != CLASSE && !ts.Consultar_Acesso(identificador, parente))
+		if (!ts.Consultar_Acesso(identificador, parente))
 			Erro(identificador, ERR_SEM_NAO_ACESSIVEL_PRIVADO);
 
 		//MEPA - Empilho a variável, irá desempilhar somente depois que inserir a CRCT/CRVL do valor atribuído
@@ -1395,7 +1393,7 @@ void C_Analise_Sintatica::Com_repeticao()
 			parente = ts.Buscar_Pai(identificador);
 
 		//Verifico se o acesso ao membro é permitido
-		if (escopo != CLASSE && !ts.Consultar_Acesso(identificador, parente))
+		if (!ts.Consultar_Acesso(identificador, parente))
 			Erro(identificador, ERR_SEM_NAO_ACESSIVEL_PRIVADO);
 
 		//Preciso saber o tipo do identificador para verificar se é int
@@ -2003,8 +2001,10 @@ string C_Analise_Sintatica::Exp_simples()
 		else
 			parente = ts.Buscar_Pai(identificador);
 
+		//Armazeno a classe pai - Classe herdada
+
 		//Verifico se o acesso ao membro é permitido
-		if (escopo != CLASSE && !ts.Consultar_Acesso(identificador, parente))
+		if (!ts.Consultar_Acesso(identificador, parente))
 			Erro(identificador, ERR_SEM_NAO_ACESSIVEL_PRIVADO);
 
 		//Buscar a categoria do identificador
@@ -2272,7 +2272,7 @@ void C_Analise_Sintatica::Lista_var()
 	tipo = ts.Buscar_Tipo(identificador);
 
 	//Verifico se o acesso ao membro é permitido
-	if (escopo != CLASSE && !ts.Consultar_Acesso(identificador, parente))
+	if (!ts.Consultar_Acesso(identificador, parente))
 		Erro(identificador, ERR_SEM_NAO_ACESSIVEL_PRIVADO);
 
 	if (tipo != CARACTERE || tipo != STRING)
@@ -2455,7 +2455,6 @@ void C_Analise_Sintatica::Iniciar_Simbolos(S_Simbolos &_simbolo)
 	_simbolo.passby = "";
 	_simbolo.classe = 0;
 	_simbolo.pos_pilha = -1;
-	_simbolo.end_param = -1;
 	_simbolo.rotulo = "";
 	_simbolo.escopo = "";
 	_simbolo.pai_heranca = -1;
