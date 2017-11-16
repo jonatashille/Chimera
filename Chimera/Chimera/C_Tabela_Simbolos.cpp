@@ -77,6 +77,9 @@ bool C_Tabela_Simbolos::Consultar_Acesso(string _identificador, int _pai)
 				//3-Se o registro está inválido, Retorno false
 				if (_pai != classe || !it->valido)
 					return false;
+				//4-Se for membro interno da classe e válido
+				else
+					return true;
 			}
 
 			//1-Se for PROTECTED, precisa ser a classe filha para utilizar

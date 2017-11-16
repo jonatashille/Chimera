@@ -1,0 +1,48 @@
+class Pessoa
+	public:
+		var string nome;
+		var int idade;
+		sub Andar()
+			println("Eu posso andar.");
+		end_sub
+		sub Falar()
+			println("Eu posso falar.");
+		end_sub
+		sub Imprime()
+			print("Meu nome: ");
+			println(nome);
+			print("Minha idade: ");
+			println(idade);
+			Andar();
+			Falar();
+		end_sub
+end_class
+
+class Professor:Pessoa
+	public:
+		sub Ensinar()
+			println("Eu posso ensinar matematica.");
+		end_sub	
+end_class
+
+class Atleta:Pessoa
+	public:
+		sub Correr()
+			println("Eu posso correr uma maratona.");
+		end_sub	
+end_class
+
+sub main()
+	var Professor professor;
+	var Atleta atleta;
+
+	professor.nome = "Blaise Pascal";
+	professor.idade = 42;
+	professor.Imprime();
+	professor.Ensinar();
+	println("");
+	atleta.nome = "Dennis Kimetto";
+	atleta.idade = 33;
+	atleta.Imprime();
+	atleta.Correr();
+end_sub

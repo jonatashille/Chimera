@@ -8,7 +8,8 @@ void Executar_Testes();
 
 void main()
 {
-	Executar_Testes();
+	//Executar_Testes();
+	Compilar("Test_Files\\Programas\\C19.chi");
 
 	system("pause");
 }
@@ -56,6 +57,7 @@ void Executar_Testes()
 	Compilar("Test_Files\\Programas\\C16.chi");
 	Compilar("Test_Files\\Programas\\C17.chi");
 	Compilar("Test_Files\\Programas\\C18.chi");
+	Compilar("Test_Files\\Programas\\C19.chi");
 
 	//Programas com Strings
 	/*Compilar("Test_Files\\Programas\\T01.chi");

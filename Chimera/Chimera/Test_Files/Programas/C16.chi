@@ -4,9 +4,7 @@ class animal
 end_class
 
 class cachorro:animal
-	//Por padrão, os membros já são privados
-	private:
-		var int id;
+	var int id; //Por padrão, PRIVATE
 	public:
 		sub set_id(var int _id by value)
 			id = _id;

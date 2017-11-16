@@ -1165,7 +1165,7 @@ void C_Analise_Sintatica::Comando()
 
 		//Verifico se o acesso ao membro é permitido
 		if (!ts.Consultar_Acesso(identificador, parente))
-			Erro(identificador, ERR_SEM_NAO_ACESSIVEL_PRIVADO);
+			Erro(identificador, ERR_SEM_NAO_ACESSIVEL);
 
 		//MEPA - Empilho a variável, irá desempilhar somente depois que inserir a CRCT/CRVL do valor atribuído
 		if (categoria == VAR || categoria == PARAM)
@@ -1394,7 +1394,7 @@ void C_Analise_Sintatica::Com_repeticao()
 
 		//Verifico se o acesso ao membro é permitido
 		if (!ts.Consultar_Acesso(identificador, parente))
-			Erro(identificador, ERR_SEM_NAO_ACESSIVEL_PRIVADO);
+			Erro(identificador, ERR_SEM_NAO_ACESSIVEL);
 
 		//Preciso saber o tipo do identificador para verificar se é int
 		tipo_exp = ts.Buscar_Tipo(identificador);
@@ -2005,7 +2005,7 @@ string C_Analise_Sintatica::Exp_simples()
 
 		//Verifico se o acesso ao membro é permitido
 		if (!ts.Consultar_Acesso(identificador, parente))
-			Erro(identificador, ERR_SEM_NAO_ACESSIVEL_PRIVADO);
+			Erro(identificador, ERR_SEM_NAO_ACESSIVEL);
 
 		//Buscar a categoria do identificador
 		categoria = ts.Buscar_Categoria(identificador);
@@ -2273,7 +2273,7 @@ void C_Analise_Sintatica::Lista_var()
 
 	//Verifico se o acesso ao membro é permitido
 	if (!ts.Consultar_Acesso(identificador, parente))
-		Erro(identificador, ERR_SEM_NAO_ACESSIVEL_PRIVADO);
+		Erro(identificador, ERR_SEM_NAO_ACESSIVEL);
 
 	if (tipo != CARACTERE || tipo != STRING)
 	{
