@@ -36,6 +36,8 @@ void TU_Programas::Executar()
 	//Estrutura
 	Testar_Programa("S01"); //Estrutura simples
 	Testar_Programa("S02"); //Estrutura dentro de estrutura
+	Testar_Programa("S03"); //Estrutura simples Dia/Mês/Ano
+
 	//Classes - Orientação à objetos
 	Testar_Programa("C01"); //Classe simples
 	Testar_Programa("C02"); //Classe com procedure
@@ -60,11 +62,14 @@ void TU_Programas::Executar()
 void TU_Programas::Testar_Programa(string _prog)
 {
 	string f1, f2;
+	//Arquivo gerado pelo compilador
 	f1 = "Test_Files\\Programas\\" + _prog + ".mep";
+	//Arquivo com a MEPA esperada
 	f2 = "Test_Files\\Programas\\" + _prog + "-OK.mep";
 
+	//Comparar os arquivos
 	if (arquivo.CompararArquivos(f1, f2))
 		cout << _prog << " - OK" << endl;
 	else
-		cout << _prog << " - FALHA *******" << endl;
+		cout << "*** " << _prog << " - FALHA NA COMPARACAO DOS ARQUIVOS MEPA ***" << endl;
 }

@@ -6,12 +6,17 @@ using namespace std;
 
 void Executar_Testes();
 
-void main()
+int main(int argc, char *argv[])
 {
+	if (argc != 2) // argc deve ser 2 para execução correta
+				   // Imprime argv[0], pois é o nome do programa
+		cout << "Utilize: " << argv[0] << " <nome_arquivo.chi>\n";
+	else
+		Compilar(argv[1]);
 	//Executar_Testes();
-	Compilar("Test_Files\\Programas\\C19.chi");
+	//Compilar("Test_Files\\Programas\\C19.chi");
 
-	system("pause");
+	//system("pause");
 }
 
 void Executar_Testes()

@@ -143,7 +143,7 @@ void TU_Analise_Lexica::Teste_002()
 	Realizar_Testes(expressao, "TESTE_02");
 }
 
-//Teste Digitos e divesos operadores com espaços e tabs
+//Teste Digitos e diversos operadores com espaços e tabs
 void TU_Analise_Lexica::Teste_003()
 {
 	string expressao = "	587 -		4487874 / 557 * 123 + 9 % 11 -=";
@@ -496,7 +496,7 @@ void TU_Analise_Lexica::Teste_030()
 	Realizar_Testes(expressao, "TESTE_30");
 }
 
-//Teste diverso operadores
+//Teste diversos operadores
 void TU_Analise_Lexica::Teste_031()
 {
 	string expressao = "\"TU_Analise_LexicaTRING\"+\'C\'555&99.99";
@@ -822,7 +822,7 @@ void TU_Analise_Lexica::Teste_055()
 	stringstream expressao;
 
 	expressao << "int numero=14;/* teste" << endl;
-	expressao << "maluco */void main(){//teste" << endl;
+	expressao << "diverso */void main(){//teste" << endl;
 	expressao << "}";
 
 	this->tabelaTeste.clear();
