@@ -1,0 +1,25 @@
+class Polygon
+  protected:
+    var int width, height;
+  public:
+    sub set_values(var int a by value, var int b by value)
+      width=a; 
+      height=b;
+    end_sub
+    function int area()
+      return (width * height);
+    end_function
+    function int area2()
+      return (width * height / 2);
+    end_function
+ end_class
+ 
+sub main ()
+  var Polygon p;
+  var int res, res2;
+  p.set_values(4,5);
+  res = p.area();
+  println(res);
+  res2 = p.area2();
+  println(res2);
+end_sub

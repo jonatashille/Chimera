@@ -68,7 +68,7 @@ public:
 	//Utilizado para inativar os símbolos, dado um escopo
 	void Inativar_Simbolos(int);
 	//Verifica se já existe a ID na TS
-	void Existe_ID(S_Simbolos);
+	void Existe_ID(S_Simbolos, string);
 	//Buscar Id pelo Pai de um identificador
 	string Buscar_ID_Pai(int);
 	//Verificar se Identificador é um Array
@@ -106,7 +106,7 @@ public:
 	//Busca a quantidade alocada pelo parametros de uma sub ou functions (Todos os params, Valor e referencia)
 	int Buscar_Qtd_Tot_Params(int);
 	//Busca o rótulo de um identificador / Usado para Funções e Procedimentos
-	string Buscar_Rotulo(string);
+	string Buscar_Rotulo(S_Id_Pai);
 	//Busca dados da TS pela chave
 	vector<S_Simbolos>::iterator Buscar_Simbolo(int);
 	//Busca dados da TS pelo identificador

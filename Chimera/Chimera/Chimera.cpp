@@ -13,9 +13,8 @@ int main(int argc, char *argv[])
 		cout << "Utilize: " << argv[0] << " <nome_arquivo.chi>\n";
 	else
 		Compilar(argv[1]);
-	//Executar_Testes();
-	//Compilar("Test_Files\\Programas\\C19.chi");
 
+	//Executar_Testes();
 	//system("pause");
 }
 
@@ -33,7 +32,7 @@ void Executar_Testes()
 	Compilar("Test_Files\\Programas\\p09.chi");
 	Compilar("Test_Files\\Programas\\P10.chi");
 	Compilar("Test_Files\\Programas\\P11.chi");
-	Compilar("Test_Files\\Programas\\P12.chi");//Falta testes - Problema a repassar para o professor
+	Compilar("Test_Files\\Programas\\P12.chi");//Resulta em bug da Mepa
 	Compilar("Test_Files\\Programas\\P13.chi");
 	Compilar("Test_Files\\Programas\\P14.chi");
 	Compilar("Test_Files\\Programas\\P15.chi");
@@ -62,15 +61,9 @@ void Executar_Testes()
 	Compilar("Test_Files\\Programas\\C16.chi");
 	Compilar("Test_Files\\Programas\\C17.chi");
 	Compilar("Test_Files\\Programas\\C18.chi");
-	Compilar("Test_Files\\Programas\\C19.chi");
-
-	//Programas com Strings
-	/*Compilar("Test_Files\\Programas\\T01.chi");
-	Compilar("Test_Files\\Programas\\T02.chi");
-	Compilar("Test_Files\\Programas\\T03.chi");
-	Compilar("Test_Files\\Programas\\T04.chi");
-	Compilar("Test_Files\\Programas\\T05.chi");
-	Compilar("Test_Files\\Programas\\T06.chi");*/
+	Compilar("Test_Files\\Programas\\C19.chi");//erro por não passar os valores da subclasse para a classe base
+	Compilar("Test_Files\\Programas\\C20.chi");
+	Compilar("Test_Files\\Programas\\C21.chi");
 
 	//Testas as opçoes da analise léxica e todos os programas acima que já foram testados
 	Executar_Testes_Unitatios();

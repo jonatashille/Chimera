@@ -118,6 +118,35 @@ R83:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
 ; ----------Inicio Impressao
+CRCT 'F'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'l'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'n'
+IMPC
+CRCT 'd'
+IMPC
+CRCT 'o'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+CRCT '.'
+IMPC
+; ----------FIM Impressao
+IMPE
+RTPR 1,1
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R107
+R107:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ----------Inicio Impressao
 CRCT 'L'
 IMPC
 CRCT 'a'
@@ -142,8 +171,8 @@ IMPC
 IMPE
 RTPR 1,1
 ; ---------- Fim/Retorno de Procedimento/Funcao
-; ---------- Entrada Rotulo R107
-R107:NADA
+; ---------- Entrada Rotulo R131
+R131:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
 ; ----------Inicio Impressao
@@ -183,8 +212,8 @@ IMPC
 IMPE
 RTPR 1,1
 ; ---------- Fim/Retorno de Procedimento/Funcao
-; ---------- Entrada Rotulo R143
-R143:NADA
+; ---------- Entrada Rotulo R167
+R167:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
 ; ---------- Alocacao de Memoria (1)
@@ -197,8 +226,8 @@ ARMI 1,-4
 DMEM 1
 RTPR 1,2
 ; ---------- Fim/Retorno de Procedimento/Funcao
-; ---------- Entrada Rotulo R152
-R152:NADA
+; ---------- Entrada Rotulo R176
+R176:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
 CRVI 1,-4
@@ -206,8 +235,8 @@ IMPR
 IMPE
 RTPR 1,1
 ; ---------- Fim/Retorno de Procedimento/Funcao
-; ---------- Entrada Rotulo R158
-R158:NADA
+; ---------- Entrada Rotulo R182
+R182:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
 ; ----------Inicio Impressao
@@ -233,8 +262,8 @@ IMPC
 IMPE
 RTPR 1,1
 ; ---------- Fim/Retorno de Procedimento/Funcao
-; ---------- Entrada Rotulo R180
-R180:NADA
+; ---------- Entrada Rotulo R204
+R204:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
 ; ----------Inicio Impressao
@@ -268,8 +297,8 @@ IMPC
 IMPE
 RTPR 1,1
 ; ---------- Fim/Retorno de Procedimento/Funcao
-; ---------- Entrada Rotulo R210
-R210:NADA
+; ---------- Entrada Rotulo R234
+R234:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
 ; ---------- Alocacao de Memoria (1)
@@ -282,8 +311,8 @@ ARMI 1,-4
 DMEM 1
 RTPR 1,2
 ; ---------- Fim/Retorno de Procedimento/Funcao
-; ---------- Entrada Rotulo R219
-R219:NADA
+; ---------- Entrada Rotulo R243
+R243:NADA
 ; ---------- Entrada Procedimento/Funcao
 ENPR 1
 CRVI 1,-4
@@ -301,11 +330,11 @@ AMEM 1
 AMEM 1
 CRCT 1
 CREN 1,0
-; ---------- Chama Procedimento/Funcao - R143
-CHPR R143,1
+; ---------- Chama Procedimento/Funcao - R167
+CHPR R167,1
 CREN 1,0
-; ---------- Chama Procedimento/Funcao - R152
-CHPR R152,1
+; ---------- Chama Procedimento/Funcao - R176
+CHPR R176,1
 CREN 1,0
 ; ---------- Chama Procedimento/Funcao - R3
 CHPR R3,1
@@ -315,19 +344,19 @@ CHPR R27,1
 CREN 1,0
 ; ---------- Chama Procedimento/Funcao - R53
 CHPR R53,1
-CREN 1,0
-; ---------- Chama Procedimento/Funcao - R83
-CHPR R83,1
 CREN 1,0
 ; ---------- Chama Procedimento/Funcao - R107
 CHPR R107,1
+CREN 1,0
+; ---------- Chama Procedimento/Funcao - R131
+CHPR R131,1
 CRCT 2
 CREN 1,1
-; ---------- Chama Procedimento/Funcao - R210
-CHPR R210,1
+; ---------- Chama Procedimento/Funcao - R234
+CHPR R234,1
 CREN 1,1
-; ---------- Chama Procedimento/Funcao - R219
-CHPR R219,1
+; ---------- Chama Procedimento/Funcao - R243
+CHPR R243,1
 CREN 1,1
 ; ---------- Chama Procedimento/Funcao - R3
 CHPR R3,1
@@ -338,11 +367,11 @@ CREN 1,1
 ; ---------- Chama Procedimento/Funcao - R53
 CHPR R53,1
 CREN 1,1
-; ---------- Chama Procedimento/Funcao - R158
-CHPR R158,1
+; ---------- Chama Procedimento/Funcao - R182
+CHPR R182,1
 CREN 1,1
-; ---------- Chama Procedimento/Funcao - R180
-CHPR R180,1
+; ---------- Chama Procedimento/Funcao - R204
+CHPR R204,1
 ; ---------- Desalocacao de Memoria (2)
 DMEM 2
 RTPR 1,0

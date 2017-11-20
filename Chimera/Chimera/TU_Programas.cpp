@@ -57,6 +57,9 @@ void TU_Programas::Executar()
 	Testar_Programa("C16"); //Teste herança e encapsulamento
 	Testar_Programa("C17"); //Teste múltiplas atribuições em método
 	Testar_Programa("C18"); //Teste parametro para método
+	Testar_Programa("C19"); //Teste parametro para método / String
+	Testar_Programa("C20"); //Teste simples polimorfismo (sobrescrita)
+	Testar_Programa("C21"); //Teste polimorfismo (sobrescrita)
 }
 
 void TU_Programas::Testar_Programa(string _prog)

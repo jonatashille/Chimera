@@ -1250,7 +1250,7 @@ void C_Analise_Sintatica::Comando()
 			if (qtd_params_decl != qtd_params_chamada)
 				Erro(identificador, ERR_SEM_NUM_PARAMS);
 			//MEPA - CHPR Chamada de procedimento
-			mepa.CHPR(ts.Buscar_Rotulo(identificador), "1");
+			mepa.CHPR(ts.Buscar_Rotulo(sidpai.make_Id_Pai(identificador, parente)), "1");
 			//TODO Atualizar valores que foram passador como referência
 
 		}
@@ -2091,7 +2091,7 @@ string C_Analise_Sintatica::Exp_simples()
 			if (Exp_simples_1() != qtd_params)
 				Erro(identificador, ERR_SEM_NUM_PARAMS);
 			//MEPA - CHPR Chamada de procedimento
-			mepa.CHPR(ts.Buscar_Rotulo(identificador), "1");
+			mepa.CHPR(ts.Buscar_Rotulo(sidpai.make_Id_Pai(identificador, parente)), "1");
 			//TODO Atualizar valores que foram passador como referência
 			if (categoria == FUNCTION && tipo_exp != TIPO_VOID)
 			{
@@ -2553,11 +2553,14 @@ void C_Analise_Sintatica::Inserir_AMEM_MEPA_STRUCT(string _identificador, int _p
 		}
 		else if (it->categoria == SUB || it->categoria == FUNCTION)
 		{
-			l_simb = (*it);
-			l_simb.chave = ++chave;
-			l_simb.linha = iter_token_lexema->linha;
-			l_simb.pai = _pai;
-			ts.Inserir(l_simb, escopo);
+			if (it->valido)
+			{
+				l_simb = (*it);
+				l_simb.chave = ++chave;
+				l_simb.linha = iter_token_lexema->linha;
+				l_simb.pai = _pai;
+				ts.Inserir(l_simb, escopo);
+			}
 		}
 	}
 	mepa.AMEM(to_string(count + count_str));

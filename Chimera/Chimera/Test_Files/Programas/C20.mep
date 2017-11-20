@@ -1,0 +1,106 @@
+include macros.asm
+pilha SEGMENT PARA STACK 'STACK'
+dw  100  dup(? )
+pilha ENDS
+dados   SEGMENT PARA 'DATA'
+dw  10  dup(0)
+buffer db 5 dup(' ')
+mesg   db  10, ? , 11 dup(0)
+dados   ENDS
+procs   SEGMENT PARA 'DATA'
+dw  32000 dup(0)
+procs   ENDS
+codigo  SEGMENT PARA 'CODE'
+ASSUME SS : pilha, CS : codigo, DS : dados, ES : dados
+inicio PROC  FAR
+; ----------Inicio das Instrucoes MEPA
+INPP
+; ---------- Chama Procedimento/Funcao - MAIN
+CHPR MAIN,1
+DSVS FIM
+; ---------- Entrada Rotulo R3
+R3:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ----------Inicio Impressao
+CRCT 'C'
+IMPC
+CRCT 'l'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 's'
+IMPC
+CRCT 's'
+IMPC
+CRCT 'e'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'B'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 's'
+IMPC
+CRCT 'e'
+IMPC
+; ----------FIM Impressao
+IMPE
+RTPR 1,0
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R29
+R29:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ----------Inicio Impressao
+CRCT 'C'
+IMPC
+CRCT 'l'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 's'
+IMPC
+CRCT 's'
+IMPC
+CRCT 'e'
+IMPC
+CRCT ' '
+IMPC
+CRCT 'D'
+IMPC
+CRCT 'e'
+IMPC
+CRCT 'r'
+IMPC
+CRCT 'i'
+IMPC
+CRCT 'v'
+IMPC
+CRCT 'a'
+IMPC
+CRCT 'd'
+IMPC
+CRCT 'a'
+IMPC
+; ----------FIM Impressao
+IMPE
+RTPR 1,0
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ----------Inicio MAIN
+MAIN:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ---------- Chama Procedimento/Funcao - R3
+CHPR R3,1
+; ---------- Chama Procedimento/Funcao - R29
+CHPR R29,1
+RTPR 1,0
+; ---------- Fim/Retorno de Procedimento/Funcao
+FIM:NADA
+PARA
+; ----------Fim das Instrucoes MEPA
+inicio  ENDP
+codigo  ENDS
+END    inicio

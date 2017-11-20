@@ -1,0 +1,21 @@
+class Base
+	public:
+		sub Show()
+			println("Classe Base");
+		end_sub
+end_class
+
+class Derivada:Base
+	public:
+		sub Show()
+			println("Classe Derivada");
+		end_sub
+end_class
+
+sub main()
+	var Base b; //Objeto da classe base
+	var Derivada d; //Objeto da classe derivada
+
+	b.Show(); //Early Biding
+	d.Show();
+end_sub

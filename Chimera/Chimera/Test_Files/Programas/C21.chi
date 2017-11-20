@@ -1,0 +1,69 @@
+class animal
+	public:
+		var int id;
+		sub Comer()
+			println("Comendo...");
+		end_sub
+		sub Dormir()
+			println("Dormindo...");
+		end_sub
+		sub Respirar()
+			println("Respirando...");
+		end_sub
+		sub Falar()
+			println("Falando...");
+		end_sub
+end_class
+
+class cachorro:animal
+	public:
+		sub Falar()
+			println("Latindo...");
+		end_sub
+		sub Abanar_rabo()
+			println("Abanando rabo...");
+		end_sub
+		sub set_id(var int _id by value)
+			id = _id;
+		end_sub
+		sub Imprime_id()
+			println(id);
+		end_sub
+end_class
+
+class gato:animal
+	public:
+		sub Falar()
+			println("Miando...");
+		end_sub
+		sub Arranhar()
+			println("Arranhando...");
+		end_sub
+		sub set_id(var int _id by value)
+			id = _id;
+		end_sub
+		sub Imprime_id()
+			println(id);
+		end_sub
+end_class
+
+sub main()
+	var cachorro rex;
+	var gato murano;
+
+	rex.set_id(1);
+	rex.Imprime_id();
+	rex.Comer();
+	rex.Dormir();
+	rex.Respirar();
+	rex.Falar();
+	rex.Abanar_rabo();
+
+	murano.set_id(2);
+	murano.Imprime_id();
+	murano.Comer();
+	murano.Dormir();
+	murano.Respirar();
+	murano.Falar();
+	murano.Arranhar();
+end_sub

@@ -32,7 +32,7 @@ bool C_Tabela_Simbolos::Inserir(S_Simbolos _simbolos, string _escopo)
 
 	_simbolos.valido = true;
 	//Antes de inserir, verifico se o identificador já foi declarado
-	Existe_ID(_simbolos);
+	Existe_ID(_simbolos, _escopo);
 
 	//Só variável tem posição na pilha
 	if (_simbolos.categoria != VAR)
@@ -103,7 +103,7 @@ void C_Tabela_Simbolos::Inativar_Simbolos(int _id)
 
 }
 
-void C_Tabela_Simbolos::Existe_ID(S_Simbolos _simbolo)
+void C_Tabela_Simbolos::Existe_ID(S_Simbolos _simbolo, string _escopo)
 {
 	for (auto it = tabela_simbolos.begin(); it != tabela_simbolos.end(); it++)
 	{
@@ -113,9 +113,17 @@ void C_Tabela_Simbolos::Existe_ID(S_Simbolos _simbolo)
 			//Se for, verifico se estão no mesmo escopo e se está válido
 			if (it->pai == _simbolo.pai && it->valido == true)
 			{
-				stringstream msg;
-				msg << _simbolo.categoria << " \'" << _simbolo.identificador << "\'" << ERR_SEM_DECLARACAO_DUPLICADA << endl;
-				Erro(msg.str(), _simbolo);
+				if ((it->classe != _simbolo.classe) && _escopo == CLASSE) //Sobreescrita de método
+				{
+					//Atualizo o registro para invalidar o método da classe base
+					it->valido = false;
+				}
+				else 
+				{
+					stringstream msg;
+					msg << _simbolo.categoria << " \'" << _simbolo.identificador << "\'" << ERR_SEM_DECLARACAO_DUPLICADA << endl;
+					Erro(msg.str(), _simbolo);
+				}
 			}
 		}
 	}
@@ -298,10 +306,10 @@ int C_Tabela_Simbolos::Buscar_Qtd_Tot_Params(int _pai)
 	return count;
 }
 
-string C_Tabela_Simbolos::Buscar_Rotulo(string _identificador)
+string C_Tabela_Simbolos::Buscar_Rotulo(S_Id_Pai _sidpai)
 {
 	vector<S_Simbolos>::iterator simbolo;
-	simbolo = Buscar_Simbolo(_identificador);
+	simbolo = Buscar_Simbolo(_sidpai);
 	if (simbolo._Ptr != nullptr)
 		return simbolo->rotulo;
 	return "";

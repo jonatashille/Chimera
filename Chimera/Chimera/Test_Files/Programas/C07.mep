@@ -323,11 +323,11 @@ CREN 1,0
 CHPR R107,1
 CRCT 2
 CREN 1,1
-; ---------- Chama Procedimento/Funcao - R143
-CHPR R143,1
+; ---------- Chama Procedimento/Funcao - R210
+CHPR R210,1
 CREN 1,1
-; ---------- Chama Procedimento/Funcao - R152
-CHPR R152,1
+; ---------- Chama Procedimento/Funcao - R219
+CHPR R219,1
 CREN 1,1
 ; ---------- Chama Procedimento/Funcao - R3
 CHPR R3,1
