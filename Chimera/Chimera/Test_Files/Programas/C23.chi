@@ -1,0 +1,14 @@
+class automovel
+  private:
+    var int id;
+  protected:
+    var string modelo;
+  public:
+    function int Get_id()
+      return id;
+    end_function
+end_class
+
+sub main ()
+
+end_sub

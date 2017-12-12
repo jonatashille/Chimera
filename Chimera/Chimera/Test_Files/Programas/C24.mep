@@ -1,0 +1,633 @@
+include macros.asm
+pilha SEGMENT PARA STACK 'STACK'
+dw  100  dup(? )
+pilha ENDS
+dados   SEGMENT PARA 'DATA'
+dw  10  dup(0)
+buffer db 5 dup(' ')
+mesg   db  10, ? , 11 dup(0)
+dados   ENDS
+procs   SEGMENT PARA 'DATA'
+dw  32000 dup(0)
+procs   ENDS
+codigo  SEGMENT PARA 'CODE'
+ASSUME SS : pilha, CS : codigo, DS : dados, ES : dados
+inicio PROC  FAR
+; ----------Inicio das Instrucoes MEPA
+INPP
+; ---------- Chama Procedimento/Funcao - MAIN
+CHPR MAIN,1
+DSVS FIM
+; ---------- Entrada Rotulo R3
+R3:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ---------- Alocacao de Memoria (1)
+AMEM 1
+CRVL 1,-66
+ARMZ 1,0
+CRVL 1,0
+ARMI 1,-4
+; ---------- Desalocacao de Memoria (1)
+DMEM 1
+RTPR 1,63
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ---------- Entrada Rotulo R12
+R12:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+CRVI 1,-4
+IMPR
+; ----------Inicio Impressao
+CRCT ' '
+IMPC
+CRCT '-'
+IMPC
+CRCT ' '
+IMPC
+; ----------FIM Impressao
+; ---------- Inicio Leitura String - Valor Indireto
+CRVI 1,-35
+IMPC
+CRVI 1,-34
+IMPC
+CRVI 1,-33
+IMPC
+CRVI 1,-32
+IMPC
+CRVI 1,-31
+IMPC
+CRVI 1,-30
+IMPC
+CRVI 1,-29
+IMPC
+CRVI 1,-28
+IMPC
+CRVI 1,-27
+IMPC
+CRVI 1,-26
+IMPC
+CRVI 1,-25
+IMPC
+CRVI 1,-24
+IMPC
+CRVI 1,-23
+IMPC
+CRVI 1,-22
+IMPC
+CRVI 1,-21
+IMPC
+CRVI 1,-20
+IMPC
+CRVI 1,-19
+IMPC
+CRVI 1,-18
+IMPC
+CRVI 1,-17
+IMPC
+CRVI 1,-16
+IMPC
+CRVI 1,-15
+IMPC
+CRVI 1,-14
+IMPC
+CRVI 1,-13
+IMPC
+CRVI 1,-12
+IMPC
+CRVI 1,-11
+IMPC
+CRVI 1,-10
+IMPC
+CRVI 1,-9
+IMPC
+CRVI 1,-8
+IMPC
+CRVI 1,-7
+IMPC
+CRVI 1,-6
+IMPC
+CRVI 1,-5
+IMPC
+; ---------- Fim Leitura String - Valor Indireto
+; ----------Inicio Impressao
+CRCT ' '
+IMPC
+; ----------FIM Impressao
+; ---------- Inicio Leitura String - Valor Indireto
+CRVI 1,-95
+IMPC
+CRVI 1,-94
+IMPC
+CRVI 1,-93
+IMPC
+CRVI 1,-92
+IMPC
+CRVI 1,-91
+IMPC
+CRVI 1,-90
+IMPC
+CRVI 1,-89
+IMPC
+CRVI 1,-88
+IMPC
+CRVI 1,-87
+IMPC
+CRVI 1,-86
+IMPC
+CRVI 1,-85
+IMPC
+CRVI 1,-84
+IMPC
+CRVI 1,-83
+IMPC
+CRVI 1,-82
+IMPC
+CRVI 1,-81
+IMPC
+CRVI 1,-80
+IMPC
+CRVI 1,-79
+IMPC
+CRVI 1,-78
+IMPC
+CRVI 1,-77
+IMPC
+CRVI 1,-76
+IMPC
+CRVI 1,-75
+IMPC
+CRVI 1,-74
+IMPC
+CRVI 1,-73
+IMPC
+CRVI 1,-72
+IMPC
+CRVI 1,-71
+IMPC
+CRVI 1,-70
+IMPC
+CRVI 1,-69
+IMPC
+CRVI 1,-68
+IMPC
+CRVI 1,-67
+IMPC
+CRVI 1,-66
+IMPC
+CRVI 1,-65
+IMPC
+CRVI 1,-64
+IMPC
+CRVI 1,-63
+IMPC
+CRVI 1,-62
+IMPC
+CRVI 1,-61
+IMPC
+CRVI 1,-60
+IMPC
+CRVI 1,-59
+IMPC
+CRVI 1,-58
+IMPC
+CRVI 1,-57
+IMPC
+CRVI 1,-56
+IMPC
+CRVI 1,-55
+IMPC
+CRVI 1,-54
+IMPC
+CRVI 1,-53
+IMPC
+CRVI 1,-52
+IMPC
+CRVI 1,-51
+IMPC
+CRVI 1,-50
+IMPC
+CRVI 1,-49
+IMPC
+CRVI 1,-48
+IMPC
+CRVI 1,-47
+IMPC
+CRVI 1,-46
+IMPC
+CRVI 1,-45
+IMPC
+CRVI 1,-44
+IMPC
+CRVI 1,-43
+IMPC
+CRVI 1,-42
+IMPC
+CRVI 1,-41
+IMPC
+CRVI 1,-40
+IMPC
+CRVI 1,-39
+IMPC
+CRVI 1,-38
+IMPC
+CRVI 1,-37
+IMPC
+CRVI 1,-36
+IMPC
+CRVI 1,-35
+IMPC
+; ---------- Fim Leitura String - Valor Indireto
+; ----------Inicio Impressao
+CRCT ' '
+IMPC
+; ----------FIM Impressao
+CRVI 1,-65
+IMPR
+IMPE
+RTPR 1,62
+; ---------- Fim/Retorno de Procedimento/Funcao
+; ----------Inicio MAIN
+MAIN:NADA
+; ---------- Entrada Procedimento/Funcao
+ENPR 1
+; ---------- Alocacao de Memoria (62)
+AMEM 62
+; ---------- Alocacao de Memoria (62)
+AMEM 62
+CRCT 1
+CREN 1,61
+; ---------- Inicio Leitura Endereço String
+CREN 1,31
+CREN 1,32
+CREN 1,33
+CREN 1,34
+CREN 1,35
+CREN 1,36
+CREN 1,37
+CREN 1,38
+CREN 1,39
+CREN 1,40
+CREN 1,41
+CREN 1,42
+CREN 1,43
+CREN 1,44
+CREN 1,45
+CREN 1,46
+CREN 1,47
+CREN 1,48
+CREN 1,49
+CREN 1,50
+CREN 1,51
+CREN 1,52
+CREN 1,53
+CREN 1,54
+CREN 1,55
+CREN 1,56
+CREN 1,57
+CREN 1,58
+CREN 1,59
+CREN 1,60
+; ---------- Fim Leitura Endereço String
+; ---------- Inicio Leitura Endereço String
+CREN 1,1
+CREN 1,2
+CREN 1,3
+CREN 1,4
+CREN 1,5
+CREN 1,6
+CREN 1,7
+CREN 1,8
+CREN 1,9
+CREN 1,10
+CREN 1,11
+CREN 1,12
+CREN 1,13
+CREN 1,14
+CREN 1,15
+CREN 1,16
+CREN 1,17
+CREN 1,18
+CREN 1,19
+CREN 1,20
+CREN 1,21
+CREN 1,22
+CREN 1,23
+CREN 1,24
+CREN 1,25
+CREN 1,26
+CREN 1,27
+CREN 1,28
+CREN 1,29
+CREN 1,30
+; ---------- Fim Leitura Endereço String
+CREN 1,0
+; ---------- Chama Procedimento/Funcao - R3
+CHPR R3,1
+; ---------- Inicio Armazenamento String
+CRCT 'V'
+ARMZ 1,1
+CRCT 'o'
+ARMZ 1,2
+CRCT 'l'
+ARMZ 1,3
+CRCT 'k'
+ARMZ 1,4
+CRCT 's'
+ARMZ 1,5
+CRCT 'w'
+ARMZ 1,6
+CRCT 'a'
+ARMZ 1,7
+CRCT 'g'
+ARMZ 1,8
+CRCT 'e'
+ARMZ 1,9
+CRCT 'n'
+ARMZ 1,10
+; ---------- Fim Armazenamento String
+; ---------- Inicio Armazenamento String
+CRCT 'G'
+ARMZ 1,31
+CRCT 'O'
+ARMZ 1,32
+CRCT 'L'
+ARMZ 1,33
+CRCT ' '
+ARMZ 1,34
+CRCT 'S'
+ARMZ 1,35
+CRCT 'E'
+ARMZ 1,36
+CRCT ' '
+ARMZ 1,37
+CRCT '1'
+ARMZ 1,38
+CRCT '.'
+ARMZ 1,39
+CRCT '0'
+ARMZ 1,40
+CRCT ' '
+ARMZ 1,41
+CRCT '1'
+ARMZ 1,42
+CRCT '6'
+ARMZ 1,43
+CRCT 'V'
+ARMZ 1,44
+; ---------- Fim Armazenamento String
+CRCT 1997
+ARMZ 1,61
+CRCT 2
+CREN 1,123
+; ---------- Inicio Leitura Endereço String
+CREN 1,93
+CREN 1,94
+CREN 1,95
+CREN 1,96
+CREN 1,97
+CREN 1,98
+CREN 1,99
+CREN 1,100
+CREN 1,101
+CREN 1,102
+CREN 1,103
+CREN 1,104
+CREN 1,105
+CREN 1,106
+CREN 1,107
+CREN 1,108
+CREN 1,109
+CREN 1,110
+CREN 1,111
+CREN 1,112
+CREN 1,113
+CREN 1,114
+CREN 1,115
+CREN 1,116
+CREN 1,117
+CREN 1,118
+CREN 1,119
+CREN 1,120
+CREN 1,121
+CREN 1,122
+; ---------- Fim Leitura Endereço String
+; ---------- Inicio Leitura Endereço String
+CREN 1,63
+CREN 1,64
+CREN 1,65
+CREN 1,66
+CREN 1,67
+CREN 1,68
+CREN 1,69
+CREN 1,70
+CREN 1,71
+CREN 1,72
+CREN 1,73
+CREN 1,74
+CREN 1,75
+CREN 1,76
+CREN 1,77
+CREN 1,78
+CREN 1,79
+CREN 1,80
+CREN 1,81
+CREN 1,82
+CREN 1,83
+CREN 1,84
+CREN 1,85
+CREN 1,86
+CREN 1,87
+CREN 1,88
+CREN 1,89
+CREN 1,90
+CREN 1,91
+CREN 1,92
+; ---------- Fim Leitura Endereço String
+CREN 1,62
+; ---------- Chama Procedimento/Funcao - R3
+CHPR R3,1
+; ---------- Inicio Armazenamento String
+CRCT 'F'
+ARMZ 1,63
+CRCT 'o'
+ARMZ 1,64
+CRCT 'r'
+ARMZ 1,65
+CRCT 'd'
+ARMZ 1,66
+; ---------- Fim Armazenamento String
+; ---------- Inicio Armazenamento String
+CRCT 'K'
+ARMZ 1,93
+CRCT 'A'
+ARMZ 1,94
+CRCT ' '
+ARMZ 1,95
+CRCT 'E'
+ARMZ 1,96
+CRCT 'X'
+ARMZ 1,97
+CRCT ' '
+ARMZ 1,98
+CRCT '1'
+ARMZ 1,99
+CRCT '.'
+ARMZ 1,100
+CRCT '5'
+ARMZ 1,101
+CRCT ' '
+ARMZ 1,102
+CRCT '4'
+ARMZ 1,103
+CRCT 'c'
+ARMZ 1,104
+; ---------- Fim Armazenamento String
+CRCT 2012
+ARMZ 1,123
+CREN 1,61
+; ---------- Inicio Leitura Endereço String
+CREN 1,31
+CREN 1,32
+CREN 1,33
+CREN 1,34
+CREN 1,35
+CREN 1,36
+CREN 1,37
+CREN 1,38
+CREN 1,39
+CREN 1,40
+CREN 1,41
+CREN 1,42
+CREN 1,43
+CREN 1,44
+CREN 1,45
+CREN 1,46
+CREN 1,47
+CREN 1,48
+CREN 1,49
+CREN 1,50
+CREN 1,51
+CREN 1,52
+CREN 1,53
+CREN 1,54
+CREN 1,55
+CREN 1,56
+CREN 1,57
+CREN 1,58
+CREN 1,59
+CREN 1,60
+; ---------- Fim Leitura Endereço String
+; ---------- Inicio Leitura Endereço String
+CREN 1,1
+CREN 1,2
+CREN 1,3
+CREN 1,4
+CREN 1,5
+CREN 1,6
+CREN 1,7
+CREN 1,8
+CREN 1,9
+CREN 1,10
+CREN 1,11
+CREN 1,12
+CREN 1,13
+CREN 1,14
+CREN 1,15
+CREN 1,16
+CREN 1,17
+CREN 1,18
+CREN 1,19
+CREN 1,20
+CREN 1,21
+CREN 1,22
+CREN 1,23
+CREN 1,24
+CREN 1,25
+CREN 1,26
+CREN 1,27
+CREN 1,28
+CREN 1,29
+CREN 1,30
+; ---------- Fim Leitura Endereço String
+CREN 1,0
+; ---------- Chama Procedimento/Funcao - R12
+CHPR R12,1
+CREN 1,123
+; ---------- Inicio Leitura Endereço String
+CREN 1,93
+CREN 1,94
+CREN 1,95
+CREN 1,96
+CREN 1,97
+CREN 1,98
+CREN 1,99
+CREN 1,100
+CREN 1,101
+CREN 1,102
+CREN 1,103
+CREN 1,104
+CREN 1,105
+CREN 1,106
+CREN 1,107
+CREN 1,108
+CREN 1,109
+CREN 1,110
+CREN 1,111
+CREN 1,112
+CREN 1,113
+CREN 1,114
+CREN 1,115
+CREN 1,116
+CREN 1,117
+CREN 1,118
+CREN 1,119
+CREN 1,120
+CREN 1,121
+CREN 1,122
+; ---------- Fim Leitura Endereço String
+; ---------- Inicio Leitura Endereço String
+CREN 1,63
+CREN 1,64
+CREN 1,65
+CREN 1,66
+CREN 1,67
+CREN 1,68
+CREN 1,69
+CREN 1,70
+CREN 1,71
+CREN 1,72
+CREN 1,73
+CREN 1,74
+CREN 1,75
+CREN 1,76
+CREN 1,77
+CREN 1,78
+CREN 1,79
+CREN 1,80
+CREN 1,81
+CREN 1,82
+CREN 1,83
+CREN 1,84
+CREN 1,85
+CREN 1,86
+CREN 1,87
+CREN 1,88
+CREN 1,89
+CREN 1,90
+CREN 1,91
+CREN 1,92
+; ---------- Fim Leitura Endereço String
+CREN 1,62
+; ---------- Chama Procedimento/Funcao - R12
+CHPR R12,1
+; ---------- Desalocacao de Memoria (124)
+DMEM 124
+RTPR 1,0
+; ---------- Fim/Retorno de Procedimento/Funcao
+FIM:NADA
+PARA
+; ----------Fim das Instrucoes MEPA
+inicio  ENDP
+codigo  ENDS
+END    inicio

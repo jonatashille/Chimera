@@ -1,0 +1,32 @@
+class carro
+	private:
+		var int id;
+	public:
+		var int ano;
+		var string modelo;
+		sub Set_Id(var int _id by value)
+			id = _id;
+		end_sub
+		sub Imprime()
+			print(id);
+			print(" - ");
+			print(ano);
+			print("  ");
+			println(modelo);
+		end_sub
+end_class
+
+sub main()
+	var carro gol;
+	var carro ka;
+
+	gol.Set_Id(1);
+	gol.modelo = "Volkswagen - GOL SE 1.0 16V";
+	gol.ano = 1997;
+	ka.Set_Id(2);
+	ka.modelo = "Ford - KA EX 1.5 4c";
+	ka.ano = 2012;
+
+	gol.Imprime();
+	ka.Imprime();
+end_sub

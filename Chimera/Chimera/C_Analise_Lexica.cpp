@@ -177,7 +177,6 @@ void C_Analise_Lexica::Estado_01()
 	case '/': estado = 15; return;
 	case '|': estado = 16; return;
 	case ',': Set_Resultado(string(1, ch), VIRGULA); break;
-	//case '.': Set_Resultado(string(1, ch), OP_SELECAO_IDENTIFICADOR); break;
 	case ';': Set_Resultado(string(1, ch), PONTO_VIRGULA); break;
 	case '(': Set_Resultado(string(1, ch), ABRE_PARENTESES); break;
 	case ')': Set_Resultado(string(1, ch), FECHA_PARENTESES); break;
@@ -190,7 +189,9 @@ void C_Analise_Lexica::Estado_01()
 	case FIM_LINHA: Set_Resultado(FIM, "FIM"); break;
 	case EOF: Set_Resultado(FIM_PROGRAMA, FIM_PROGRAMA); break;
 	default:
-		ERRO("CARACTERE VALIDO", "este caracter nao e reconhecido pela linguagem Chimera: " + string(1, ch));
+		ERRO("CARACTERE VALIDO", 
+			 "este caracter nao e reconhecido pela linguagem Chimera: "
+			 + string(1, ch));
 		break;
 	}
 	continua = false;
